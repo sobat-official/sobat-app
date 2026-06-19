@@ -1,20 +1,27 @@
 <!DOCTYPE html>
 <html lang="id">
-<header class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white sticky top-0 z-50 shadow-sm">
-    <div class="max-w-md mx-auto px-4 py-4 flex items-center gap-3">
-        <img src="logo.png" alt="Logo" class="w-10 h-10 rounded-md bg-white p-1"> 
-        
-        <div>
-            <h1 class="text-xl font-black">NebengSobat Tentena</h1>
-            <p class="text-xs text-blue-200">Gabungan Tebengan Antar Kampus & Sekolah</p>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NebengSobat - Komunitas Tebengan Tentena</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 font-sans antialiased text-slate-800">
+
+    <header class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white sticky top-0 z-50 shadow-sm">
+        <div class="max-w-md mx-auto px-4 py-3 flex items-center gap-2">
+            <img src="logo.png" alt="Logo" class="w-8 h-8 rounded-md bg-white p-0.5"> 
+            <div>
+                <h1 class="text-lg font-black leading-tight">NebengSobat Tentena</h1>
+                <p class="text-[10px] text-blue-200 uppercase tracking-wider font-semibold">Gabungan Tebengan Antar Kampus</p>
+            </div>
         </div>
-    </div>
-</header>
+    </header>
+
     <main class="max-w-md mx-auto px-4 py-6">
-        <!-- FORM UTAMA -->
         <form action="https://api.sheetmonkey.io/form/6xr8JzScmDA7KU84FLjKWp" method="post" class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 space-y-4">
-            
-            <h2 class="text-base font-bold text-slate-900">Bagikan Jok Kosong Motor Anda</h2>
+            <h2 class="text-base font-bold text-slate-900">📢 Bagikan Jok Kosong Motor Anda</h2>
 
             <div>
                 <label class="block font-semibold text-slate-700 mb-1 text-sm">Nama Panggilan:</label>
@@ -26,13 +33,14 @@
                 <select name="Tujuan" class="w-full px-3 py-2.5 border border-slate-300 rounded-xl bg-white" required>
                     <option value="Unkrit">Universitas Kristen Tentena (Unkrit)</option>
                     <option value="SMAN 1 Pamona Utara">SMAN 1 Pamona Utara</option>
+                    <option value="SMKN 1 Pamona Poso">SMKN 1 Pamona Poso</option>
                 </select>
             </div>
 
             <div>
                 <label class="block font-semibold text-slate-700 mb-1 text-sm">Titik Jemput (GPS):</label>
-                <button type="button" onclick="getLokasiOtomatis()" class="w-full bg-slate-100 py-2.5 rounded-xl border border-slate-300 text-xs">📍 Dapatkan Lokasi</button>
-                <input type="text" name="Titik Jemput" id="geo-link" class="w-full mt-2 px-3 py-2 border rounded-xl text-xs" placeholder="Link GPS akan muncul di sini" readonly>
+                <button type="button" onclick="getLokasiOtomatis()" class="w-full bg-slate-100 py-2.5 rounded-xl border border-slate-300 text-xs hover:bg-slate-200 transition">📍 Dapatkan Lokasi Saya</button>
+                <input type="text" name="Titik Jemput" id="geo-link" class="w-full mt-2 px-3 py-2 border rounded-xl text-xs bg-slate-50" placeholder="Link GPS akan muncul di sini" readonly>
             </div>
 
             <div class="grid grid-cols-2 gap-3">
@@ -47,17 +55,20 @@
             </div>
 
             <input type="hidden" name="Created" value="x-sheetmonkey-current-date-time" />
-            <input type="hidden" name="Catatan" value="Manual Form" />
-
-            <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700">🚀 Buat Pengumuman</button>
+            
+            <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition">🚀 Buat Pengumuman</button>
         </form>
     </main>
+
+    <footer class="text-center py-4 text-slate-500 text-sm">
+        <p>© 2026 NebengSobat Tentena by RHS.</p>
+    </footer>
 
     <script>
         function getLokasiOtomatis() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((position) => {
-                    const link = `https://www.google.com/maps/q=${position.coords.latitude},${position.coords.longitude}`;
+                    const link = `https://www.google.com/maps/search/?api=1&query=${position.coords.latitude},${position.coords.longitude}`;
                     document.getElementById('geo-link').value = link;
                     alert("Lokasi berhasil diambil!");
                 });
