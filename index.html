@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<link rel="icon" type="image/png" href="logo.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NebengSobat - Komunitas Tebengan Tentena</title>
@@ -10,92 +9,67 @@
 <body class="bg-slate-50 font-sans antialiased text-slate-800">
 
     <header class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white sticky top-0 z-50 shadow-sm">
-        <div class="max-w-md mx-auto px-4 py-4 flex justify-between items-center">
-            <div>
-                <h1 class="text-xl font-black tracking-tight"><img src="logo.png" alt="Logo" class="w-8 h-8 inline-block mr-2 rounded-md align-middle"> NebengSobat Tentena</h1>
-                <p class="text-xs text-blue-200">Gabungan Tebengan Antar Kampus & Sekolah Se-Kota</p>
-            </div>
+        <div class="max-w-md mx-auto px-4 py-4">
+            <h1 class="text-xl font-black">NebengSobat Tentena</h1>
+            <p class="text-xs text-blue-200">Gabungan Tebengan Antar Kampus & Sekolah</p>
         </div>
     </header>
 
-    <main class="max-w-md mx-auto px-4 py-6 space-y-6">
+    <main class="max-w-md mx-auto px-4 py-6">
+        <!-- FORM UTAMA -->
+        <form action="https://api.sheetmonkey.io/form/6xr8JzScmDA7KU84FLjKWp" method="post" class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 space-y-4">
+            
+            <h2 class="text-base font-bold text-slate-900">Bagikan Jok Kosong Motor Anda</h2>
 
-        <form id="formtebengan" onsubmit="event.preventDefault(); prosesTebengan();" class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
-             <div>
-            <span class="text-xl">📢</span>
-                <h2 class="text-base font-bold text-slate-900">Bagikan Jok Kosong Motor Anda</h2>
+            <div>
+                <label class="block font-semibold text-slate-700 mb-1 text-sm">Nama Panggilan:</label>
+                <input type="text" name="Nama" placeholder="Contoh: Ruben" class="w-full px-3 py-2.5 border border-slate-300 rounded-xl" required>
             </div>
-            <div class="space-y-3 text-sm">
-    <div>
-        <label class="block font-semibold text-slate-700 mb-1">Nama Panggilan:</label>
-        <input type="text" id="driver-name" name="nama" placeholder="Contoh: Ruben" class="w-full px-3 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-    </div>
-</div>
-                <div>
-                    <label class="block font-semibold text-slate-700 mb-1">Tujuan Kampus / Sekolah:</label>
-                    <select id="route-to" name="tujuan" class="w-full px-3 py-2.5 border border-slate-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                        <option value="">-- Pilih Tempat Tujuan --</option>
-                        <option value="Universitas Kristen Tentena (Unkrit)">Universitas Kristen Tentena (Unkrit)</option>
-                        <option value="SMAN 1 Pamona Utara">SMAN 1 Pamona Utara</option>
-                        <option value="SMKN 1 Pamona Poso">SMKN 1 Pamona Poso</option>
-                        <option value="SMA/SMK Sederajat Lainnya">SMA/SMK Lain di Tentena</option>
-                    </select>
-                </div>
 
-                <div>
-                    <label class="block font-semibold text-slate-700 mb-1">Titik Jemputan (GPS):</label>
-                    <div class="flex gap-2">
-                        <button type="button" onclick="getLokasiOtomatis()" id="btn-gps" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-2.5 px-3 rounded-xl border border-slate-300 text-xs flex items-center justify-center gap-1 transition-colors">
-                            📍 Dapatkan Lokasi Saya Otomatis
-                        </button>
-                    </div>
-                    <input type="hidden" id="geo-link" name="titik_jemput" value="">
-                    <p id="gps-status" class="text-[11px] text-slate-500 mt-1 italic">Lokasi belum diambil.</p>
-                </div>
-
-                <div>
-                    <label class="block font-semibold text-slate-700 mb-1">Patokan / Detail Tambahan (Opsional):</label>
-                    <input type="text" id="route-from" placeholder="Contoh: Depan kos warna hijau / samping warung" class="w-full px-3 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block font-semibold text-slate-700 mb-1">Jam Berangkat:</label>
-                        <input type="text" id="departure-time" name="jam_berangkat" placeholder="Contoh: 07.15 WITA" class="w-full px-3 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                    </div>
-                    <div>
-                        <label class="block font-semibold text-slate-700 mb-1">No. WA (Bisa ketik 08...):</label>
-                        <input type="text" id="driver-wa" name="no_wa" placeholder="Contoh: 082291..." class="w-full px-3 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                    </div>
-                </div>
-                
-        <button type="button" onclick="prosesTebengan()" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition">
-    🚀 Buat Pengumuman Komunitas
-</button>
+            <div>
+                <label class="block font-semibold text-slate-700 mb-1 text-sm">Tujuan:</label>
+                <select name="Tujuan" class="w-full px-3 py-2.5 border border-slate-300 rounded-xl bg-white" required>
+                    <option value="Unkrit">Universitas Kristen Tentena (Unkrit)</option>
+                    <option value="SMAN 1 Pamona Utara">SMAN 1 Pamona Utara</option>
+                </select>
             </div>
+
+            <div>
+                <label class="block font-semibold text-slate-700 mb-1 text-sm">Titik Jemput (GPS):</label>
+                <button type="button" onclick="getLokasiOtomatis()" class="w-full bg-slate-100 py-2.5 rounded-xl border border-slate-300 text-xs">📍 Dapatkan Lokasi</button>
+                <input type="text" name="Titik Jemput" id="geo-link" class="w-full mt-2 px-3 py-2 border rounded-xl text-xs" placeholder="Link GPS akan muncul di sini" readonly>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1 text-sm">Jam Berangkat:</label>
+                    <input type="text" name="Jam Berangkat" placeholder="07.00 WITA" class="w-full px-3 py-2.5 border border-slate-300 rounded-xl" required>
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1 text-sm">No. WA:</label>
+                    <input type="text" name="No WA" placeholder="0822..." class="w-full px-3 py-2.5 border border-slate-300 rounded-xl" required>
+                </div>
+            </div>
+
+            <input type="hidden" name="Created" value="x-sheetmonkey-current-date-time" />
+            <input type="hidden" name="Catatan" value="Manual Form" />
+
+            <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700">🚀 Buat Pengumuman</button>
         </form>
-
-        <section id="output-section" class="hidden bg-emerald-50 rounded-2xl p-5 border border-emerald-200 space-y-3">
-            <h3 class="text-sm font-bold text-emerald-900 flex items-center gap-1">✅ Teks Siap Disebarkan!</h3>
-            <p class="text-xs text-emerald-700">Salin teks di bawah ini, lalu sebarkan ke grup WA Kampus, OSIS, atau grup angkatan sekolah masing-masing.</p>
-            
-            <textarea id="wa-text-result" class="w-full h-40 p-3 text-xs border border-emerald-300 rounded-xl bg-white focus:outline-none" readonly></textarea>
-            
-            <button onclick="salinTeksWA()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-sm transition-colors">
-                📋 Salin Teks Pengumuman
-            </button>
-        </section>
-
     </main>
 
-    <footer class="text-center py-4 text-slate-500 text-sm">
-        <p>© 2026 NebengSobat Tentena by RHS. All rights reserved.</p>
-    </footer>
-    <form action="https://api.sheetmonkey.io/form/6xr8JzScmDA7KU84FLjKWp" method="post">
-  <!-- Put HTML input fields in here and see how they fill up your sheet -->
-  <label>Example Field: <input type="text" name="Example Header" required /></label>
-  <input type="hidden" name="Created" value="x-sheetmonkey-current-date-time" />
-  <input type="submit" value="Submit" />
-</form>
+    <script>
+        function getLokasiOtomatis() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    const link = `https://www.google.com/maps/q=${position.coords.latitude},${position.coords.longitude}`;
+                    document.getElementById('geo-link').value = link;
+                    alert("Lokasi berhasil diambil!");
+                });
+            } else {
+                alert("Browser tidak mendukung GPS");
+            }
+        }
+    </script>
 </body>
 </html>
