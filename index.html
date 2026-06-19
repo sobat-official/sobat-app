@@ -20,17 +20,23 @@
 
     <main class="max-w-md mx-auto px-4 py-6 space-y-6">
 
-        <form id="formtebengan" onsubmit="event.preventDefault(); prosesTebengan();" class="...">
-                <span class="text-xl">📢</span>
+        <form id="formtebengan" onsubmit="event.preventDefault(); prosesTebengan();" class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+             <div>
+            <span class="text-xl">📢</span>
                 <h2 class="text-base font-bold text-slate-900">Bagikan Jok Kosong Motor Anda</h2>
             </div>
             
             <div class="space-y-3 text-sm">
                 <div>
-                    <label class="block font-semibold text-slate-700 mb-1">Nama Panggilan:</label>
-                    <input type="text" id="driver-name" name="nama" placeholder="Contoh: Ruben" class="w-full px-3 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                </div>
-                
+    <label class="block font-semibold text-slate-700 mb-1">Titik Jemputan (GPS):</label>
+    <div class="flex gap-2">
+        <button type="button" onclick="getLokasiOtomatis()" id="btn-gps" class="bg-slate-100">
+            📍 Dapatkan Lokasi Saya Otomatis
+        </button>
+    </div>
+    <input type="hidden" id="geo-link" name="titik_jemput" value="">
+    <p id="gps-status" class="text-[11px] text-slate-500 mt-1 italic">Lokasi belum diambil.</p>
+</div>
                 <div>
                     <label class="block font-semibold text-slate-700 mb-1">Tujuan Kampus / Sekolah:</label>
                     <select id="route-to" name="tujuan" class="w-full px-3 py-2.5 border border-slate-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
@@ -92,21 +98,37 @@
         <p>© 2026 NebengSobat Tentena by RHS. All rights reserved.</p>
     </footer>
 <script>
+    // Fungsi untuk mendapatkan lokasi (di luar, tidak terperangkap)
+    function getLokasiOtomatis() {
+        const status = document.getElementById('gps-status');
+        if (!navigator.geolocation) return alert("Browser tidak mendukung GPS.");
+
+        status.innerText = "⏳ Sedang mencari lokasi...";
+        navigator.geolocation.getCurrentPosition((pos) => {
+            const link = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+            document.getElementById('geo-link').value = link;
+            status.innerText = "✅ Lokasi berhasil dikunci!";
+        }, () => {
+            status.innerText = "❌ Gagal akses lokasi.";
+            alert("Harap izinkan akses lokasi di pengaturan browser.");
+        });
+    }
+
+    // Fungsi untuk mengirim form
     async function prosesTebengan() {
         const form = document.getElementById('formtebengan');
         const formData = new FormData(form);
         const scriptURL = 'https://script.google.com/macros/s/AKfycbx1r6604N9KWke-IotKx9o9UfGwdYW6ZBsg5ufjHxg_AOFK5qUj5yX00tQ0n4UPjEruDw/exec';
 
-        // 1. Kirim ke Database
         try {
             await fetch(scriptURL, { method: 'POST', body: formData });
-            alert("Mantap! Data berhasil dikirim ke database.");
+            alert("Mantap! Data berhasil dikirim.");
         } catch(e) { 
             console.error(e); 
             alert("Gagal kirim ke database.");
         }
 
-        // 2. Tampilkan Hasil ke Layar
+        // Tampilkan hasil
         const name = document.getElementById('driver-name').value;
         const to = document.getElementById('route-to').value;
         const wa = document.getElementById('driver-wa').value;
