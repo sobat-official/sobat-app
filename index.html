@@ -175,7 +175,7 @@
     async function loadDataTebengan() {
         const container = document.getElementById('data-container');
         try {
-            const response = await fetch('https://sheetdb.io/api/v1/oi1whu4x406qs');
+            const response = await fetch('https://sheetdb.io/api/v1/oi1whu4x406qs?sort_by=Created&sort_order=desc');
             const data = await response.json();
 
             if (data.length > 0) {
