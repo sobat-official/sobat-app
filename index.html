@@ -124,12 +124,12 @@
 
     <!-- Bottom Nav -->
     <nav class="fixed bottom-0 w-full bg-white border-t flex justify-around p-3 text-gray-500">
-        <div id class="text-blue-600 text-center text-xs"><i class="fa-solid fa-house block text-lg"></i>Beranda</div>
-        <div id class="text-center text-xs"><i class="fa-solid fa-magnifying-glass block text-lg"></i>Cari</div>
-        <div id class="text-center text-xs"><i class="fa-solid fa-calendar block text-lg"></i>Jadwal</div>
-        <div id class="text-center text-xs"><i class="fa-solid fa-comment block text-lg"></i>Pesan</div>
-        <div id class="text-center text-xs"><i class="fa-solid fa-user block text-lg"></i>Akun</div>
-    </nav>
+    <div id="nav-beranda" class="text-blue-600 text-center text-xs cursor-pointer"><i class="fa-solid fa-house block text-lg"></i>Beranda</div>
+    <div id="nav-cari" class="text-center text-xs cursor-pointer"><i class="fa-solid fa-magnifying-glass block text-lg"></i>Cari</div>
+    <div id="nav-jadwal" class="text-center text-xs cursor-pointer"><i class="fa-solid fa-calendar block text-lg"></i>Jadwal</div>
+    <div id="nav-pesan" class="text-center text-xs cursor-pointer"><i class="fa-solid fa-comment block text-lg"></i>Pesan</div>
+    <div id="nav-akun" class="text-center text-xs cursor-pointer"><i class="fa-solid fa-user block text-lg"></i>Akun</div>
+</nav>
 <script>
     // 1. Fungsi Tombol "Bagikan Jok" ke Form
     document.getElementById('btn-bagikan').addEventListener('click', function() {
@@ -144,6 +144,26 @@
                 window.location.reload(); // Refresh untuk kembali ke posisi atas
             } else {
                 alert("Fitur " + id.replace('nav-', '') + " sedang dalam tahap pengembangan, Ruben!");
+            }
+        });
+    });
+</script>
+<script>
+    // Seleksi semua tombol navigasi
+    const navButtons = [
+        { id: 'nav-beranda', name: 'Beranda' },
+        { id: 'nav-cari', name: 'Cari Tebengan' },
+        { id: 'nav-jadwal', name: 'Jadwal Saya' },
+        { id: 'nav-pesan', name: 'Pesan' },
+        { id: 'nav-akun', name: 'Akun' }
+    ];
+
+    navButtons.forEach(btn => {
+        document.getElementById(btn.id).addEventListener('click', function() {
+            if (btn.id === 'nav-beranda') {
+                window.location.reload(); // Refresh halaman untuk kembali ke awal
+            } else {
+                alert("Fitur " + btn.name + " akan segera hadir ya! Tunggu update berikutnya dari Ruben. 🚀");
             }
         });
     });
