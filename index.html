@@ -13,7 +13,7 @@
     <!-- Header -->
     <header class="bg-blue-600 text-white p-4 flex justify-between items-center shadow-md">
         <div class="flex items-center gap-2">
-            <img src="logo.png" class="w-10 h-10 bg-white rounded-lg p-1">
+            <i class="fa-solid fa-car text-2xl"></i>
             <div>
                 <h1 class="font-bold text-lg">NebengSobat Tentena</h1>
                 <p class="text-xs text-blue-100">Komunitas Tebengan</p>
@@ -22,160 +22,184 @@
         <i class="fa-solid fa-bars text-xl"></i>
     </header>
 
-    <!-- Wrapper Baru: Gabungan Bagikan & Temukan -->
+    <!-- Tombol Utama -->
     <div class="px-4 mt-4">
         <div class="grid grid-cols-2 gap-3">
-            
-            <!-- Kotak 1: Bagikan Jok -->
             <div class="bg-blue-700 rounded-2xl p-4 text-white">
-                <h2 class="text-xs font-bold mb-2">Nebeng Aman, Nyaman, & Terpercaya</h2>
+                <h2 class="text-xs font-bold mb-2">Nebeng Aman & Nyaman</h2>
                 <button id="btn-bagikan" class="bg-white text-blue-700 font-bold px-3 py-2 rounded-lg text-xs w-full">
                     <i class="fa-solid fa-plus mr-1"></i> Bagikan Jok
                 </button>
             </div>
-
-            <!-- Kotak 2: Temukan Jok -->
             <div class="bg-blue-700 rounded-2xl p-4 text-white">
                 <h2 class="text-xs font-bold mb-2">Lihat Daftar Jok Kosong</h2>
                 <button id="btn-temukan" class="bg-white text-blue-700 font-bold px-3 py-2 rounded-lg text-xs w-full">
                     <i class="fa-solid fa-magnifying-glass mr-1"></i> Temukan Jok
                 </button>
             </div>
-
         </div>
     </div>
 
-    <!-- Main Content -->
-    <main class="px-4">
-        <form id="nebengForm" class="bg-white rounded-2xl p-5 shadow-sm space-y-4">
+    <!-- Form Input (SUDAH DITAMBAHKAN ACTION SHEETMONKEY) -->
+    <main class="px-4 mt-4">
+        <!-- Ganti action form di bawah ini jika kamu pakai URL SheetMonkey yang berbeda -->
+        <form id="nebengForm" action="https://api.sheetmonkey.io/form/6xr8JzScmDA7KU84FLjKWp" method="POST" class="bg-white rounded-2xl p-5 shadow-sm space-y-4">
             <h3 class="font-bold text-gray-800"><i class="fa-solid fa-bullhorn mr-2"></i> Bagikan Jok Kosong</h3>
             
-            <!-- Nama -->
             <div>
-                <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Nama Panggilan</label>
-                <input type="text" name="Nama" class="w-full mt-1 p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Contoh: Ruben" required>
+                <label class="text-xs font-bold text-gray-500 uppercase">Nama Panggilan</label>
+                <input type="text" name="Nama" class="w-full mt-1 p-3 border border-gray-200 rounded-xl outline-none" required>
             </div>
 
-            <!-- Tujuan -->
             <div>
-                <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Tujuan</label>
-                <select name="Tujuan" class="w-full mt-1 p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none" required>
+                <label class="text-xs font-bold text-gray-500 uppercase">Tujuan</label>
+                <select name="Tujuan" class="w-full mt-1 p-3 border border-gray-200 rounded-xl bg-white outline-none" required>
                     <option value="UNKRIT">Universitas Kristen Tentena</option>
-                    <option value="STT">Sekolah Tinggi Teologi Tentena</option>
                     <option value="SMAN 1">SMAN 1 Pamona Utara</option>
-                    <option value="SMA GKST 1">SMA GKST 1 Tentena</option>
-                    <option value="SMA GKST 2">SMA GKST 2 Tentena</option>
                     <option value="SMK GKST 1">SMK GKST 1 Tentena</option>
-                    <option value="SMK GKST 2">SMK GKST 2 Tentena</option>
-                    <option value="SMK Eklesia">SMK Teknik Eklesia Tentena</option>
                 </select>
             </div>
 
-            <!-- Titik Jemput -->
             <div>
-                <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Titik Jemput (GPS)</label>
-                <button type="button" onclick="getLokasiOtomatis()" class="w-full mt-1 bg-gray-50 border border-dashed border-gray-300 py-3 rounded-xl text-blue-600 font-semibold text-sm hover:bg-gray-100 transition">
+                <label class="text-xs font-bold text-gray-500 uppercase">Titik Jemput (GPS)</label>
+                <button type="button" onclick="getLokasiOtomatis()" class="w-full mt-1 bg-gray-50 border border-dashed border-gray-300 py-3 rounded-xl text-blue-600 font-semibold text-sm">
                     <i class="fa-solid fa-location-dot mr-2"></i> Dapatkan Lokasi Saya
                 </button>
-                <input type="text" name="Titik Jemput" id="geo-link" class="w-full mt-2 p-2 border rounded-lg text-xs bg-gray-50" placeholder="Link akan otomatis terisi..." readonly required>
+                <input type="text" name="Titik Jemput" id="geo-link" class="w-full mt-2 p-2 border rounded-lg text-xs bg-gray-50" readonly required>
             </div>
 
-            <!-- Baris Jam & WA -->
             <div class="grid grid-cols-2 gap-3">
                 <div>
-                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Jam</label>
-                    <input type="text" name="Jam Berangkat" placeholder="07.00 WITA" class="w-full mt-1 p-3 border rounded-xl" required>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Jam</label>
+                    <input type="text" name="Jam Berangkat" class="w-full mt-1 p-3 border rounded-xl" required>
                 </div>
                 <div>
-                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">No. WA</label>
-                    <input type="tel" name="No WA" placeholder="08xx..." class="w-full mt-1 p-3 border rounded-xl" required>
+                    <label class="text-xs font-bold text-gray-500 uppercase">No. WA</label>
+                    <input type="tel" name="No WA" class="w-full mt-1 p-3 border rounded-xl" required>
                 </div>
             </div>
 
             <input type="hidden" name="Created" value="x-sheetmonkey-current-date-time" />
             
-            <button type="submit" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-blue-700 transition active:scale-95">
+            <button type="submit" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold shadow-lg shadow-blue-200">
                 <i class="fa-solid fa-rocket mr-2"></i> Buat Pengumuman
             </button>
         </form>
+    </main>
 
-        <!-- Tambahkan script GPS agar tombolnya berfungsi -->
-        <script>
-    // 1. Fungsi Navigasi dan Tombol Dasar
-    document.getElementById('btn-bagikan').addEventListener('click', function() {
-        document.querySelector('form').scrollIntoView({ behavior: 'smooth' });
-    });
+    <!-- HTML Modal (YANG SEMPAT HILANG) -->
+    <div id="modal-jok" class="fixed inset-0 bg-blue-900 bg-opacity-95 z-50 hidden flex flex-col">
+        <div class="p-4 flex justify-between items-center text-white border-b border-blue-700">
+            <h2 class="font-bold text-lg">Daftar Jok Tersedia</h2>
+            <button onclick="tutupModal()" class="text-white font-bold px-3 py-1 bg-blue-800 rounded-lg">✕ Tutup</button>
+        </div>
+        <div id="modal-data-container" class="p-4 overflow-y-auto flex-1 space-y-3 pt-6">
+            <!-- Data dari SheetDB muncul di sini -->
+        </div>
+    </div>
 
-    document.getElementById('btn-temukan').addEventListener('click', function() {
-        document.getElementById('modal-jok').classList.remove('hidden');
-        loadDataTebengan();
-    });
+    <!-- Navigasi Bawah (YANG SEMPAT HILANG) -->
+    <nav class="fixed bottom-0 w-full bg-white border-t border-gray-100 flex justify-around p-3 text-xs text-gray-400 z-40">
+        <button id="nav-beranda" class="text-blue-600 flex flex-col items-center"><i class="fa-solid fa-house text-lg mb-1"></i> Beranda</button>
+        <button id="nav-cari" class="hover:text-blue-600 flex flex-col items-center"><i class="fa-solid fa-magnifying-glass text-lg mb-1"></i> Cari</button>
+        <button id="nav-jadwal" class="hover:text-blue-600 flex flex-col items-center"><i class="fa-solid fa-calendar text-lg mb-1"></i> Jadwal</button>
+        <button id="nav-pesan" class="hover:text-blue-600 flex flex-col items-center"><i class="fa-solid fa-comment text-lg mb-1"></i> Pesan</button>
+    </nav>
 
-    function tutupModal() {
-        document.getElementById('modal-jok').classList.add('hidden');
-    }
-
-    // 2. Fungsi Load Data Profesional
-    async function loadDataTebengan() {
-        const container = document.getElementById('modal-data-container');
-        container.innerHTML = '<p class="text-white text-center p-4">Memuat data...</p>';
-        
-        // PASTE URL API SHEETDB KAMU DI BAWAH INI
-        const apiUrl = 'https://sheetdb.io/api/v1/oi1whu4x406qs?sort_by=Created&sort_order=desc'; 
-
-        try {
-            const response = await fetch(apiUrl);
-            const data = await response.json();
-
-            if (data.length > 0) {
-                container.innerHTML = data.map(item => `
-                    <div class="bg-white p-4 rounded-2xl shadow-lg border border-gray-100 mx-2 mb-4">
-                        <div class="flex justify-between items-start">
-                            <div class="flex items-center gap-3">
-                                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-xl">
-                                    ${item.Nama.charAt(0).toUpperCase()}
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-gray-800 text-lg">${item.Nama}</h4>
-                                    <span class="text-xs text-yellow-500 font-bold"><i class="fa-solid fa-star"></i> 4.8</span>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <div class="text-2xl font-black text-gray-800">${item.JamBerangkat}</div>
-                            </div>
-                        </div>
-                        <div class="mt-4 grid grid-cols-2 gap-2 text-sm text-gray-600">
-                            <p><i class="fa-solid fa-location-dot text-blue-500 mr-1"></i> ${item.Tujuan}</p>
-                            <p><i class="fa-solid fa-car text-blue-500 mr-1"></i> Tebengan</p>
-                        </div>
-                        <div class="mt-4 flex gap-2">
-                            <a href="${item.TitikJemput}" target="_blank" class="flex-1 text-center bg-gray-100 py-2 rounded-xl text-gray-700 font-bold text-sm">Peta</a>
-                            <a href="https://wa.me/${item.NoWA}" target="_blank" class="flex-[2] text-center bg-green-600 py-2 rounded-xl text-white font-bold text-sm shadow-md">
-                                <i class="fa-brands fa-whatsapp mr-1"></i> Chat Driver
-                            </a>
-                        </div>
-                    </div>
-                `).join('');
+    <script>
+        // FUNGSI GPS YANG HILANG
+        function getLokasiOtomatis() {
+            const geoLinkInput = document.getElementById('geo-link');
+            if (navigator.geolocation) {
+                geoLinkInput.value = "Sedang mencari lokasi...";
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    geoLinkInput.value = `https://www.google.com/maps?q=${lat},${lng}`;
+                }, function(error) {
+                    geoLinkInput.value = "Gagal akses GPS. Aktifkan Izin Lokasi.";
+                });
             } else {
-                container.innerHTML = '<p class="text-white text-center p-4">Belum ada tebengan.</p>';
+                geoLinkInput.value = "Browser tidak mendukung GPS.";
             }
-        } catch (error) {
-            container.innerHTML = '<p class="text-white text-center p-4">Gagal memuat data.</p>';
         }
-    }
 
-    // 3. Fungsi Navigasi Bawah
-    const navItems = ['nav-beranda', 'nav-cari', 'nav-jadwal', 'nav-pesan', 'nav-akun'];
-    navItems.forEach(id => {
-        document.getElementById(id).addEventListener('click', function() {
-            if(id === 'nav-beranda') {
-                window.location.reload();
-            } else {
-                alert("Fitur " + id.replace('nav-', '') + " akan segera hadir!");
+        // FUNGSI NAVIGASI
+        document.getElementById('btn-bagikan').addEventListener('click', function() {
+            document.querySelector('form').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        document.getElementById('btn-temukan').addEventListener('click', function() {
+            document.getElementById('modal-jok').classList.remove('hidden');
+            loadDataTebengan();
+        });
+
+        function tutupModal() {
+            document.getElementById('modal-jok').classList.add('hidden');
+        }
+
+        // FUNGSI LOAD DATA SHEETDB
+        async function loadDataTebengan() {
+            const container = document.getElementById('modal-data-container');
+            container.innerHTML = '<p class="text-white text-center p-4">Memuat data...</p>';
+            
+            const apiUrl = 'https://sheetdb.io/api/v1/oi1whu4x406qs?sort_by=Created&sort_order=desc'; 
+
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (data.length > 0) {
+                    container.innerHTML = data.map(item => `
+                        <div class="bg-white p-4 rounded-2xl shadow-lg border border-gray-100 mx-2 mb-4">
+                            <div class="flex justify-between items-start">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-xl">
+                                        ${item.Nama.charAt(0).toUpperCase()}
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-gray-800 text-lg">${item.Nama}</h4>
+                                        <span class="text-xs text-yellow-500 font-bold"><i class="fa-solid fa-star"></i> 4.8</span>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-2xl font-black text-gray-800">${item.JamBerangkat}</div>
+                                </div>
+                            </div>
+                            <div class="mt-4 grid grid-cols-2 gap-2 text-sm text-gray-600">
+                                <p><i class="fa-solid fa-location-dot text-blue-500 mr-1"></i> ${item.Tujuan}</p>
+                                <p><i class="fa-solid fa-car text-blue-500 mr-1"></i> Tebengan</p>
+                            </div>
+                            <div class="mt-4 flex gap-2">
+                                <a href="${item.TitikJemput}" target="_blank" class="flex-1 text-center bg-gray-100 py-2 rounded-xl text-gray-700 font-bold text-sm">Peta</a>
+                                <a href="https://wa.me/${item.NoWA}" target="_blank" class="flex-[2] text-center bg-green-600 py-2 rounded-xl text-white font-bold text-sm shadow-md">
+                                    <i class="fa-brands fa-whatsapp mr-1"></i> Chat Driver
+                                </a>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = '<p class="text-white text-center p-4">Belum ada tebengan.</p>';
+                }
+            } catch (error) {
+                container.innerHTML = '<p class="text-white text-center p-4">Gagal memuat data.</p>';
+            }
+        }
+
+        // FUNGSI NAVIGASI BAWAH
+        const navItems = ['nav-beranda', 'nav-cari', 'nav-jadwal', 'nav-pesan', 'nav-akun'];
+        navItems.forEach(id => {
+            const element = document.getElementById(id);
+            if(element) {
+                element.addEventListener('click', function() {
+                    if(id === 'nav-beranda') {
+                        window.location.reload();
+                    } else {
+                        alert("Fitur " + id.replace('nav-', '') + " akan segera hadir!");
+                    }
+                });
             }
         });
-    });
-</script>
-    
+    </script>
 </body>
 </html>
