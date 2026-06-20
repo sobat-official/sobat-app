@@ -80,12 +80,20 @@
                 <i class="fa-solid fa-rocket mr-2"></i> Buat Pengumuman
             </button>
         </form>
-        <section class="px-4 mt-8 mb-10">
-    <h3 class="font-bold text-gray-800 mb-4"><i class="fa-solid fa-list-ul mr-2"></i> Daftar Jok Kosong</h3>
-    <div id="data-container" class="space-y-3">
-        <p class="text-gray-500 text-sm italic">Memuat data tebengan...</p>
+        <div class="px-4 mt-8 mb-24">
+    <div class="bg-blue-700 rounded-2xl p-5 text-white relative overflow-hidden">
+        <h2 class="text-lg font-bold w-2/3">Daftar Jok Kosong</h2>
+        <button id="btn-temukan" class="mt-4 bg-white text-blue-700 font-bold px-4 py-2 rounded-lg text-sm">
+            <i class="fa-solid fa-magnifying-glass mr-1"></i> Temukan Jok
+        </button>
     </div>
-</section>
+    
+    <div id="data-container" class="mt-4 space-y-3">
+        <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm text-gray-500 text-sm italic">
+            Memuat data tebengan...
+        </div>
+    </div>
+</div>
 
         <!-- Tambahkan script GPS agar tombolnya berfungsi -->
         <script>
@@ -142,6 +150,9 @@
         document.querySelector('form').scrollIntoView({ behavior: 'smooth' });
     });
 
+    document.getElementById('btn-temukan').addEventListener('click', function() {
+    alert("Fitur cari tebengan sedang kami siapkan ya! 🔍");
+});
     // 2. Fungsi Navigasi Bawah
     const navItems = ['nav-beranda', 'nav-cari', 'nav-jadwal', 'nav-pesan', 'nav-akun'];
     navItems.forEach(id => {
