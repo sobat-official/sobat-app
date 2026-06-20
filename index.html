@@ -101,101 +101,59 @@
 
         <!-- Tambahkan script GPS agar tombolnya berfungsi -->
         <script>
-    // 1. Fungsi Lokasi
-    function getLokasiOtomatis() {
-        const btn = event.target.closest('button');
-        const inputLink = document.getElementById('geo-link');
-        
-        if (navigator.geolocation) {
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Mengambil...';
-            navigator.geolocation.getCurrentPosition((position) => {
-                inputLink.value = `https://maps.google.com/?q=${position.coords.latitude},${position.coords.longitude}`;
-                btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i> Lokasi Terambil!';
-                btn.classList.replace('bg-gray-50', 'bg-green-50');
-            });
-        }
-    }
-
-    // 2. Fungsi Kirim Data (Tanpa Pindah Halaman)
-    const form = document.getElementById('nebengForm');
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault(); // Mencegah pindah halaman
-        
-        const btnSubmit = form.querySelector('button[type="submit"]');
-        btnSubmit.innerHTML = 'Mengirim...';
-        btnSubmit.disabled = true;
-
-        const data = new FormData(form);
-        await fetch('https://api.sheetmonkey.io/form/6xr8JzScmDA7KU84FLjKWp', {
-            method: 'POST',
-            body: data,
-        });
-
-        // Setelah sukses
-        alert('Data berhasil dikirim! Tebengan kamu sudah muncul.');
-        form.reset(); // Kosongkan form
-        btnSubmit.innerHTML = 'Buat Pengumuman';
-        btnSubmit.disabled = false;
-    });
-</script>
-    </main>
-
-    <!-- Bottom Nav -->
-    <nav class="fixed bottom-0 w-full bg-white border-t flex justify-around p-3 text-gray-500">
-    <div id="nav-beranda" class="text-blue-600 text-center text-xs cursor-pointer"><i class="fa-solid fa-house block text-lg"></i>Beranda</div>
-    <div id="nav-cari" class="text-center text-xs cursor-pointer"><i class="fa-solid fa-magnifying-glass block text-lg"></i>Cari</div>
-    <div id="nav-jadwal" class="text-center text-xs cursor-pointer"><i class="fa-solid fa-calendar block text-lg"></i>Jadwal</div>
-    <div id="nav-pesan" class="text-center text-xs cursor-pointer"><i class="fa-solid fa-comment block text-lg"></i>Pesan</div>
-    <div id="nav-akun" class="text-center text-xs cursor-pointer"><i class="fa-solid fa-user block text-lg"></i>Akun</div>
-</nav>
-<script>
-    // 1. Fungsi Tombol "Bagikan Jok" ke Form
+    // 1. Fungsi Navigasi dan Tombol Dasar
     document.getElementById('btn-bagikan').addEventListener('click', function() {
         document.querySelector('form').scrollIntoView({ behavior: 'smooth' });
     });
 
-    // Fungsi buka modal
     document.getElementById('btn-temukan').addEventListener('click', function() {
         document.getElementById('modal-jok').classList.remove('hidden');
-        loadDataTebengan(); // Panggil fungsi ambil data saat modal dibuka
+        loadDataTebengan();
     });
 
-    // Fungsi tutup modal
     function tutupModal() {
         document.getElementById('modal-jok').classList.add('hidden');
     }
-    // 2. Fungsi Navigasi Bawah
-    const navItems = ['nav-beranda', 'nav-cari', 'nav-jadwal', 'nav-pesan', 'nav-akun'];
-    navItems.forEach(id => {
-        document.getElementById(id).addEventListener('click', function() {
-            if(id === 'nav-beranda') {
-                window.location.reload(); // Refresh untuk kembali ke posisi atas
-            } else {
-                alert("Fitur " + id.replace('nav-', '') + " sedang dalam tahap pengembangan, Ruben!");
-            }
-        });
-    });
-</script>
-<script>
+
+    // 2. Fungsi Load Data Profesional
     async function loadDataTebengan() {
         const container = document.getElementById('modal-data-container');
         container.innerHTML = '<p class="text-white text-center p-4">Memuat data...</p>';
         
+        // PASTE URL API SHEETDB KAMU DI BAWAH INI
+        const apiUrl = 'https://sheetdb.io/api/v1/oi1whu4x406qs?sort_by=Created&sort_order=desc'; 
+
         try {
-            const response = await fetch('https://sheetdb.io/api/v1/oi1whu4x406qs?sort_by=Created&sort_order=desc');
+            const response = await fetch(apiUrl);
             const data = await response.json();
 
             if (data.length > 0) {
                 container.innerHTML = data.map(item => `
-                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
-                        <div class="flex justify-between items-center">
-                            <h4 class="font-bold text-blue-800">${item.Nama}</h4>
-                            <span class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-md font-bold">${item['Jam Berangkat']}</span>
+                    <div class="bg-white p-4 rounded-2xl shadow-lg border border-gray-100 mx-2 mb-4">
+                        <div class="flex justify-between items-start">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-xl">
+                                    ${item.Nama.charAt(0).toUpperCase()}
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800 text-lg">${item.Nama}</h4>
+                                    <span class="text-xs text-yellow-500 font-bold"><i class="fa-solid fa-star"></i> 4.8</span>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-2xl font-black text-gray-800">${item.JamBerangkat}</div>
+                            </div>
                         </div>
-                        <p class="text-sm text-gray-600 mt-1">Tujuan: ${item.Tujuan}</p>
-                        <a href="${item['Titik Jemput']}" target="_blank" class="text-xs text-blue-500 underline mt-2 block">
-                            <i class="fa-solid fa-location-dot"></i> Lihat Lokasi Jemput
-                        </a>
+                        <div class="mt-4 grid grid-cols-2 gap-2 text-sm text-gray-600">
+                            <p><i class="fa-solid fa-location-dot text-blue-500 mr-1"></i> ${item.Tujuan}</p>
+                            <p><i class="fa-solid fa-car text-blue-500 mr-1"></i> Tebengan</p>
+                        </div>
+                        <div class="mt-4 flex gap-2">
+                            <a href="${item.TitikJemput}" target="_blank" class="flex-1 text-center bg-gray-100 py-2 rounded-xl text-gray-700 font-bold text-sm">Peta</a>
+                            <a href="https://wa.me/${item.NoWA}" target="_blank" class="flex-[2] text-center bg-green-600 py-2 rounded-xl text-white font-bold text-sm shadow-md">
+                                <i class="fa-brands fa-whatsapp mr-1"></i> Chat Driver
+                            </a>
+                        </div>
                     </div>
                 `).join('');
             } else {
@@ -205,15 +163,19 @@
             container.innerHTML = '<p class="text-white text-center p-4">Gagal memuat data.</p>';
         }
     }
+
+    // 3. Fungsi Navigasi Bawah
+    const navItems = ['nav-beranda', 'nav-cari', 'nav-jadwal', 'nav-pesan', 'nav-akun'];
+    navItems.forEach(id => {
+        document.getElementById(id).addEventListener('click', function() {
+            if(id === 'nav-beranda') {
+                window.location.reload();
+            } else {
+                alert("Fitur " + id.replace('nav-', '') + " akan segera hadir!");
+            }
+        });
+    });
 </script>
-<div id="modal-jok" class="fixed inset-0 bg-blue-900 bg-opacity-90 z-50 hidden flex flex-col">
-    <div class="p-4 flex justify-between items-center text-white border-b border-blue-700">
-        <h2 class="font-bold text-lg">Daftar Jok Tersedia</h2>
-        <button onclick="tutupModal()" class="text-white font-bold px-3 py-1 bg-blue-800 rounded-lg">✕ Tutup</button>
-    </div>
-    <div id="modal-data-container" class="p-4 overflow-y-auto flex-1 space-y-3">
-        </div>
-</div>
     
 </body>
 </html>
