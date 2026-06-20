@@ -201,7 +201,21 @@
                 container.innerHTML = '<p class="text-gray-500 text-sm">Belum ada tebengan hari ini.</p>';
             }
         } catch (error) {
-            container.innerHTML = '<p class="text-red-500 text-sm">Gagal memuat data. Coba refresh lagi.</p>';
+
+container.innerHTML = `
+    <button onclick="document.getElementById('data-container').classList.add('hidden')" 
+            class="w-full bg-gray-200 py-2 rounded-lg text-sm font-bold mb-2">
+        <i class="fa-solid fa-times"></i> Tutup Daftar
+    </button>
+` + data.map(item => `
+    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+        <h4 class="font-bold text-blue-800">${item.Nama}</h4>
+        <p class="text-sm text-gray-600 mt-1">Tujuan: ${item.Tujuan}</p>
+        <a href="${item.TitikJemput}" target="_blank" class="text-xs text-blue-500 underline mt-2 block">
+            <i class="fa-solid fa-location-dot"></i> Lihat Lokasi Jemput
+        </a>
+    </div>
+`).join('');
             console.error(error); // Ini untuk membantumu melihat error di Inspect Element
         }
     }
