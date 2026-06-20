@@ -34,7 +34,7 @@
 
     <!-- Main Content -->
     <main class="px-4">
-        <form action="https://api.sheetmonkey.io/form/6xr8JzScmDA7KU84FLjKWp" method="post" class="bg-white rounded-2xl p-5 shadow-sm space-y-4">
+        <form id="nebengForm" class="bg-white rounded-2xl p-5 shadow-sm space-y-4">
             <h3 class="font-bold text-gray-800"><i class="fa-solid fa-bullhorn mr-2"></i> Bagikan Jok Kosong</h3>
             
             <!-- Nama -->
@@ -83,34 +83,42 @@
 
         <!-- Tambahkan script GPS agar tombolnya berfungsi -->
         <script>
+    // 1. Fungsi Lokasi
     function getLokasiOtomatis() {
-        // Ambil elemen tombol dan input
         const btn = event.target.closest('button');
         const inputLink = document.getElementById('geo-link');
-
+        
         if (navigator.geolocation) {
-            // Ubah teks tombol jadi proses loading
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Mengambil Lokasi...';
-            
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Mengambil...';
             navigator.geolocation.getCurrentPosition((position) => {
-                const link = `https://www.google.com/maps/search/?api=1&query=${position.coords.latitude},${position.coords.longitude}`;
-                
-                // Isi link ke input
-                inputLink.value = link;
-                
-                // Ubah tombol jadi sukses
-                btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i> Lokasi Berhasil Diambil!';
+                inputLink.value = `https://maps.google.com/?q=${position.coords.latitude},${position.coords.longitude}`;
+                btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i> Lokasi Terambil!';
                 btn.classList.replace('bg-gray-50', 'bg-green-50');
-                btn.classList.replace('text-blue-600', 'text-green-600');
-                btn.classList.replace('border-dashed', 'border-solid');
-            }, (error) => {
-                alert("Gagal ambil lokasi. Pastikan GPS aktif ya!");
-                btn.innerHTML = '<i class="fa-solid fa-location-dot mr-2"></i> Dapatkan Lokasi Saya';
             });
-        } else {
-            alert("Browser tidak mendukung GPS");
         }
     }
+
+    // 2. Fungsi Kirim Data (Tanpa Pindah Halaman)
+    const form = document.getElementById('nebengForm');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault(); // Mencegah pindah halaman
+        
+        const btnSubmit = form.querySelector('button[type="submit"]');
+        btnSubmit.innerHTML = 'Mengirim...';
+        btnSubmit.disabled = true;
+
+        const data = new FormData(form);
+        await fetch('https://api.sheetmonkey.io/form/6xr8JzScmDA7KU84FLjKWp', {
+            method: 'POST',
+            body: data,
+        });
+
+        // Setelah sukses
+        alert('Data berhasil dikirim! Tebengan kamu sudah muncul.');
+        form.reset(); // Kosongkan form
+        btnSubmit.innerHTML = 'Buat Pengumuman';
+        btnSubmit.disabled = false;
+    });
 </script>
     </main>
 
