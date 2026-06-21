@@ -201,17 +201,18 @@
         navigator.geolocation.getCurrentPosition((pos) => {
             const lat = pos.coords.latitude;
             const lng = pos.coords.longitude;
-            // Format link yang benar untuk dibuka di HP
-            inputLink.value = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+            
+            // PERBAIKAN: Format link Google Maps yang benar
+            inputLink.value = `https://www.google.com/maps?q=${lat},${lng}`;
             
             text.innerText = "Berhasil!";
             btn.classList.add('border-green-500', 'text-green-600', 'bg-green-50');
         }, (err) => {
-            alert("Gagal. Aktifkan izin lokasi di browser.");
+            alert("Gagal. Pastikan izin lokasi aktif.");
             text.innerText = "Dapatkan Lokasi Saya";
         });
     } else {
-        alert("Browser tidak mendukung lokasi.");
+        alert("Browser tidak mendukung GPS.");
     }
 }
         
