@@ -71,8 +71,12 @@
             <div class="grid grid-cols-2 gap-3">
                 <div>
     <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Jam</label>
-    <input type="text" name="Jam Berangkat" inputmode="decimal" pattern="[0-9]*" placeholder="07.00" class="w-full mt-1 p-3 border rounded-xl" required>
-    <p class="text-[10px] text-gray-400 mt-1">Format: 07.00</p>
+    <input type="text" name="Jam Berangkat" 
+       inputmode="decimal" 
+       pattern="([0-1]?[0-9]|2[0-3])[\.:]?[0-5][0-9]" 
+       placeholder="07.00" 
+       class="w-full mt-1 p-3 border rounded-xl" 
+       required>
 </div>
                 <div>
     <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">No. WhatsApp</label>
