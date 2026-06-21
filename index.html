@@ -22,44 +22,31 @@
         <i class="fa-solid fa-bars text-xl"></i>
     </header>
 
-    <!-- Wrapper Baru: Gabungan Bagikan & Temukan -->
+    <!-- Wrapper -->
     <div class="px-4 mt-4">
         <div class="grid grid-cols-2 gap-3">
-            
-            <!-- Kotak 1: Bagikan Jok -->
             <div class="bg-blue-700 rounded-2xl p-4 text-white">
                 <h2 class="text-xs font-bold mb-2">Sediakan jok Buat Teman Komunitas</h2>
-                <button id="btn-bagikan" class="bg-white text-blue-700 font-bold px-3 py-2 rounded-lg text-xs w-full">
-                    <i class="fa-solid fa-plus mr-1"></i> Bagikan Jok
-                </button>
+                <button id="btn-bagikan" class="bg-white text-blue-700 font-bold px-3 py-2 rounded-lg text-xs w-full"><i class="fa-solid fa-plus mr-1"></i> Bagikan Jok</button>
             </div>
-
-            <!-- Kotak 2: Temukan Jok -->
             <div class="bg-blue-700 rounded-2xl p-4 text-white">
                 <h2 class="text-xs font-bold mb-2">Lihat Daftar Jok Kosong Yang Tersedia</h2>
-                <button id="btn-temukan" class="bg-white text-blue-700 font-bold px-3 py-2 rounded-lg text-xs w-full">
-                    <i class="fa-solid fa-magnifying-glass mr-1"></i> Temukan Jok
-                </button>
+                <button id="btn-temukan" class="bg-white text-blue-700 font-bold px-3 py-2 rounded-lg text-xs w-full"><i class="fa-solid fa-magnifying-glass mr-1"></i> Temukan Jok</button>
             </div>
-
         </div>
     </div>
 
     <!-- Main Content -->
-    <main class="px-4">
+    <main class="px-4 mt-4">
         <form id="nebengForm" class="bg-white rounded-2xl p-5 shadow-sm space-y-4">
             <h3 class="font-bold text-gray-800"><i class="fa-solid fa-bullhorn mr-2"></i> Bagikan Jok Kosong</h3>
-            
-            <!-- Nama -->
             <div>
                 <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Nama Panggilan</label>
-                <input type="text" name="Nama" class="w-full mt-1 p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Contoh: Ruben" required>
+                <input type="text" name="Nama" class="w-full mt-1 p-3 border border-gray-200 rounded-xl" placeholder="Contoh: Ruben" required>
             </div>
-
-            <!-- Tujuan -->
             <div>
                 <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Tujuan</label>
-                <select name="Tujuan" class="w-full mt-1 p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none" required>
+                <select name="Tujuan" class="w-full mt-1 p-3 border border-gray-200 rounded-xl bg-white" required>
                     <option value="UNKRIT">Universitas Kristen Tentena</option>
                     <option value="STT">Sekolah Tinggi Teologi Tentena</option>
                     <option value="SMAN 1">SMAN 1 Pamona Utara</option>
@@ -70,205 +57,128 @@
                     <option value="SMK Eklesia">SMK Teknik Eklesia Tentena</option>
                 </select>
             </div>
-
-            <!-- Titik Jemput -->
             <div>
                 <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Titik Jemput (GPS)</label>
-                <button type="button" onclick="getLokasiOtomatis()" class="w-full mt-1 bg-gray-50 border border-dashed border-gray-300 py-3 rounded-xl text-blue-600 font-semibold text-sm hover:bg-gray-100 transition">
+                <button type="button" onclick="getLokasiOtomatis()" class="w-full mt-1 bg-gray-50 border border-dashed border-gray-300 py-3 rounded-xl text-blue-600 font-semibold text-sm">
                     <i class="fa-solid fa-location-dot mr-2"></i> Dapatkan Lokasi Saya
                 </button>
-                <input type="text" name="Titik Jemput" id="geo-link" class="w-full mt-2 p-2 border rounded-lg text-xs bg-gray-50" placeholder="Link akan otomatis terisi..." readonly required>
+                <input type="text" name="Titik Jemput" id="geo-link" class="w-full mt-2 p-2 border rounded-lg text-xs bg-gray-50" readonly required>
             </div>
-
-            <!-- Baris Jam & WA -->
             <div class="grid grid-cols-2 gap-3">
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Jam</label>
-                    <input type="text" name="Jam Berangkat" placeholder="07.00 WITA" class="w-full mt-1 p-3 border rounded-xl" required>
+                    <input type="text" name="Jam Berangkat" placeholder="07:00" class="w-full mt-1 p-3 border rounded-xl" required>
                 </div>
                 <div>
                     <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">No. WA</label>
                     <input type="tel" name="No WA" placeholder="08xx..." class="w-full mt-1 p-3 border rounded-xl" required>
                 </div>
             </div>
-
             <input type="hidden" name="Created" value="x-sheetmonkey-current-date-time" />
-            
-            <button type="submit" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-blue-700 transition active:scale-95">
-                <i class="fa-solid fa-rocket mr-2"></i> Buat Pengumuman
-            </button>
+            <button type="submit" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold hover:bg-blue-700">Buat Pengumuman</button>
         </form>
-
-        <!-- Tambahkan script GPS agar tombolnya berfungsi -->
-        <script>
-    // 1. Fungsi Lokasi
-    function getLokasiOtomatis() {
-        const btn = event.target.closest('button');
-        const inputLink = document.getElementById('geo-link');
-        
-        if (navigator.geolocation) {
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Mengambil...';
-            navigator.geolocation.getCurrentPosition((position) => {
-                inputLink.value = `https://maps.google.com/?q=${position.coords.latitude},${position.coords.longitude}`;
-                btn.innerHTML = '<i class="fa-solid fa-check mr-2"></i> Lokasi Terambil!';
-                btn.classList.replace('bg-gray-50', 'bg-green-50');
-            });
-        }
-    }
-
-    // 2. Fungsi Kirim Data (Tanpa Pindah Halaman)
-    const form = document.getElementById('nebengForm');
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault(); // Mencegah pindah halaman
-        
-        const btnSubmit = form.querySelector('button[type="submit"]');
-        btnSubmit.innerHTML = 'Mengirim...';
-        btnSubmit.disabled = true;
-
-        const data = new FormData(form);
-        await fetch('https://api.sheetmonkey.io/form/6xr8JzScmDA7KU84FLjKWp', {
-            method: 'POST',
-            body: data,
-        });
-
-        // Setelah sukses
-        alert('Data berhasil dikirim! Tebengan kamu sudah muncul.');
-        form.reset(); // Kosongkan form
-        btnSubmit.innerHTML = 'Buat Pengumuman';
-        btnSubmit.disabled = false;
-    });
-</script>
     </main>
 
-    <!-- Bottom Nav -->
-    <nav class="fixed bottom-0 w-full bg-white border-t flex justify-around p-3 text-gray-500">
-    <div id="nav-beranda" class="text-blue-600 text-center text-xs cursor-pointer"><i class="fa-solid fa-house block text-lg"></i>Beranda</div>
-    <div id="nav-cari" class="text-center text-xs cursor-pointer"><i class="fa-solid fa-magnifying-glass block text-lg"></i>Cari</div>
-    <div id="nav-jadwal" class="text-center text-xs cursor-pointer"><i class="fa-solid fa-calendar block text-lg"></i>Jadwal</div>
-    <div id="nav-pesan" class="text-center text-xs cursor-pointer"><i class="fa-solid fa-comment block text-lg"></i>Pesan</div>
-    <div id="nav-akun" class="text-center text-xs cursor-pointer"><i class="fa-solid fa-user block text-lg"></i>Akun</div>
-</nav>
-<script>
-    // 1. Fungsi Tombol "Bagikan Jok" ke Form
-    document.getElementById('btn-bagikan').addEventListener('click', function() {
-        document.querySelector('form').scrollIntoView({ behavior: 'smooth' });
-    });
-
-    // Fungsi buka modal
-    document.getElementById('btn-temukan').addEventListener('click', function() {
-        document.getElementById('modal-jok').classList.remove('hidden');
-        loadDataTebengan(); // Panggil fungsi ambil data saat modal dibuka
-    });
-
-    // Fungsi tutup modal
-    function tutupModal() {
-        document.getElementById('modal-jok').classList.add('hidden');
-    }
-    // 2. Fungsi Navigasi Bawah
-    const navItems = ['nav-beranda', 'nav-cari', 'nav-jadwal', 'nav-pesan', 'nav-akun'];
-    navItems.forEach(id => {
-        document.getElementById(id).addEventListener('click', function() {
-            if(id === 'nav-beranda') {
-                window.location.reload(); // Refresh untuk kembali ke posisi atas
-            } else {
-                alert("Fitur " + id.replace('nav-', '') + " sedang dalam tahap pengembangan, Tabea!");
-            }
-        });
-    });
-</script>
-<script>
-    async function loadDataTebengan() {
-        const container = document.getElementById('modal-data-container');
-        container.innerHTML = '<p class="text-white text-center p-4">Memuat data...</p>';
-        
-        try {
-            const response = await fetch('https://sheetdb.io/api/v1/oi1whu4x406qs?sort_by=Created&sort_order=desc');
-            const data = await response.json();
-
-            const sekarang = new Date().getTime();
-            const dataAktif = data.filter(item => {
-                const waktuInput = new Date(item.Created).getTime();
-                return (sekarang - waktuInput) < (24 * 60 * 60 * 1000);
-            });
-<div class="px-4 mb-4">
-    <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200">
-        <input type="text" id="filterTujuan" placeholder="Cari tujuan..." onkeyup="filterData()" class="w-full p-3 mb-2 border rounded-xl text-sm">
-        <select id="filterWaktu" onchange="filterData()" class="w-full p-3 border rounded-xl text-sm text-gray-600">
-            <option value="">Semua Waktu</option>
-            <option value="Pagi">Pagi (05:00 - 11:00)</option>
-            <option value="Siang">Siang (11:00 - 15:00)</option>
-            <option value="Sore">Sore (15:00 - 18:00)</option>
-            <option value="Malam">Malam (18:00 - 05:00)</option>
-        </select>
-    </div>
-</div>
-            
-            if (dataAktif.length > 0) {
-                container.innerHTML = dataAktif.map(item => {
-                    const pesanWA = `Halo ${item.Nama}, saya ingin nebeng ke ${item.Tujuan} pukul ${item['Jam Berangkat']}.`;
-                    const linkWA = `https://wa.me/${item['No WA']}?text=${encodeURIComponent(pesanWA)}`;
-
-                    return `
-                    <div class="bg-white p-4 rounded-2xl shadow-lg border border-gray-100 mx-2 mb-4">
-                        <div class="flex justify-between items-center">
-                            <div class="flex items-center gap-3">
-                                <img src="${item['Foto Profil'] || 'https://ui-avatars.com/api/?name=' + item.Nama}" class="w-12 h-12 rounded-full object-cover">
-                                <h4 class="font-bold text-gray-800 text-lg">${item.Nama}</h4>
-                            </div>
-                            <div class="text-xl font-black text-blue-600">${item['Jam Berangkat']}</div>
-                        </div>
-                        <div class="mt-3 text-sm text-gray-600"><i class="fa-solid fa-location-dot text-blue-500 mr-1"></i> ${item.Tujuan}</div>
-                        <div class="mt-4 flex gap-2">
-                            <a href="${item['Titik Jemput']}" target="_blank" class="flex-1 text-center bg-gray-100 py-2 rounded-xl text-gray-700 font-bold text-sm">Peta</a>
-                            <a href="${linkWA}" target="_blank" class="flex-[2] text-center bg-green-600 py-2 rounded-xl text-white font-bold text-sm">
-                                <i class="fa-brands fa-whatsapp mr-1"></i> Chat Driver
-                            </a>
-                        </div>
-                    </div>
-                    `;
-                }).join('');
-            } else {
-                container.innerHTML = '<p class="text-white text-center p-4">Belum ada tebengan aktif saat ini.</p>';
-            }
-        } catch (error) {
-            container.innerHTML = '<p class="text-white text-center p-4">Gagal memuat data.</p>';
-        }
-    }
-</script>
-<div id="modal-jok" class="fixed inset-0 bg-blue-900 bg-opacity-90 z-50 hidden flex flex-col">
-    <div class="p-4 flex justify-between items-center text-white border-b border-blue-700">
-        <h2 class="font-bold text-lg">Daftar Jok Tersedia</h2>
-        <button onclick="tutupModal()" class="text-white font-bold px-3 py-1 bg-blue-800 rounded-lg">✕ Tutup</button>
-    </div>
-    <div id="modal-data-container" class="p-4 overflow-y-auto flex-1 space-y-3">
+    <!-- Modal Temukan Jok (Filter Terintegrasi) -->
+    <div id="modal-jok" class="fixed inset-0 bg-blue-900 bg-opacity-90 z-50 hidden flex flex-col">
+        <div class="p-4 flex justify-between items-center text-white border-b border-blue-700">
+            <h2 class="font-bold text-lg">Daftar Jok Tersedia</h2>
+            <button onclick="tutupModal()" class="text-white font-bold px-3 py-1 bg-blue-800 rounded-lg">✕ Tutup</button>
         </div>
-</div>
-<!-- Tombol Dukung Admin -->
-<div class="text-center p-6">
-    <button onclick="bukaDonasi()" class="bg-gray-800 text-white px-6 py-3 rounded-full font-bold shadow-lg hover:bg-gray-700 transition">
-        <i class="fa-solid fa-coffee mr-2"></i> Traktir Admin
-    </button>
-</div>
+        <!-- Filter Bar -->
+        <div class="px-4 py-2 bg-blue-900">
+            <input type="text" id="filterTujuan" placeholder="Cari tujuan..." onkeyup="filterData()" class="w-full p-2 rounded-lg text-sm mb-2 outline-none">
+            <select id="filterWaktu" onchange="filterData()" class="w-full p-2 rounded-lg text-sm text-gray-600 outline-none">
+                <option value="">Semua Waktu</option>
+                <option value="Pagi">Pagi (05:00 - 11:00)</option>
+                <option value="Siang">Siang (11:00 - 15:00)</option>
+                <option value="Sore">Sore (15:00 - 18:00)</option>
+                <option value="Malam">Malam (18:00 - 05:00)</option>
+            </select>
+        </div>
+        <div id="modal-data-container" class="p-4 overflow-y-auto flex-1 space-y-3"></div>
+    </div>
 
-<!-- Modal Donasi (Awalnya tersembunyi) -->
-<div id="modal-donasi" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-4 z-50">
-    <!-- Tombol Dukung Admin (Langsung buka aplikasi DANA) -->
-<div class="text-center p-6">
-    <a href="https://link.dana.id/minta?full_url=https://qr.dana.id/v1/281012012021051353281852" target="_blank" class="block bg-blue-600 text-white px-6 py-4 rounded-2xl font-bold shadow-lg hover:bg-blue-700 transition transform hover:scale-105">
-        <i class="fa-solid fa-coffee mr-2"></i> Traktir Admin Kopi (DANA)
-    </a>
-    <p class="text-xs text-gray-500 mt-3 italic">Terima kasih sudah mendukung NebengSobat Tentena!</p>
-</div>
-</div>
+    <!-- Donasi -->
+    <div class="text-center p-6">
+        <button onclick="bukaDonasi()" class="bg-gray-800 text-white px-6 py-3 rounded-full font-bold shadow-lg hover:bg-gray-700 transition">
+            <i class="fa-solid fa-coffee mr-2"></i> Traktir Admin
+        </button>
+    </div>
 
-<script>
-    function bukaDonasi() {
-        document.getElementById('modal-donasi').classList.remove('hidden');
-    }
-    function tutupDonasi() {
-        document.getElementById('modal-donasi').classList.add('hidden');
-    }
-</script>
-    
+    <div id="modal-donasi" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white p-6 rounded-2xl w-full max-w-sm text-center">
+            <a href="https://link.dana.id/minta?full_url=https://qr.dana.id/v1/281012012021051353281852" target="_blank" class="block bg-blue-600 text-white px-6 py-4 rounded-2xl font-bold shadow-lg">
+                <i class="fa-solid fa-coffee mr-2"></i> Traktir Admin Kopi (DANA)
+            </a>
+            <button onclick="tutupDonasi()" class="mt-4 text-gray-400 font-bold">Tutup</button>
+        </div>
+    </div>
+
+    <!-- Script Utama -->
+    <script>
+        let semuaData = [];
+
+        async function loadDataTebengan() {
+            const container = document.getElementById('modal-data-container');
+            container.innerHTML = '<p class="text-white text-center p-4">Memuat data...</p>';
+            try {
+                const response = await fetch('https://sheetdb.io/api/v1/oi1whu4x406qs?sort_by=Created&sort_order=desc');
+                semuaData = await response.json();
+                tampilkanData(semuaData);
+            } catch (e) { container.innerHTML = '<p class="text-white">Gagal memuat.</p>'; }
+        }
+
+        function tampilkanData(data) {
+            const container = document.getElementById('modal-data-container');
+            container.innerHTML = data.length > 0 ? data.map(item => `
+                <div class="bg-white p-4 rounded-2xl shadow-lg border border-gray-100">
+                    <div class="flex justify-between items-center"><h4 class="font-bold text-gray-800">${item.Nama}</h4><span class="text-blue-600 font-black">${item['Jam Berangkat']}</span></div>
+                    <div class="text-sm text-gray-600 my-1"><i class="fa-solid fa-location-dot mr-1 text-blue-500"></i> ${item.Tujuan}</div>
+                    <div class="mt-3 flex gap-2">
+                        <a href="${item['Titik Jemput']}" target="_blank" class="flex-1 text-center bg-gray-100 py-2 rounded-xl text-sm font-bold">Peta</a>
+                        <a href="https://wa.me/${item['No WA']}" target="_blank" class="flex-[2] text-center bg-green-600 py-2 rounded-xl text-white text-sm font-bold">Chat Driver</a>
+                    </div>
+                </div>`).join('') : '<p class="text-white text-center">Data tidak ditemukan.</p>';
+        }
+
+        function filterData() {
+            const teks = document.getElementById('filterTujuan').value.toLowerCase();
+            const waktu = document.getElementById('filterWaktu').value;
+            const hasil = semuaData.filter(item => {
+                const cocokTujuan = item.Tujuan.toLowerCase().includes(teks);
+                let cocokWaktu = true;
+                const jam = parseInt(item['Jam Berangkat'].split(':')[0]);
+                if (waktu === 'Pagi') cocokWaktu = (jam >= 5 && jam < 11);
+                else if (waktu === 'Siang') cocokWaktu = (jam >= 11 && jam < 15);
+                else if (waktu === 'Sore') cocokWaktu = (jam >= 15 && jam < 18);
+                else if (waktu === 'Malam') cocokWaktu = (jam >= 18 || jam < 5);
+                return cocokTujuan && cocokWaktu;
+            });
+            tampilkanData(hasil);
+        }
+
+        // Fungsi Pendukung lainnya
+        document.getElementById('btn-bagikan').onclick = () => document.getElementById('nebengForm').scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('btn-temukan').onclick = () => { document.getElementById('modal-jok').classList.remove('hidden'); loadDataTebengan(); };
+        function tutupModal() { document.getElementById('modal-jok').classList.add('hidden'); }
+        function bukaDonasi() { document.getElementById('modal-donasi').classList.remove('hidden'); }
+        function tutupDonasi() { document.getElementById('modal-donasi').classList.add('hidden'); }
+        
+        async function getLokasiOtomatis() {
+            const inputLink = document.getElementById('geo-link');
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((pos) => {
+                    inputLink.value = `https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                });
+            }
+        }
+        
+        document.getElementById('nebengForm').onsubmit = async (e) => {
+            e.preventDefault();
+            await fetch('https://api.sheetmonkey.io/form/6xr8JzScmDA7KU84FLjKWp', { method: 'POST', body: new FormData(e.target) });
+            alert('Berhasil!'); e.target.reset();
+        };
+    </script>
 </body>
 </html>
