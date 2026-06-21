@@ -190,7 +190,19 @@
                 const waktuInput = new Date(item.Created).getTime();
                 return (sekarang - waktuInput) < (24 * 60 * 60 * 1000);
             });
-
+<div class="px-4 mb-4">
+    <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200">
+        <input type="text" id="filterTujuan" placeholder="Cari tujuan..." onkeyup="filterData()" class="w-full p-3 mb-2 border rounded-xl text-sm">
+        <select id="filterWaktu" onchange="filterData()" class="w-full p-3 border rounded-xl text-sm text-gray-600">
+            <option value="">Semua Waktu</option>
+            <option value="Pagi">Pagi (05:00 - 11:00)</option>
+            <option value="Siang">Siang (11:00 - 15:00)</option>
+            <option value="Sore">Sore (15:00 - 18:00)</option>
+            <option value="Malam">Malam (18:00 - 05:00)</option>
+        </select>
+    </div>
+</div>
+            
             if (dataAktif.length > 0) {
                 container.innerHTML = dataAktif.map(item => {
                     const pesanWA = `Halo ${item.Nama}, saya ingin nebeng ke ${item.Tujuan} pukul ${item['Jam Berangkat']}.`;
