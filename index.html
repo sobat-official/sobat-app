@@ -193,10 +193,36 @@
         }
         
         document.getElementById('nebengForm').onsubmit = async (e) => {
-            e.preventDefault();
-            await fetch('https://api.sheetmonkey.io/form/6xr8JzScmDA7KU84FLjKWp', { method: 'POST', body: new FormData(e.target) });
-            alert('Berhasil!'); e.target.reset();
-        };
+    e.preventDefault();
+    
+    // 1. Ambil elemen tombol
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    
+    // 2. Ubah status tombol menjadi Loading
+    submitBtn.disabled = true;
+    submitBtn.classList.add('opacity-70', 'cursor-not-allowed');
+    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Mengirim...';
+    
+    try {
+        // 3. Kirim data
+        await fetch('https://api.sheetmonkey.io/form/6xr8JzScmDA7KU84FLjKWp', { 
+            method: 'POST', 
+            body: new FormData(e.target) 
+        });
+        
+        // 4. Sukses: Reset form dan tampilkan pesan
+        alert('Berhasil! Jok kamu sudah dibagikan.');
+        e.target.reset();
+    } catch (error) {
+        alert('Gagal mengirim data, silakan coba lagi.');
+    } finally {
+        // 5. Kembalikan tombol ke kondisi semula
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('opacity-70', 'cursor-not-allowed');
+        submitBtn.innerHTML = originalText;
+    }
+};
     </script>
     <script>
     function formatWA(input) {
