@@ -78,15 +78,12 @@
            oninput="formatWA(this)" maxlength="18" required>
 </div>
             <input type="hidden" name="Created" value="x-sheetmonkey-current-date-time" />
-            <!-- Tombol Aksi - Layout Full-Width -->
-<div class="flex gap-3 w-full mt-2">
-    <!-- Tombol Bagikan Jok -->
-    <button type="submit" class="flex-[3] bg-blue-600 text-white py-4 rounded-xl font-bold shadow-lg hover:bg-blue-700 transition active:scale-95 flex items-center justify-center">
+          <div class="flex gap-4 w-full mt-4">
+    <button type="submit" class="flex-[3] whitespace-nowrap bg-blue-600 text-white py-4 rounded-xl font-bold shadow-lg hover:bg-blue-700 transition active:scale-95 flex items-center justify-center text-sm md:text-base">
         <i class="fa-solid fa-rocket mr-2"></i> Bagikan Jok Kosong
     </button>
     
-    <!-- Tombol Traktir Admin -->
-    <button type="button" onclick="bukaDonasi()" class="flex-[2] bg-amber-500 text-white py-4 rounded-xl font-bold shadow-lg hover:bg-amber-600 transition active:scale-95 flex items-center justify-center">
+    <button type="button" onclick="bukaDonasi()" class="flex-[2] whitespace-nowrap bg-amber-500 text-white py-4 rounded-xl font-bold shadow-lg hover:bg-amber-600 transition active:scale-95 flex items-center justify-center text-sm md:text-base">
         <i class="fa-solid fa-coffee mr-2"></i> Traktir Admin
     </button>
 </div>
