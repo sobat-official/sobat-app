@@ -68,26 +68,33 @@
 </button>
                 <input type="text" name="Titik Jemput" id="geo-link" class="w-full mt-2 p-2 border rounded-lg text-xs bg-gray-50" readonly required>
             </div>
-          
-              <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Jam</label>
-                    <input type="text" name="Jam Berangkat" inputmode="decimal" pattern="([0-1]?[0-9]|2[0-3])[\.:]?[0-5][0-9]" placeholder="07.00" class="w-full mt-1 p-3 border rounded-xl" required>
-                </div>
-                <div>
-                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">No. WhatsApp</label>
-                    <input type="text" name="No WA" id="no-wa" placeholder="+62 8xx xxx xxx xx" inputmode="numeric" pattern="[0-9\+\s]*" class="w-full mt-1 p-3 border rounded-xl" oninput="formatWA(this)" maxlength="18" required>
-                </div>
-            </div> <input type="hidden" name="Created" value="x-sheetmonkey-current-date-time" />
-            
-            <div class="flex gap-3 w-full mt-4">
-                <button type="submit" class="flex-[7] bg-blue-600 text-white py-4 rounded-xl font-bold shadow-md hover:bg-blue-700 transition active:scale-95 flex items-center justify-center text-sm md:text-base">
-                    <i class="fa-solid fa-rocket mr-2"></i> <span>Bagikan Jok</span>
-                </button>
-                <button type="button" onclick="bukaDonasi()" class="flex-[3] bg-amber-500 text-white py-4 rounded-xl font-bold shadow-md hover:bg-amber-600 transition active:scale-95 flex items-center justify-center text-sm md:text-base">
-                    <i class="fa-solid fa-coffee mr-2"></i> <span>Traktir</span>
-                </button>
-            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+    <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Jam</label>
+    <input type="text" name="Jam Berangkat" 
+       inputmode="decimal" 
+       pattern="([0-1]?[0-9]|2[0-3])[\.:]?[0-5][0-9]" 
+       placeholder="07.00" 
+       class="w-full mt-1 p-3 border rounded-xl" 
+       required>
+</div>
+                <div>
+    <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">No. WhatsApp</label>
+    <input type="text" name="No WA" id="no-wa" placeholder="+62 8xx xxx xxx xx" 
+           inputmode="numeric" pattern="[0-9\+\s]*"
+           class="w-full mt-1 p-3 border rounded-xl" 
+           oninput="formatWA(this)" maxlength="18" required>
+</div>
+            <input type="hidden" name="Created" value="x-sheetmonkey-current-date-time" />
+        <div class="flex gap-3 w-full mt-4">
+    <button type="submit" class="flex-[7] bg-blue-600 text-white py-4 rounded-xl font-bold shadow-md hover:bg-blue-700 transition active:scale-95 flex items-center justify-center text-sm md:text-base">
+        <i class="fa-solid fa-rocket mr-2"></i> <span>Bagikan Jok</span>
+    </button>
+    
+    <button type="button" onclick="bukaDonasi()" class="flex-[3] bg-amber-500 text-white py-4 rounded-xl font-bold shadow-md hover:bg-amber-600 transition active:scale-95 flex items-center justify-center text-sm md:text-base">
+        <i class="fa-solid fa-coffee mr-2"></i> <span>Traktir</span>
+    </button>
+</div>
         </form>
     </main>
 
