@@ -78,7 +78,11 @@
            oninput="formatWA(this)" maxlength="18" required>
 </div>
             <input type="hidden" name="Created" value="x-sheetmonkey-current-date-time" />
-            <button type="submit" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold hover:bg-blue-700">Buat Pengumuman</button>
+            <div class="grid grid-cols-4 gap-3">
+    <button type="submit" class="col-span-3 bg-blue-600 text-white py-4 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-blue-700 transition active:scale-95">
+        <i class="fa-solid fa-rocket mr-2"></i> Buat Pengumuman
+    </button>
+</div>
         </form>
     </main>
 
@@ -104,9 +108,9 @@
 
     <!-- Donasi -->
     <div class="text-center p-6">
-        <button onclick="bukaDonasi()" class="bg-gray-800 text-white px-6 py-3 rounded-full font-bold shadow-lg hover:bg-gray-700 transition">
-            <i class="fa-solid fa-coffee mr-2"></i> Traktir Admin
-        </button>
+        <button type="button" onclick="bukaDonasi()" class="col-span-1 bg-amber-500 text-white py-4 rounded-xl font-bold shadow-lg shadow-amber-200 hover:bg-amber-600 transition active:scale-95 flex items-center justify-center">
+        <i class="fa-solid fa-coffee"></i>
+    </button>
     </div>
 
     <div id="modal-donasi" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-4 z-50">
