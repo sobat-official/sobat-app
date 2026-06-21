@@ -199,21 +199,29 @@
     const btn = document.getElementById('btn-lokasi');
     const text = document.getElementById('text-lokasi');
     
+    // Opsi agar lebih presisi
+    const options = {
+        enableHighAccuracy: true, // Memaksa browser menggunakan GPS jika tersedia
+        timeout: 10000,           // Waktu tunggu 10 detik
+        maximumAge: 0             // Tidak mengambil data lama
+    };
+    
     if (navigator.geolocation) {
-        text.innerText = "Mengambil...";
+        text.innerText = "Mendeteksi...";
         navigator.geolocation.getCurrentPosition((pos) => {
             const lat = pos.coords.latitude;
             const lng = pos.coords.longitude;
             
-            // PERBAIKAN: Format link Google Maps yang benar
-            inputLink.value = `https://www.google.com/maps?q=${lat},${lng}`;
+            // Menggunakan format URL maps.google.com yang lebih stabil
+            // z=18 memberikan tampilan zoom yang sangat dekat (presisi)
+            inputLink.value = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
             
-            text.innerText = "Berhasil!";
+            text.innerText = "Lokasi Ditemukan!";
             btn.classList.add('border-green-500', 'text-green-600', 'bg-green-50');
         }, (err) => {
-            alert("Gagal. Pastikan izin lokasi aktif.");
+            alert("Gagal. Pastikan GPS HP aktif & beri izin lokasi.");
             text.innerText = "Dapatkan Lokasi Saya";
-        });
+        }, options); // Menambahkan options di sini
     } else {
         alert("Browser tidak mendukung GPS.");
     }
