@@ -202,7 +202,29 @@
         tampilkanData(hasil);
     }
 
-    document.getElementById('btn-bagikan').onclick = () => document.getElementById('nebengForm').scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('btn-bagikan').onclick = () => document.getElementById('nebengForm').onsubmit = async (e) => {
+    e.preventDefault();
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Mengirim...';
+    
+    try {
+        await fetch('https://api.sheetmonkey.io/form/6xr8JzScmDA7KU84FLjKWp', { 
+            method: 'POST', 
+            body: new FormData(e.target) 
+        });
+        
+        // --- PANGGIL FUNGSI NOTIFIKASI DI SINI ---
+        tampilNotif(); 
+        
+        e.target.reset();
+    } catch (error) { 
+        alert('Gagal mengirim data.'); 
+    } finally { 
+        submitBtn.disabled = false; 
+        submitBtn.innerHTML = '<i class="fa-solid fa-rocket mr-2"></i> Bagikan Jok'; 
+    }
+};
     document.getElementById('btn-temukan').onclick = () => { document.getElementById('modal-jok').classList.remove('hidden'); loadDataTebengan(); };
     function tutupModal() { document.getElementById('modal-jok').classList.add('hidden'); }
     function bukaDonasi() { document.getElementById('modal-donasi').classList.remove('hidden'); }
@@ -243,10 +265,38 @@
         if (val.startsWith('0')) val = '62' + val.substring(1);
         input.value = val.length > 0 ? '+' + val : '';
     }
+        function tampilNotif() {
+    const notif = document.getElementById('notif-berhasil');
+    notif.classList.remove('hidden');
+    // Beri sedikit jeda untuk animasi
+    setTimeout(() => {
+        notif.classList.add('opacity-100');
+        notif.querySelector('div').classList.remove('scale-95');
+        notif.querySelector('div').classList.add('scale-100');
+    }, 10);
+}
+
+function tutupNotif() {
+    const notif = document.getElementById('notif-berhasil');
+    notif.classList.remove('opacity-100');
+    notif.querySelector('div').classList.remove('scale-100');
+    notif.querySelector('div').classList.add('scale-95');
+    setTimeout(() => notif.classList.add('hidden'), 300);
+}
 </script>
     <footer class="text-center p-4 text-gray-400 text-[10px]">
     <p>NebengSobat Tentena © 2026</p>
     <p>Dikembangkan untuk komunitas kampus & sekolah</p>
 </footer>
+    <div id="notif-berhasil" class="fixed inset-0 z-[100] flex items-center justify-center p-4 hidden transition-opacity duration-300 opacity-0">
+    <div class="bg-white rounded-2xl p-6 shadow-2xl text-center transform scale-95 transition-transform duration-300 w-full max-w-sm">
+        <div class="w-16 h-16 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fa-solid fa-check text-3xl"></i>
+        </div>
+        <h3 class="text-lg font-bold text-gray-800">Berhasil!</h3>
+        <p class="text-sm text-gray-600 mt-1 mb-6">Jok kamu sudah dibagikan ke komunitas.</p>
+        <button onclick="tutupNotif()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700">Tutup</button>
+    </div>
+</div>
 </body>
 </html>
