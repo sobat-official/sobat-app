@@ -23,10 +23,14 @@
         </div>
         <ul class="space-y-6">
             <li><a href="#" onclick="tutupMenu()" class="flex items-center gap-4 text-gray-700 font-medium"><i class="fa-solid fa-house text-blue-600 w-6"></i> Beranda</a></li>
-            <li><a href="#" onclick="alert('Cara Pakai:\n1. Bagikan Jok jika punya kendaraan.\n2. Klik Temukan Jok untuk mencari tumpangan.\n3. Chat driver untuk konfirmasi.'); tutupMenu()" class="flex items-center gap-4 text-gray-700 font-medium"><i class="fa-solid fa-lightbulb text-amber-500 w-6"></i> Cara Pakai</a></li>
+            <li><a href="#" onclick="bukaModalInfo('Cara Pakai', '1. Bagikan Jok jika punya kendaraan.\n2. Klik Temukan Jok untuk mencari tumpangan.\n3. Chat driver untuk konfirmasi.'); tutupMenu()" class="...">
+    <i class="fa-solid fa-lightbulb text-amber-500 w-6"></i> Cara Pakai
+</a></li>
             <li><a href="#" onclick="bukaDonasi(); tutupMenu()" class="flex items-center gap-4 text-gray-700 font-medium"><i class="fa-solid fa-heart text-red-500 w-6"></i> Traktir Admin</a></li>
             <li><a href="https://wa.me/628xxxxxxxxxx" target="_blank" class="flex items-center gap-4 text-gray-700 font-medium"><i class="fa-brands fa-whatsapp text-green-500 w-6"></i> Hubungi Admin</a></li>
-            <li><a href="#" onclick="alert('NebengSobat Tentena adalah platform berbagi tumpangan untuk komunitas Tentena.'); tutupMenu()" class="flex items-center gap-4 text-gray-700 font-medium"><i class="fa-solid fa-users text-blue-600 w-6"></i> Tentang Kami</a></li>
+            <li><a href="#" onclick="bukaModalInfo('Tentang Kami', 'NebengSobat Tentena adalah platform berbagi tumpangan khusus untuk komunitas kampus & sekolah di Tentena.'); tutupMenu()" class="...">
+    <i class="fa-solid fa-users text-blue-600 w-6"></i> Tentang Kami
+</a></li>
         </ul>
     </div>
 </div>
@@ -168,16 +172,16 @@
 
     <!-- Script Utama -->
     <script>
-        function bukaMenu() {
-    const menu = document.getElementById('menu-side');
-    menu.classList.remove('hidden');
-    setTimeout(() => menu.classList.add('opacity-100'), 10);
+        // Fungsi untuk memanggil modal
+function bukaModalInfo(judul, pesan) {
+    document.getElementById('info-title').innerText = judul;
+    document.getElementById('info-text').innerText = pesan;
+    document.getElementById('modal-info').classList.remove('hidden');
 }
 
-function tutupMenu() {
-    const menu = document.getElementById('menu-side');
-    menu.classList.add('hidden');
-    menu.classList.remove('opacity-100');
+// Fungsi untuk menutup modal
+function tutupModalInfo() {
+    document.getElementById('modal-info').classList.add('hidden');
 }
     let semuaData = [];
 // --- TAMBAHKAN FUNGSI INI ---
@@ -302,6 +306,13 @@ function tutupMenu() {
         <h3 class="text-lg font-bold text-gray-800">Berhasil!</h3>
         <p class="text-sm text-gray-600 mt-1 mb-6">Jok kamu sudah dibagikan ke komunitas.</p>
         <button onclick="tutupNotif()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700">Tutup</button>
+    </div>
+</div>
+    <div id="modal-info" class="fixed inset-0 bg-black bg-opacity-50 z-[200] hidden flex items-center justify-center p-4" onclick="tutupModalInfo()">
+    <div class="bg-white rounded-2xl p-6 shadow-2xl max-w-sm w-full" onclick="event.stopPropagation()">
+        <h3 id="info-title" class="font-bold text-lg text-gray-800 mb-2"></h3>
+        <p id="info-text" class="text-sm text-gray-600 mb-6"></p>
+        <button onclick="tutupModalInfo()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold">Mengerti</button>
     </div>
 </div>
 </body>
