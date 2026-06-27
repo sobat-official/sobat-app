@@ -15,13 +15,18 @@
 
     <!-- Header -->
     <header class="bg-blue-600 text-white p-4 flex justify-between items-center shadow-md">
-        <div id="menu-side" class="fixed inset-0 bg-black bg-opacity-50 z-[100] hidden" onclick="tutupMenu()">
-    <div class="bg-white w-64 h-full shadow-xl p-6" onclick="event.stopPropagation()">
-        <h3 class="font-bold text-gray-800 mb-6">Menu</h3>
-        <ul class="space-y-4">
-            <li><a href="#" onclick="tutupMenu()" class="block text-gray-700 font-medium">Beranda</a></li>
-            <li><a href="#" onclick="bukaDonasi(); tutupMenu()" class="block text-gray-700 font-medium">Traktir Admin</a></li>
-            <li><a href="https://wa.me/62xxxxxxxxxxx" target="_blank" class="block text-gray-700 font-medium">Hubungi Admin</a></li>
+        <div id="menu-side" class="fixed inset-0 bg-black bg-opacity-50 z-[100] hidden transition-opacity duration-300" onclick="tutupMenu()">
+    <div class="bg-white w-3/4 max-w-xs h-full shadow-2xl p-6 transition-transform duration-300 translate-x-0" onclick="event.stopPropagation()">
+        <div class="flex items-center gap-3 mb-8">
+            <div class="bg-blue-600 p-2 rounded-lg text-white"><i class="fa-solid fa-car"></i></div>
+            <h3 class="font-bold text-gray-800">Menu Utama</h3>
+        </div>
+        <ul class="space-y-6">
+            <li><a href="#" onclick="tutupMenu()" class="flex items-center gap-4 text-gray-700 font-medium"><i class="fa-solid fa-house text-blue-600 w-6"></i> Beranda</a></li>
+            <li><a href="#" onclick="alert('Cara Pakai:\n1. Bagikan Jok jika punya kendaraan.\n2. Klik Temukan Jok untuk mencari tumpangan.\n3. Chat driver untuk konfirmasi.'); tutupMenu()" class="flex items-center gap-4 text-gray-700 font-medium"><i class="fa-solid fa-lightbulb text-amber-500 w-6"></i> Cara Pakai</a></li>
+            <li><a href="#" onclick="bukaDonasi(); tutupMenu()" class="flex items-center gap-4 text-gray-700 font-medium"><i class="fa-solid fa-heart text-red-500 w-6"></i> Traktir Admin</a></li>
+            <li><a href="https://wa.me/628xxxxxxxxxx" target="_blank" class="flex items-center gap-4 text-gray-700 font-medium"><i class="fa-brands fa-whatsapp text-green-500 w-6"></i> Hubungi Admin</a></li>
+            <li><a href="#" onclick="alert('NebengSobat Tentena adalah platform berbagi tumpangan untuk komunitas Tentena.'); tutupMenu()" class="flex items-center gap-4 text-gray-700 font-medium"><i class="fa-solid fa-users text-blue-600 w-6"></i> Tentang Kami</a></li>
         </ul>
     </div>
 </div>
@@ -164,11 +169,15 @@
     <!-- Script Utama -->
     <script>
         function bukaMenu() {
-    document.getElementById('menu-side').classList.remove('hidden');
+    const menu = document.getElementById('menu-side');
+    menu.classList.remove('hidden');
+    setTimeout(() => menu.classList.add('opacity-100'), 10);
 }
 
 function tutupMenu() {
-    document.getElementById('menu-side').classList.add('hidden');
+    const menu = document.getElementById('menu-side');
+    menu.classList.add('hidden');
+    menu.classList.remove('opacity-100');
 }
     let semuaData = [];
 // --- TAMBAHKAN FUNGSI INI ---
