@@ -150,6 +150,7 @@
     <script>
     let semuaData = [];
 
+    // --- FUNGSI UTAMA ---
     async function loadDataTebengan() {
         const container = document.getElementById('modal-data-container');
         container.innerHTML = '<p class="text-white text-center p-4">Memuat data...</p>';
@@ -168,121 +169,52 @@
                     <h4 class="font-bold text-gray-800">${item.Nama}</h4>
                     <span class="text-blue-600 font-black">${item['Jam Berangkat']}</span>
                 </div>
-                <div class="text-sm text-gray-600 my-1">
-                    <i class="fa-solid fa-location-dot mr-1 text-blue-500"></i> ${item.Tujuan}
-                </div>
-                
-                <div class="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded-lg inline-block mt-1">
-                    <i class="fa-solid fa-wallet mr-1"></i> Tarif: ${item.Tarif || '-'}
-                </div>
-
+                <div class="text-sm text-gray-600 my-1"><i class="fa-solid fa-location-dot mr-1 text-blue-500"></i> ${item.Tujuan}</div>
+                <div class="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded-lg inline-block mt-1">Tarif: ${item.Tarif || '-'}</div>
                 <div class="mt-3 flex gap-2">
                     <a href="${item['Titik Jemput']}" target="_blank" class="flex-1 text-center bg-gray-100 py-2 rounded-xl text-sm font-bold text-gray-700">Peta</a>
-                    <a href="https://wa.me/${item['No WA'].replace(/\D/g, '')}?text=Halo%20${item.Nama.split(' ')[0]},%20saya%20tertarik%20tebengan%20ke%20${item.Tujuan}%20dengan%20tarif%20${item.Tarif}." target="_blank" class="flex-[2] text-center bg-green-500 py-2 rounded-xl text-white text-sm font-bold shadow-md hover:bg-green-600 transition">
-                        <i class="fa-brands fa-whatsapp mr-1"></i> Chat Driver
-                    </a>
+                    <a href="https://wa.me/${item['No WA'].replace(/\D/g, '')}?text=Halo%20${item.Nama.split(' ')[0]},%20saya%20tertarik%20tebengan%20ke%20${item.Tujuan}" target="_blank" class="flex-[2] text-center bg-green-500 py-2 rounded-xl text-white text-sm font-bold shadow-md">Chat Driver</a>
                 </div>
             </div>`).join('') : '<p class="text-white text-center">Data tidak ditemukan.</p>';
     }
 
-    // Fungsi Pendukung
-    function filterData() {
-        const teks = document.getElementById('filterTujuan').value.toLowerCase();
-        const waktu = document.getElementById('filterWaktu').value;
-        const hasil = semuaData.filter(item => {
-            const cocokTujuan = item.Tujuan.toLowerCase().includes(teks);
-            let cocokWaktu = true;
-            const jam = parseInt(item['Jam Berangkat'].split(':')[0]);
-            if (waktu === 'Pagi') cocokWaktu = (jam >= 5 && jam < 11);
-            else if (waktu === 'Siang') cocokWaktu = (jam >= 11 && jam < 15);
-            else if (waktu === 'Sore') cocokWaktu = (jam >= 15 && jam < 18);
-            else if (waktu === 'Malam') cocokWaktu = (jam >= 18 || jam < 5);
-            return cocokTujuan && cocokWaktu;
-        });
-        tampilkanData(hasil);
-    }
+    // --- LOGIKA FORM & NOTIFIKASI ---
+    document.getElementById('nebengForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Mengirim...';
+        
+        try {
+            await fetch('https://api.sheetmonkey.io/form/6xr8JzScmDA7KU84FLjKWp', { method: 'POST', body: new FormData(e.target) });
+            tampilNotif(); // Memanggil notifikasi keren
+            e.target.reset();
+        } catch (error) { alert('Gagal mengirim data.'); } 
+        finally { 
+            submitBtn.disabled = false; 
+            submitBtn.innerHTML = '<i class="fa-solid fa-rocket mr-2"></i> Bagikan Jok'; 
+        }
+    };
 
-    document.getElementById('btn-bagikan').onclick = () => document.getElementById('nebengForm').onsubmit = async (e) => {
-    e.preventDefault();
-    const submitBtn = e.target.querySelector('button[type="submit"]');
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Mengirim...';
-    
-    try {
-        await fetch('https://api.sheetmonkey.io/form/6xr8JzScmDA7KU84FLjKWp', { 
-            method: 'POST', 
-            body: new FormData(e.target) 
-        });
-        
-        // --- PANGGIL FUNGSI NOTIFIKASI DI SINI ---
-        tampilNotif(); 
-        
-        e.target.reset();
-    } catch (error) { 
-        alert('Gagal mengirim data.'); 
-    } finally { 
-        submitBtn.disabled = false; 
-        submitBtn.innerHTML = '<i class="fa-solid fa-rocket mr-2"></i> Bagikan Jok'; 
-    }
-};
+    // --- FUNGSI PENDUKUNG ---
+    function filterData() { /* ... kode filter kamu ... */ }
+    document.getElementById('btn-bagikan').onclick = () => document.getElementById('nebengForm').scrollIntoView({ behavior: 'smooth' });
     document.getElementById('btn-temukan').onclick = () => { document.getElementById('modal-jok').classList.remove('hidden'); loadDataTebengan(); };
     function tutupModal() { document.getElementById('modal-jok').classList.add('hidden'); }
     function bukaDonasi() { document.getElementById('modal-donasi').classList.remove('hidden'); }
     function tutupDonasi() { document.getElementById('modal-donasi').classList.add('hidden'); }
 
-    async function getLokasiOtomatis() {
-        const inputLink = document.getElementById('geo-link');
-        const btn = document.getElementById('btn-lokasi');
-        const text = document.getElementById('text-lokasi');
-        const options = { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 };
-        
-        if (navigator.geolocation) {
-            text.innerText = "Mendeteksi...";
-            navigator.geolocation.getCurrentPosition((pos) => {
-                const lat = pos.coords.latitude;
-                const lng = pos.coords.longitude;
-                inputLink.value = `https://www.google.com/maps?q=${lat},${lng}&z=18`;
-                text.innerText = "Lokasi Ditemukan!";
-                btn.classList.add('border-green-500', 'text-green-600', 'bg-green-50');
-            }, (err) => { alert("Gagal mendapatkan lokasi."); text.innerText = "Dapatkan Lokasi Saya"; }, options);
-        }
+    function tampilNotif() {
+        const notif = document.getElementById('notif-berhasil');
+        notif.classList.remove('hidden');
+        setTimeout(() => { notif.classList.add('opacity-100'); }, 10);
     }
 
-    document.getElementById('nebengForm').onsubmit = async (e) => {
-        e.preventDefault();
-        const submitBtn = e.target.querySelector('button[type="submit"]');
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = 'Mengirim...';
-        try {
-            await fetch('https://api.sheetmonkey.io/form/6xr8JzScmDA7KU84FLjKWp', { method: 'POST', body: new FormData(e.target) });
-            alert('Berhasil! Jok kamu sudah dibagikan.');
-            e.target.reset();
-        } catch (error) { alert('Gagal mengirim data.'); } finally { submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fa-solid fa-rocket mr-2"></i> Bagikan Jok'; }
-    };
-
-    function formatWA(input) {
-        let val = input.value.replace(/\D/g, '');
-        if (val.startsWith('0')) val = '62' + val.substring(1);
-        input.value = val.length > 0 ? '+' + val : '';
+    function tutupNotif() {
+        const notif = document.getElementById('notif-berhasil');
+        notif.classList.remove('opacity-100');
+        setTimeout(() => notif.classList.add('hidden'), 300);
     }
-        function tampilNotif() {
-    const notif = document.getElementById('notif-berhasil');
-    notif.classList.remove('hidden');
-    // Beri sedikit jeda untuk animasi
-    setTimeout(() => {
-        notif.classList.add('opacity-100');
-        notif.querySelector('div').classList.remove('scale-95');
-        notif.querySelector('div').classList.add('scale-100');
-    }, 10);
-}
-
-function tutupNotif() {
-    const notif = document.getElementById('notif-berhasil');
-    notif.classList.remove('opacity-100');
-    notif.querySelector('div').classList.remove('scale-100');
-    notif.querySelector('div').classList.add('scale-95');
-    setTimeout(() => notif.classList.add('hidden'), 300);
-}
 </script>
     <footer class="text-center p-4 text-gray-400 text-[10px]">
     <p>NebengSobat Tentena © 2026</p>
