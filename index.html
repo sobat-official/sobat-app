@@ -172,6 +172,18 @@
 
     <!-- Script Utama -->
     <script>
+        function bukaMenu() {
+    const menu = document.getElementById('menu-side');
+    menu.classList.remove('hidden');
+    // Efek transisi halus
+    setTimeout(() => menu.classList.add('opacity-100'), 10);
+}
+
+function tutupMenu() {
+    const menu = document.getElementById('menu-side');
+    menu.classList.add('hidden');
+    menu.classList.remove('opacity-100');
+}
         // Fungsi untuk memanggil modal
 function bukaModalInfo(judul, pesan) {
     document.getElementById('info-title').innerText = judul;
