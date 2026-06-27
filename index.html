@@ -149,7 +149,30 @@
     <!-- Script Utama -->
     <script>
     let semuaData = [];
-
+// --- TAMBAHKAN FUNGSI INI ---
+    async function getLokasiOtomatis() {
+        const inputLink = document.getElementById('geo-link');
+        const btn = document.getElementById('btn-lokasi');
+        const text = document.getElementById('text-lokasi');
+        const options = { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 };
+        
+        if (navigator.geolocation) {
+            text.innerText = "Mendeteksi...";
+            navigator.geolocation.getCurrentPosition((pos) => {
+                const lat = pos.coords.latitude;
+                const lng = pos.coords.longitude;
+                // INI BAGIAN YANG BENAR (Tanpa typo angka 2 dan format ${} yang benar):
+                inputLink.value = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+                text.innerText = "Lokasi Ditemukan!";
+                btn.classList.add('border-green-500', 'text-green-600', 'bg-green-50');
+            }, (err) => { 
+                alert("Gagal mendapatkan lokasi. Pastikan izin lokasi aktif."); 
+                text.innerText = "Dapatkan Lokasi Saya"; 
+            }, options);
+        } else {
+            alert("Browser tidak mendukung geolokasi.");
+        }
+    }
     // --- FUNGSI UTAMA ---
     async function loadDataTebengan() {
         const container = document.getElementById('modal-data-container');
