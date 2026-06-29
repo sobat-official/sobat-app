@@ -220,18 +220,23 @@
 </div>
     <!-- Script Utama -->
     <script>
-        // Fungsi untuk mengecek status saat halaman dimuat
-    if (!localStorage.getItem('sudahSetuju')) {
-        // Jika tidak ada, tampilkan modal
-        document.getElementById('tos-modal').style.display = 'flex';
-    }
-};
+        document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('tos-modal');
+    const btnSetuju = document.getElementById('btn-setuju');
 
-// Fungsi saat tombol diklik
-document.getElementById('btn-setuju').addEventListener('click', function() {
-    localStorage.setItem('sudahSetuju', 'true');
-    document.getElementById('tos-modal').style.display = 'none';
-    console.log("Tombol diklik dan status disimpan!"); 
+    // Cek status
+    if (localStorage.getItem('sudahSetuju')) {
+        modal.style.display = 'none';
+    } else {
+        modal.style.display = 'flex';
+    }
+
+    // Pasang listener
+    btnSetuju.addEventListener('click', function() {
+        localStorage.setItem('sudahSetuju', 'true');
+        modal.style.display = 'none';
+        console.log("Status tersimpan!");
+    });
 });
         function bukaTentangKami() {
     const narasi = `NebengSobat Tentena adalah inisiatif berbasis teknologi yang hadir untuk memfasilitasi kebutuhan mobilitas harian civitas akademika dan Pelajar Tentena dengan semangat "Dibuat oleh Sobat untuk Sobat". Kami berfokus pada efisiensi, aksesibilitas, dan penguatan nilai gotong-royong.
