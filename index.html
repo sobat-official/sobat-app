@@ -378,7 +378,7 @@ function tutupModalInfo() {
             const cocokTujuan = item.Tujuan.toLowerCase().includes(teks);
             let cocokWaktu = true;
             if (item['Jam Berangkat']) {
-                const jam = parseInt(item['Jam Berangkat'].split(':')[0]);
+                const jam = parseInt(item['Jam Berangkat'].split('.')[0]);
                 if (waktu === 'Pagi') cocokWaktu = (jam >= 5 && jam < 11);
                 else if (waktu === 'Siang') cocokWaktu = (jam >= 11 && jam < 15);
                 else if (waktu === 'Sore') cocokWaktu = (jam >= 15 && jam < 18);
@@ -395,16 +395,18 @@ function tutupModalInfo() {
     function tutupDonasi() { document.getElementById('modal-donasi').classList.add('hidden'); }
 
     function tampilNotif() {
-        const notif = document.getElementById('notif-berhasil');
-        notif.classList.remove('hidden');
-        setTimeout(() => { notif.classList.add('opacity-100'); }, 10);
-    }
+    const notif = document.getElementById('notif-berhasil');
+    notif.classList.remove('hidden');
+    notif.classList.remove('opacity-0');
+    notif.classList.add('opacity-100');
+}
 
-    function tutupNotif() {
-        const notif = document.getElementById('notif-berhasil');
-        notif.classList.remove('opacity-100');
-        setTimeout(() => notif.classList.add('hidden'), 300);
-    }
+function tutupNotif() {
+    const notif = document.getElementById('notif-berhasil');
+    notif.classList.remove('opacity-100');
+    notif.classList.add('opacity-0');
+    setTimeout(() => notif.classList.add('hidden'), 300);
+}
         function formatWA(input) {
         // Menghapus karakter non-angka kecuali tanda '+'
         let value = input.value.replace(/[^\d+]/g, '');
