@@ -98,7 +98,16 @@
             </div>
             <div class="mt-4">
     <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Tarif (Rp)</label>
-    <input type="text" name="Tarif" class="w-full mt-1 p-3 border border-gray-200 rounded-xl" placeholder="Contoh: Rp5.000" required>
+    <input type="number" 
+           name="Tarif" 
+           min="2000" 
+           max="15000" 
+           class="w-full mt-1 p-3 border border-gray-200 rounded-xl" 
+           placeholder="Contoh: 5000" 
+           required>
+    <p class="text-[10px] text-blue-600 mt-1 italic">
+        Kontribusi solidaritas: Rp2.000 - Rp15.000. Berbagi jok, berbagi beban, demi kemudahan kita bersama.
+    </p>
 </div>
             <div class="grid grid-cols-2 gap-3">
     <div>
