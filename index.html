@@ -221,8 +221,6 @@
     <!-- Script Utama -->
     <script>
         // Fungsi untuk mengecek status saat halaman dimuat
-window.onload = function() {
-    // Cek apakah ada kunci 'sudahSetuju' di memori HP
     if (!localStorage.getItem('sudahSetuju')) {
         // Jika tidak ada, tampilkan modal
         document.getElementById('tos-modal').style.display = 'flex';
