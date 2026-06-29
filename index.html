@@ -188,6 +188,22 @@
 </div>
     <!-- Script Utama -->
     <script>
+        // Fungsi untuk mengecek status saat halaman dimuat
+window.onload = function() {
+    // Cek apakah ada kunci 'sudahSetuju' di memori HP
+    if (!localStorage.getItem('sudahSetuju')) {
+        // Jika tidak ada, tampilkan modal
+        document.getElementById('tos-modal').style.display = 'flex';
+    }
+};
+
+// Fungsi saat tombol diklik
+document.getElementById('btn-setuju').onclick = function() {
+    // Simpan kunci ke memori HP
+    localStorage.setItem('sudahSetuju', 'true');
+    // Tutup modal
+    document.getElementById('tos-modal').style.display = 'none';
+};
         function bukaTentangKami() {
     const narasi = `NebengSobat Tentena adalah inisiatif berbasis teknologi yang hadir untuk memfasilitasi kebutuhan mobilitas harian civitas akademika dan Pelajar Tentena dengan semangat "Dibuat oleh Sobat untuk Sobat". Kami berfokus pada efisiensi, aksesibilitas, dan penguatan nilai gotong-royong.
 
@@ -361,6 +377,26 @@ function tutupModalInfo() {
         <h3 id="info-title" class="font-bold text-lg text-gray-800 mb-2"></h3>
         <p id="info-text" class="text-sm text-gray-600 mb-6"></p>
         <button onclick="tutupModalInfo()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold">Mengerti</button>
+    </div>
+</div>
+    <!-- Modal ToS -->
+<div id="tos-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center; padding: 10px;">
+    <div style="background:white; padding:25px; border-radius:15px; width:90%; max-width:500px; max-height:80vh; overflow-y:auto; text-align:left;">
+        <h3 style="text-align:center;">Syarat & Ketentuan NebengSobat</h3>
+        <p style="font-size: 14px; line-height: 1.5; color: #333;">
+            Dengan menggunakan layanan NebengSobat, pengguna menyatakan setuju pada hal-hal berikut:<br><br>
+            <strong>1. Sifat Layanan:</strong> NebengSobat hanyalah platform perantara untuk menghubungkan sesama mahasiswa. Kami bukan penyedia jasa transportasi komersial.<br><br>
+            <strong>2. Tanggung Jawab:</strong> Segala bentuk interaksi, negosiasi harga, dan risiko selama perjalanan adalah tanggung jawab masing-masing individu (pengemudi dan penumpang).<br><br>
+            <strong>3. Keamanan:</strong> Pengguna wajib mengutamakan keselamatan, mematuhi aturan lalu lintas, dan menjaga perilaku sopan.<br><br>
+            <strong>4. Pelaporan:</strong> Jika terjadi pelanggaran, perilaku tidak menyenangkan, atau hal mencurigakan, pengguna berhak dan wajib melapor melalui fitur "Laporkan Pelanggaran" yang tersedia.<br><br>
+            <strong>5. Batasan Tanggung Jawab:</strong> Admin NebengSobat tidak bertanggung jawab atas kerugian, kerusakan, atau kecelakaan yang mungkin terjadi selama penggunaan layanan.<br><br>
+            <strong>6. Hak Admin:</strong> Admin berhak menghapus data atau memblokir akses pengguna yang dianggap melanggar etika atau menyalahgunakan platform ini.
+        </p>
+        <div style="text-align:center; margin-top: 20px;">
+            <button id="btn-setuju" style="padding:12px 30px; background:#28a745; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold;">
+                Saya Setuju & Mulai
+            </button>
+        </div>
     </div>
 </div>
 </body>
