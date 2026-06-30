@@ -103,6 +103,7 @@
 }
 </style>
 <style>
+    /* Kontainer Navigasi */
     .bottom-nav {
         position: fixed;
         bottom: 0;
@@ -117,24 +118,31 @@
         box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
     }
 
+    /* Tautan (Tombol) Navigasi */
     .bottom-nav a {
         text-decoration: none;
-        color: #555; /* Warna polos/abu-abu */
+        color: #555; /* Warna default (abu-abu) */
         display: flex;
         flex-direction: column;
         align-items: center;
         font-size: 18px;
-        transition: color 0.3s; /* Animasi halus */
+        transition: color 0.3s ease; /* Animasi transisi halus */
     }
 
+    /* Ikon (span) mengikuti warna teks parent */
+    .bottom-nav a span {
+        color: inherit;
+    }
+
+    /* Ukuran teks bawah ikon */
     .bottom-nav a small {
         font-size: 10px;
         margin-top: 4px;
     }
 
-    /* Warna saat tombol ditekan/aktif */
+    /* Warna saat tombol ditekan/aktif (Biru) */
     .bottom-nav a.active-nav {
-        color: #2563eb; /* Warna biru */
+        color: #2563eb; 
     }
 </style>
 </head>
@@ -673,12 +681,13 @@ function tutupModalInfo() {
     <a href="#" id="nav-beranda" class="active-nav" onclick="setAktif('nav-beranda'); window.scrollTo({top: 0, behavior: 'smooth'}); return false;">
         <span>🏠</span><small>Beranda</small>
     </a>
-    <a href="#" id="nav-cara" onclick="setAktif('nav-cara'); bukaModalInfo('Cara Pakai', '...'); return false;">
+    <a href="#" id="nav-cara" onclick="setAktif('nav-cara'); bukaModalInfo('Cara Pakai', '1. Bagikan Jok jika punya kendaraan.\n2. Klik Temukan Jok untuk mencari tumpangan.\n3. Chat driver untuk konfirmasi.'); return false;">
         <span>💡</span><small>Cara Pakai</small>
     </a>
     <a href="#" id="nav-dukung" onclick="setAktif('nav-dukung'); bukaDonasi(); return false;">
         <span>❤️</span><small>Dukungan</small>
     </a>
+    <!-- Hapus class warna pada link admin -->
     <a href="https://wa.me/6282292067618" id="nav-admin" target="_blank" onclick="setAktif('nav-admin')">
         <span>💬</span><small>Admin</small>
     </a>
