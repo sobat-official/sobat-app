@@ -25,7 +25,8 @@
     0% { opacity: 0; transform: translateY(10px); }
     100% { opacity: 1; transform: translateY(0); }
 }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+        padding-bottom: 70px; }
 </style>
  <style>   
     .umkm-board-section {
@@ -101,6 +102,35 @@
     background-color: #1DA851;
 }
 </style>
+ <style>     
+    .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    border-top: 1px solid #ddd;
+    z-index: 9999; /* Agar selalu di atas semua konten */
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+}
+
+.bottom-nav a {
+    text-decoration: none;
+    color: #555;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 18px; /* Ukuran icon */
+}
+
+.bottom-nav a small {
+    font-size: 10px; /* Ukuran teks bawah icon */
+    margin-top: 4px;
+}
+ </style>    
 </head>
 <body class="bg-gray-50 pb-20">
 <div id="splash-screen">
@@ -277,7 +307,7 @@
     </div>
 
     <!-- Donasi -->
-    <div id="modal-donasi" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-4 z-50">
+    <div id="modal-donasi" id="dukungan" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-4 z-50">
     <div class="bg-white p-6 rounded-2xl w-full max-w-sm text-center">
         <!-- Judul -->
         <h3 class="font-bold text-gray-800 text-lg mb-2">Dukung Komunitas</h3>
@@ -606,6 +636,7 @@ function tutupModalInfo() {
     <p>NebengSobat Tentena © 2026</p>
     <p>All Rights Reserved</p>
 </footer>
+    <div id="tentang" class="p-6 text-center text-gray-500">
     <div id="notif-berhasil" class="fixed inset-0 z-[100] flex items-center justify-center p-4 hidden transition-opacity duration-300 opacity-0">
     <div class="bg-white rounded-2xl p-6 shadow-2xl text-center transform scale-95 transition-transform duration-300 w-full max-w-sm">
         <div class="w-16 h-16 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -622,6 +653,23 @@ function tutupModalInfo() {
         <p id="info-text" class="text-sm text-gray-600 mb-6"></p>
         <button onclick="tutupModalInfo()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold">Mengerti</button>
     </div>
+</div>
+    <div class="bottom-nav">
+    <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">
+        <span>🏠</span><small>Beranda</small>
+    </a>
+    <a href="#cara-pakai">
+        <span>💡</span><small>Cara Pakai</small>
+    </a>
+    <a href="#dukungan">
+        <span>❤️</span><small>Dukungan</small>
+    </a>
+    <a href="https://wa.me/6282292067618" target="_blank">
+        <span>💬</span><small>Admin</small>
+    </a>
+    <a href="#tentang">
+        <span>👥</span><small>Tentang</small>
+    </a>
 </div>
 </body>
 </html>
