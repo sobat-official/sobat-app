@@ -103,7 +103,6 @@
 }
 </style>
 <style>
-    /* Kontainer Navigasi */
     .bottom-nav {
         position: fixed;
         bottom: 0;
@@ -115,34 +114,32 @@
         padding: 10px 0;
         border-top: 1px solid #ddd;
         z-index: 9999;
-        box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
     }
 
-    /* Tautan (Tombol) Navigasi */
     .bottom-nav a {
         text-decoration: none;
-        color: #555; /* Warna default (abu-abu) */
+        color: #555; /* Warna Default: Abu-abu */
         display: flex;
         flex-direction: column;
         align-items: center;
         font-size: 18px;
-        transition: color 0.3s ease; /* Animasi transisi halus */
+        transition: color 0.3s;
     }
 
-    /* Ikon (span) mengikuti warna teks parent */
-    .bottom-nav a span {
-        color: inherit;
+    /* Memaksa ikon mengikuti warna parent (<a>) */
+    .bottom-nav a i {
+        color: inherit; 
     }
 
-    /* Ukuran teks bawah ikon */
     .bottom-nav a small {
         font-size: 10px;
         margin-top: 4px;
+        color: inherit; /* Teks juga ikut warna parent */
     }
 
-    /* Warna saat tombol ditekan/aktif (Biru) */
+    /* Warna saat aktif (Biru) */
     .bottom-nav a.active-nav {
-        color: #2563eb; 
+        color: #2563eb !important; /* Gunakan !important agar menang dari gaya lain */
     }
 </style>
 </head>
@@ -679,20 +676,19 @@ function tutupModalInfo() {
 </div>
     <div class="bottom-nav">
     <a href="#" id="nav-beranda" class="active-nav" onclick="setAktif('nav-beranda'); window.scrollTo({top: 0, behavior: 'smooth'}); return false;">
-        <span>🏠</span><small>Beranda</small>
+        <i class="fa-solid fa-house"></i><small>Beranda</small>
     </a>
-    <a href="#" id="nav-cara" onclick="setAktif('nav-cara'); bukaModalInfo('Cara Pakai', '1. Bagikan Jok jika punya kendaraan.\n2. Klik Temukan Jok untuk mencari tumpangan.\n3. Chat driver untuk konfirmasi.'); return false;">
-        <span>💡</span><small>Cara Pakai</small>
+    <a href="#" id="nav-cara" onclick="setAktif('nav-cara'); bukaModalInfo('Cara Pakai', '...'); return false;">
+        <i class="fa-solid fa-lightbulb"></i><small>Cara Pakai</small>
     </a>
     <a href="#" id="nav-dukung" onclick="setAktif('nav-dukung'); bukaDonasi(); return false;">
-        <span>❤️</span><small>Dukungan</small>
+        <i class="fa-solid fa-heart"></i><small>Dukungan</small>
     </a>
-    <!-- Hapus class warna pada link admin -->
     <a href="https://wa.me/6282292067618" id="nav-admin" target="_blank" onclick="setAktif('nav-admin')">
-        <span>💬</span><small>Admin</small>
+        <i class="fa-brands fa-whatsapp"></i><small>Admin</small>
     </a>
     <a href="#" id="nav-tentang" onclick="setAktif('nav-tentang'); bukaTentangKami(); return false;">
-        <span>👥</span><small>Tentang</small>
+        <i class="fa-solid fa-users"></i><small>Tentang</small>
     </a>
 </div>
 </body>
