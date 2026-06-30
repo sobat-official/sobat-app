@@ -333,75 +333,79 @@
 </button>
     </div>
 </div>
+    <script>
+    // 1. Pisahkan ID API dan Nama Tab
+    const API_ID = 'oi1whu4x406qs'; 
+    const TAB_NAME = 'iklan UMKM'; // Pastikan nama tab di Spreadsheet-mu SAMA PERSIS dengan ini
+    const BASE_URL = `https://sheetdb.io/api/v1/${API_ID}`;
+
+    // Fungsi untuk mengambil dan menampilkan data UMKM
+    async function loadBulletinBoard() {
+        const container = document.getElementById('bulletin-container');
+        
+        try {
+            // PERBAIKAN 1: Menambahkan pemanggilan parameter ?sheet=TAB_NAME saat mengambil data
+            const response = await fetch(`${BASE_URL}?sheet=${TAB_NAME}`);
+            const data = await response.json();
+            
+            container.innerHTML = ''; // Bersihkan loading text
+            
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'umkm-card';
+                
+                card.innerHTML = `
+                    <div class="umkm-name">${item.nama_umkm}</div>
+                    <div class="product-name">${item.produk}</div>
+                    <div class="product-desc">${item.deskripsi}</div>
+                    <button class="wa-btn" 
+                        onclick="handleWaClick('${item.id}', '${item.nomor_wa}', '${item.produk}', '${item.jumlah_klik}')">
+                        Hubungi Penjual via WA
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+        } catch (error) {
+            container.innerHTML = '<p>Gagal memuat pengumuman. Silakan coba lagi nanti.</p>';
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    // Fungsi Pelacakan dan Redirect (Optimistic Tracking)
+    function handleWaClick(id, nomorWa, namaProduk, currentClicks) {
+        // 1. Siapkan URL WhatsApp dan Pesan Otomatis
+        const pesan = `Halo, saya tertarik dengan produk ${namaProduk} yang saya lihat di NebengSobat.`;
+        const waUrl = `https://wa.me/${nomorWa}?text=${encodeURIComponent(pesan)}`;
+        
+        // 2. Langsung Buka WhatsApp di Tab Baru
+        window.open(waUrl, '_blank');
+        
+        // 3. Lakukan proses update jumlah klik di Background
+        const newClicks = parseInt(currentClicks || 0) + 1;
+        
+        // PERBAIKAN 2: Menambahkan pemanggilan parameter ?sheet=TAB_NAME saat mengirim data (PATCH)
+        fetch(`${BASE_URL}/id/${id}?sheet=${TAB_NAME}`, {
+            method: 'PATCH',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                data: {
+                    'jumlah_klik': newClicks
+                }
+            })
+        })
+        .then(response => response.json())
+        .then(data => console.log('Tracking berhasil dicatat:', data))
+        .catch(error => console.error('Gagal mencatat tracking:', error));
+    }
+
+    // Jalankan fungsi saat halaman selesai dimuat
+    document.addEventListener('DOMContentLoaded', loadBulletinBoard);
+</script>
     <!-- Script Utama -->
     <script>
-        // Ganti dengan API URL SheetDB kamu
-const SHEETDB_URL = 'https://sheetdb.io/api/v1/oi1whu4x406qs'; 
-
-// Fungsi untuk mengambil dan menampilkan data UMKM
-async function loadBulletinBoard() {
-    const container = document.getElementById('bulletin-container');
-    
-    try {
-        const response = await fetch(SHEETDB_URL);
-        const data = await response.json();
-        
-        container.innerHTML = ''; // Bersihkan loading text
-        
-        data.forEach(item => {
-            // Buat komponen kartu
-            const card = document.createElement('div');
-            card.className = 'umkm-card';
-            
-            card.innerHTML = `
-                <div class="umkm-name">${item.nama_umkm}</div>
-                <div class="product-name">${item.produk}</div>
-                <div class="product-desc">${item.deskripsi}</div>
-                <button class="wa-btn" 
-                    onclick="handleWaClick('${item.id}', '${item.nomor_wa}', '${item.produk}', '${item.jumlah_klik}')">
-                    Hubungi Penjual via WA
-                </button>
-            `;
-            container.appendChild(card);
-        });
-    } catch (error) {
-        container.innerHTML = '<p>Gagal memuat pengumuman. Silakan coba lagi nanti.</p>';
-        console.error('Error fetching data:', error);
-    }
-}
-
-// Fungsi Pelacakan dan Redirect (Optimistic Tracking)
-function handleWaClick(id, nomorWa, namaProduk, currentClicks) {
-    // 1. Siapkan URL WhatsApp dan Pesan Otomatis
-    const pesan = `Halo, saya tertarik dengan produk ${namaProduk} yang saya lihat di NebengSobat.`;
-    const waUrl = `https://wa.me/${nomorWa}?text=${encodeURIComponent(pesan)}`;
-    
-    // 2. Langsung Buka WhatsApp di Tab Baru (Performa super cepat untuk user)
-    window.open(waUrl, '_blank');
-    
-    // 3. Lakukan proses update jumlah klik di Background (Tidak mengganggu user)
-    const newClicks = parseInt(currentClicks || 0) + 1;
-    
-    // Query PATCH ke SheetDB untuk mengupdate baris berdasarkan 'id'
-    fetch(`${SHEETDB_URL}/id/${id}`, {
-        method: 'PATCH',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            data: {
-                'jumlah_klik': newClicks
-            }
-        })
-    })
-    .then(response => response.json())
-    .then(data => console.log('Tracking berhasil dicatat:', data))
-    .catch(error => console.error('Gagal mencatat tracking:', error));
-}
-
-// Jalankan fungsi saat halaman selesai dimuat
-document.addEventListener('DOMContentLoaded', loadBulletinBoard);
         // Splash screen
 window.addEventListener('load', () => {
     setTimeout(() => {
