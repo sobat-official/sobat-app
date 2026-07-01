@@ -707,7 +707,7 @@ function tutupModalInfo() {
     </a>
 </div>
     <!-- Tombol Hubungi Admin -->
-<button id="btnTanyaAI" style="position:fixed; bottom:20px; right:20px; padding:15px; border-radius:50px; background-color:#007bff; color:white; border:none; cursor:pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+<button id="btnTanyaAI" style="position:fixed; bottom:80px; right:20px; padding:15px; border-radius:50px; background-color:#007bff; color:white; border:none; cursor:pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
   💬 Tanya Asisten
 </button>
 
@@ -737,20 +737,19 @@ function tutupModalInfo() {
     const webAppUrl = "https://script.google.com/macros/s/AKfycbxyF7CDJ3pdal8c3zIIDghqTKoACVfO2UgHo-T__j3eG5FaD_OyC3P8bbBWKJv10m0vGw/exec";
 
     fetch(webAppUrl, {
-        method: 'POST',
-        mode: 'no-cors', // Penting agar tidak kena error CORS dari browser
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: pesan })
-    })
-    .then(response => {
-        // Karena kita pakai no-cors, kita tidak bisa baca body response secara langsung
-        // Solusi: Kita akan buat skrip tadi mengembalikan data dengan cara lain atau 
-        // pastikan setingan CORS di Google Apps Script benar.
-        displayArea.innerText = "Pesan terkirim! (Cek jawaban di log konsol atau sesuaikan CORS)";
-    })
-    .catch(error => {
-        displayArea.innerText = "Error: " + error;
-    });
+    method: 'POST',
+    // Hapus baris mode: 'no-cors' agar kita bisa baca responnya
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message: pesan })
+})
+.then(response => response.json()) // Sekarang kita bisa baca JSON-nya
+.then(data => {
+    displayArea.innerText = data.reply; // Menampilkan jawaban AI!
+})
+.catch(error => {
+    displayArea.innerText = "Error: Pastikan Google Apps Script sudah di-Deploy ulang!";
+    console.error(error);
+});
 }
 </script>
 </body>
