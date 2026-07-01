@@ -706,5 +706,52 @@ function tutupModalInfo() {
         <i class="fa-solid fa-users"></i><small>Tentang</small>
     </a>
 </div>
+    <!-- Tombol Hubungi Admin -->
+<button id="btnTanyaAI" style="position:fixed; bottom:20px; right:20px; padding:15px; border-radius:50px; background-color:#007bff; color:white; border:none; cursor:pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+  💬 Tanya Asisten
+</button>
+
+<!-- Modal Chat (Awalnya tersembunyi) -->
+<div id="modalChat" style="display:none; position:fixed; bottom:80px; right:20px; width:300px; height:400px; background:white; border:1px solid #ccc; border-radius:10px; padding:15px; box-shadow:0 4px 10px rgba(0,0,0,0.2);">
+  <textarea id="inputUser" style="width:100%; height:80px;" placeholder="Tanya apa saja..."></textarea>
+  <button onclick="kirimPesanKeAI()" style="width:100%; margin-top:10px; padding:10px;">Kirim</button>
+  <div id="jawabanAI" style="margin-top:15px; font-size:14px; color:#333; overflow-y:auto; height:200px;"></div>
+</div>
+
+<script>
+  // Script untuk membuka modal
+  document.getElementById('btnTanyaAI').onclick = function() {
+    var modal = document.getElementById('modalChat');
+    modal.style.display = (modal.style.display === 'none') ? 'block' : 'none';
+  };
+    function kirimPesanKeAI() {
+    const inputField = document.getElementById('inputUser');
+    const displayArea = document.getElementById('jawabanAI');
+    const pesan = inputField.value;
+
+    if (!pesan) return;
+
+    displayArea.innerText = "Sedang mengetik...";
+
+    // GANTI URL DI BAWAH INI DENGAN URL WEB APP DARI GOOGLE APPS SCRIPT ANDA
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbzn490bTH5vbaVdGORHCZpadZyhfXlLg9Edf7Ga6D943zUkkndqt3Rg8X0jse1klsbv6A/exec";
+
+    fetch(webAppUrl, {
+        method: 'POST',
+        mode: 'no-cors', // Penting agar tidak kena error CORS dari browser
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: pesan })
+    })
+    .then(response => {
+        // Karena kita pakai no-cors, kita tidak bisa baca body response secara langsung
+        // Solusi: Kita akan buat skrip tadi mengembalikan data dengan cara lain atau 
+        // pastikan setingan CORS di Google Apps Script benar.
+        displayArea.innerText = "Pesan terkirim! (Cek jawaban di log konsol atau sesuaikan CORS)";
+    })
+    .catch(error => {
+        displayArea.innerText = "Error: " + error;
+    });
+}
+</script>
 </body>
 </html>
