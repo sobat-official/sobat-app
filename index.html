@@ -732,23 +732,30 @@ function tutupModalInfo() {
 
     displayArea.innerText = "Sedang mengetik...";
 
-    // GANTI URL DI BAWAH INI DENGAN URL WEB APP DARI GOOGLE APPS SCRIPT ANDA
     const webAppUrl = "https://jdmvepfxiuvjsebvypfa.supabase.co/functions/v1/chat-ai";
 
     fetch(webAppUrl, {
-    method: 'POST',
-    // Hapus baris mode: 'no-cors' agar kita bisa baca responnya
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message: pesan })
-})
-.then(response => response.json()) // Sekarang kita bisa baca JSON-nya
-.then(data => {
-    displayArea.innerText = data.reply; // Menampilkan jawaban AI!
-})
-.catch(error => {
-    displayArea.innerText = "Error: Pastikan Google Apps Script sudah di-Deploy ulang!";
-    console.error(error);
-});
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            // TAMBAHKAN BARIS INI AGAR SUPABASE MENGIZINKAN AKSES WEBSITE ANDA
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+        },
+        body: JSON.stringify({ message: pesan })
+    })
+    .then(response => response.json()) 
+    .then(data => {
+        // Pengaman ekstra: Jika sukses tampilkan reply, jika error tampilkan pesan sistem
+        if (data.reply) {
+            displayArea.innerText = data.reply; 
+        } else {
+            displayArea.innerText = "Terjadi kendala data: " + JSON.stringify(data);
+        }
+    })
+    .catch(error => {
+        displayArea.innerText = "Error: Gagal terhubung ke server AI.";
+        console.error(error);
+    });
 }
 </script>
 </body>
