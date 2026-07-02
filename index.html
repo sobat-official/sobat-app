@@ -11,7 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         // Konfigurasi koneksi Supabase (menggantikan SheetDB & SheetMonkey)
-        const SUPABASE_URL = 'https://jdmvepfxiuvjsebvypfa.supabase.co';
+        const SUPABASE_URL = 'https://jdmvepfxiujsebvypfa.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_6VCuASp19-VvDklo6zAspg_elcuAWf4';
         const { createClient } = supabase;
         const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -732,7 +732,7 @@ function tutupModalInfo() {
 
     displayArea.innerText = "Sedang mengetik...";
 
-    const webAppUrl = "https://jdmvepfxiuvjsebvypfa.supabase.co/functions/v1/chat-ai";
+    const webAppUrl = "https://jdmvepfxiujsebvypfa.supabase.co/functions/v1/chat-ai";
 
     fetch(webAppUrl, {
         method: 'POST',
