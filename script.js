@@ -24,10 +24,12 @@ async function loadBulletinBoard() {
             card.className = 'umkm-card';
             
             card.innerHTML = `
-                <img src="${item.foto_url}" alt="${item.produk}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;">
-                <div class="umkm-name">${item.nama_umkm}</div>
-                <div class="product-name">${item.produk}</div>
-                <div class="product-desc">${item.deskripsi}</div>
+                <div>
+                    <img src="${item.foto_url}" alt="${item.produk}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 16px; margin-bottom: 10px;">
+                    <div class="umkm-name">${item.nama_umkm}</div>
+                    <div class="product-name">${item.produk}</div>
+                    <div class="product-desc">${item.deskripsi}</div>
+                </div>
                 <button class="wa-btn" 
                     onclick="handleWaClick('${item.id}', '${item.nomor_wa}', '${item.produk}', '${item.jumlah_klik}')">
                     Hubungi Penjual via WA
@@ -36,21 +38,18 @@ async function loadBulletinBoard() {
             container.appendChild(card);
         });
     } catch (error) {
-        container.innerHTML = '<p>Gagal memuat pengumuman. Silakan coba lagi nanti.</p>';
+        container.innerHTML = '<p class="text-gray-400 text-xs p-2">Gagal memuat pengumuman. Silakan coba lagi nanti.</p>';
         console.error('Error fetching data:', error);
     }
 }
 
 // Fungsi Pelacakan dan Redirect (Optimistic Tracking)
 async function handleWaClick(id, nomorWa, namaProduk, currentClicks) {
-    // 1. Siapkan URL WhatsApp dan Pesan Otomatis
     const pesan = `Halo, saya tertarik dengan produk ${namaProduk} yang saya lihat di NebengSobat.`;
     const waUrl = `https://wa.me/${nomorWa}?text=${encodeURIComponent(pesan)}`;
     
-    // 2. Langsung Buka WhatsApp di Tab Baru
     window.open(waUrl, '_blank');
     
-    // 3. Lakukan proses update jumlah klik di Background
     const newClicks = parseInt(currentClicks || 0) + 1;
     
     try {
@@ -66,13 +65,8 @@ async function handleWaClick(id, nomorWa, namaProduk, currentClicks) {
 document.addEventListener('DOMContentLoaded', loadBulletinBoard);
 
 function setAktif(id) {
-    // 1. Ambil semua link di bottom-nav
     const links = document.querySelectorAll('.bottom-nav a');
-    
-    // 2. Hapus class 'active-nav' dari semua link
     links.forEach(link => link.classList.remove('active-nav'));
-    
-    // 3. Tambahkan class 'active-nav' ke link yang diklik
     document.getElementById(id).classList.add('active-nav');
 }
 
@@ -82,11 +76,11 @@ window.addEventListener('load', () => {
         const splash = document.getElementById('splash-screen');
         splash.style.opacity = '0';
         setTimeout(() => splash.style.display = 'none', 500);
-    }, 1800); // tampil selama 1.8 detik
+    }, 1800);
 });
 
 function formatJam(input) {
-    let val = input.value.replace(/\D/g, ''); // Hapus semua selain angka
+    let val = input.value.replace(/\D/g, ''); 
     if (val.length > 2) {
         val = val.substring(0, 2) + '.' + val.substring(2, 4);
     }
@@ -97,18 +91,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const modal = document.getElementById('tos-modal');
     const btnSetuju = document.getElementById('btn-setuju');
 
-    // Cek status
     if (localStorage.getItem('sudahSetuju')) {
         modal.style.display = 'none';
     } else {
         modal.style.display = 'flex';
     }
 
-    // Pasang listener
     btnSetuju.addEventListener('click', function() {
         localStorage.setItem('sudahSetuju', 'true');
         modal.style.display = 'none';
-        console.log("Status tersimpan!");
     });
 });
 
@@ -122,8 +113,7 @@ Keselamatan di Jalan
 Keselamatan adalah prioritas utama. Kami mengimbau seluruh pengguna untuk selalu menaati aturan lalu lintas dan melakukan verifikasi titik jemput yang akurat. Harap diingat bahwa segala interaksi di luar sistem koordinasi platform sepenuhnya merupakan tanggung jawab pribadi masing-masing pengguna.
 
 Landasan Hukum & Etika
-Platform ini dikembangkan dengan mematuhi etika bermasyarakat dan ketentuan UU ITE terkait pemanfaatan teknologi yang bertanggung jawab. Dengan menggunakan layanan ini, Anda sepakat untuk saling menghargai, menjaga ketertiban, dan berkontribusi pada ekosistem komunitas yang sehat serta saling mendukung.
-`;
+Platform ini dikembangkan dengan mematuhi etika bermasyarakat dan ketentuan UU ITE terkait pemanfaatan teknologi yang bertanggung jawab. Dengan menggunakan layanan ini, Anda sepakat untuk saling menghargai, menjaga ketertiban, dan berkontribusi pada ekosistem komunitas yang sehat serta saling mendukung.`;
     
     bukaModalInfo('Tentang Kami', narasi);
 }
@@ -131,7 +121,6 @@ Platform ini dikembangkan dengan mematuhi etika bermasyarakat dan ketentuan UU I
 function bukaMenu() {
     const menu = document.getElementById('menu-side');
     menu.classList.remove('hidden');
-    // Efek transisi halus
     setTimeout(() => menu.classList.add('opacity-100'), 10);
 }
 
@@ -141,19 +130,16 @@ function tutupMenu() {
     menu.classList.remove('opacity-100');
 }
 
-// Fungsi untuk memanggil modal
 function bukaModalInfo(judul, pesan) {
     document.getElementById('info-title').innerText = judul;
     document.getElementById('info-text').innerText = pesan;
     document.getElementById('modal-info').classList.remove('hidden');
 }
 
-// Fungsi untuk menutup modal
 function tutupModalInfo() {
     document.getElementById('modal-info').classList.add('hidden');
 }
 
-// --- TAMBAHKAN FUNGSI INI ---
 async function getLokasiOtomatis() {
     const inputLink = document.getElementById('geo-link');
     const btn = document.getElementById('btn-lokasi');
@@ -177,7 +163,7 @@ async function getLokasiOtomatis() {
     }
 }
 
-// --- FUNGSI UTAMA ---
+// --- LOGIKA UTAMA MEMUAT DATA TEBENGAN ---
 async function loadDataTebengan() {
     const container = document.getElementById('modal-data-container');
     container.innerHTML = '<p class="text-white text-center p-4">Memuat data...</p>';
@@ -235,7 +221,8 @@ document.getElementById('nebengForm').onsubmit = async (e) => {
         };
         const { error } = await sb.from(TABLE_TEBENGAN).insert([payload]);
         if (error) throw error;
-        tampilNotif(); // Memanggil notifikasi keren
+        tutupFormBagikan();
+        tampilNotif(); 
         e.target.reset();
     } catch (error) { 
         console.error('Gagal mengirim data:', error);
@@ -243,11 +230,10 @@ document.getElementById('nebengForm').onsubmit = async (e) => {
     } 
     finally { 
         submitBtn.disabled = false; 
-        submitBtn.innerHTML = '<i class="fa-solid fa-rocket mr-2"></i> Bagikan Jok'; 
+        submitBtn.innerHTML = '<i class="fa-solid fa-rocket mr-2"></i> Mulai Bagikan Jok'; 
     }
 };
 
-// --- FUNGSI PENDUKUNG ---
 function filterData() {
     const teks = document.getElementById('filterTujuan').value.toLowerCase();
     const waktu = document.getElementById('filterWaktu').value;
@@ -266,8 +252,13 @@ function filterData() {
     tampilkanData(hasil);
 }
 
-document.getElementById('btn-bagikan').onclick = () => document.getElementById('nebengForm').scrollIntoView({ behavior: 'smooth' });
-document.getElementById('btn-temukan').onclick = () => { document.getElementById('modal-jok').classList.remove('hidden'); loadDataTebengan(); };
+// --- 📱 PENGHUBUNG ACTION DASHBOARD KARTU NATIVE ---
+document.getElementById('card-bagikan').onclick = () => bukaFormBagikan();
+document.getElementById('card-cari').onclick = () => { document.getElementById('modal-jok').classList.remove('hidden'); loadDataTebengan(); };
+document.getElementById('card-dukungan').onclick = () => bukaDonasi();
+
+function bukaFormBagikan() { document.getElementById('modal-form-bagikan').classList.remove('hidden'); }
+function tutupFormBagikan() { document.getElementById('modal-form-bagikan').classList.add('hidden'); }
 function tutupModal() { document.getElementById('modal-jok').classList.add('hidden'); }
 function bukaDonasi() { document.getElementById('modal-donasi').classList.remove('hidden'); }
 function tutupDonasi() { document.getElementById('modal-donasi').classList.add('hidden'); }
@@ -275,7 +266,6 @@ function tutupDonasi() { document.getElementById('modal-donasi').classList.add('
 function tampilNotif() {
     const notif = document.getElementById('notif-berhasil');
     notif.classList.remove('hidden');
-    // Tunggu 1 frame agar 'hidden' benar-benar sudah dihapus sebelum animasi jalan
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
             notif.classList.remove('opacity-0');
@@ -292,19 +282,8 @@ function tutupNotif() {
 }
 
 function formatWA(input) {
-    // Menghapus karakter non-angka kecuali tanda '+'
     let value = input.value.replace(/[^\d+]/g, '');
     input.value = value;
-}
-
-// Script untuk membuka modal chatbot lama jika elemennya ada
-if (document.getElementById('btnTanyaAI')) {
-    document.getElementById('btnTanyaAI').onclick = function() {
-        var modal = document.getElementById('modalChat');
-        if (modal) {
-            modal.style.display = (modal.style.display === 'none') ? 'block' : 'none';
-        }
-    };
 }
 
 function kirimPesanKeAI() {
@@ -313,7 +292,6 @@ function kirimPesanKeAI() {
     const pesan = inputField.value;
 
     if (!pesan) return;
-
     displayArea.innerText = "Sedang mengetik...";
 
     const webAppUrl = "https://jdmvepfxiuvjsebvypfa.supabase.co/functions/v1/chat-ai";
@@ -322,19 +300,14 @@ function kirimPesanKeAI() {
         method: 'POST',
         headers: { 
             'Content-Type': 'application/json',
-            // TAMBAHKAN BARIS INI AGAR SUPABASE MENGIZINKAN AKSES WEBSITE ANDA
             'Authorization': `Bearer ${SUPABASE_KEY}`
         },
         body: JSON.stringify({ message: pesan })
     })
     .then(response => response.json()) 
     .then(data => {
-        // Pengaman ekstra: Jika sukses tampilkan reply, jika error tampilkan pesan sistem
-        if (data.reply) {
-            displayArea.innerText = data.reply; 
-        } else {
-            displayArea.innerText = "Terjadi kendala data: " + JSON.stringify(data);
-        }
+        if (data.reply) { displayArea.innerText = data.reply; } 
+        else { displayArea.innerText = "Terjadi kendala data: " + JSON.stringify(data); }
     })
     .catch(error => {
         displayArea.innerText = "Error: Gagal terhubung ke server AI.";
@@ -344,7 +317,6 @@ function kirimPesanKeAI() {
 
 function toggleChatbot() {
     const chatModal = document.getElementById('chat-modal');
-    // Jika modal tidak terlihat, kita buka. Jika terlihat, kita tutup.
     if (chatModal.style.display === 'none' || chatModal.style.display === '') {
         chatModal.style.display = 'flex';
     } else {
@@ -352,12 +324,8 @@ function toggleChatbot() {
     }
 }
 
-// Fungsi untuk mengecek status internet
 function updateOnlineStatus() {
-    const mainForm = document.querySelector('.container'); // Sesuaikan dengan class/id bungkus form kamu
-    
     if (!navigator.onLine) {
-        // Jika Offline
         document.body.innerHTML = `
             <div style="text-align: center; padding: 50px 20px; font-family: sans-serif;">
                 <h2 style="color: #333;">Koneksi Terputus 📡</h2>
@@ -368,9 +336,6 @@ function updateOnlineStatus() {
     }
 }
 
-// Pantau perubahan status internet
 window.addEventListener('online', updateOnlineStatus);
 window.addEventListener('offline', updateOnlineStatus);
-
-// Cek saat pertama kali dimuat
 updateOnlineStatus();
