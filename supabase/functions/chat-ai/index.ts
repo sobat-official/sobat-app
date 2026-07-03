@@ -24,7 +24,7 @@ serve(async (req) => {
       )
     }
 
-   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`
+   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`
 
     const response = await fetch(url, {
       method: 'POST',
