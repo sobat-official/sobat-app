@@ -836,5 +836,29 @@ function tutupModalInfo() {
     }
 }
 </script>
+    <script>
+  // Fungsi untuk mengecek status internet
+  function updateOnlineStatus() {
+    const mainForm = document.querySelector('.container'); // Sesuaikan dengan class/id bungkus form kamu
+    
+    if (!navigator.onLine) {
+      // Jika Offline
+      document.body.innerHTML = `
+        <div style="text-align: center; padding: 50px 20px; font-family: sans-serif;">
+          <h2 style="color: #333;">Koneksi Terputus 📡</h2>
+          <p style="color: #666;">Sepertinya kamu sedang offline. Silakan periksa koneksi internetmu agar bisa mencari atau membagikan jok di NebengSobat.</p>
+          <button onclick="window.location.reload()" style="padding: 10px 20px; background: #4f46e5; color: white; border: none; border-radius: 8px; margin-top: 20px;">Coba Ulang</button>
+        </div>
+      `;
+    }
+  }
+
+  // Pantau perubahan status internet
+  window.addEventListener('online', updateOnlineStatus);
+  window.addEventListener('offline', updateOnlineStatus);
+
+  // Cek saat pertama kali dimuat
+  updateOnlineStatus();
+</script>
 </body>
 </html>
