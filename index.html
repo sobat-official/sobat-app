@@ -12,7 +12,7 @@
     <!-- 🎨 Menghubungkan File CSS Eksternal -->
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gray-50 pb-20">
+<body class="bg-gray-50 pb-24">
 
     <div id="splash-screen">
         <img src="logo.png" alt="Logo NebengSobat">
@@ -21,7 +21,7 @@
     </div>
 
     <!-- Header -->
-    <header class="bg-blue-600 text-white p-4 flex justify-between items-center shadow-md">
+    <header class="bg-white text-gray-800 p-5 flex justify-between items-center shadow-sm border-b border-gray-100">
         <div id="menu-side" class="fixed inset-0 bg-black bg-opacity-50 z-[100] hidden transition-opacity duration-300" onclick="tutupMenu()">
             <div class="bg-white w-3/4 max-w-xs h-full shadow-2xl p-6 transition-transform duration-300 translate-x-0" onclick="event.stopPropagation()">
                 <div class="flex items-center gap-3 mb-8">
@@ -37,160 +37,197 @@
                 </ul>
             </div>
         </div>
-        <div class="flex items-center gap-2">
-            <img src="logo.png" class="w-10 h-10 bg-white rounded-lg p-1">
+        <div class="flex items-center gap-3">
+            <img src="logo.png" class="w-11 h-11 bg-gray-50 rounded-xl p-1 border border-gray-100 shadow-sm">
             <div>
-                <h1 class="font-bold text-lg">NebengSobat Tentena</h1>
-                <p class="text-xs text-blue-100">Komunitas Tebengan</p>
+                <h1 class="font-black text-xl tracking-tight text-gray-900">NebengSobat Tentena</h1>
+                <p class="text-xs text-gray-500 font-medium">Komunitas Tebengan Kalcer</p>
             </div>
         </div>
-        <i class="fa-solid fa-bars text-xl cursor-pointer" onclick="bukaMenu()"></i>
+        <div class="flex items-center gap-4">
+            <i class="fa-solid fa-bars text-xl cursor-pointer text-gray-700" onclick="bukaMenu()"></i>
+        </div>
     </header>
 
-    <!-- Wrapper -->
-    <div class="px-4 mt-4">
-        <!-- Grid dua kolom hanya untuk tombol saja -->
-        <div class="grid grid-cols-2 gap-3">
-            <div class="bg-blue-700 rounded-2xl p-4 text-white">
-                <h2 class="text-xs font-bold mb-2">Sediakan jok Buat Teman Komunitas</h2>
-                <button id="btn-bagikan" class="bg-white text-blue-700 font-bold px-3 py-2 rounded-lg text-xs w-full"><i class="fa-solid fa-plus mr-1"></i> Bagikan Jok</button>
+    <!-- 📱 NATIVE DASHBOARD MAIN WRAPPER -->
+    <main class="px-5 mt-6 space-y-6">
+        
+        <!-- CARD 1: BAGIKAN JOK (Kartu Polos Info Utama Utama) -->
+        <div id="card-bagikan" class="bg-blue-600 rounded-3xl p-6 text-white shadow-xl shadow-blue-100 cursor-pointer transform active:scale-95 transition relative overflow-hidden flex flex-col justify-between min-h-[180px]">
+            <div class="absolute right-4 bottom-2 opacity-10 text-[130px] pointer-events-none">
+                <i class="fa-solid fa-car-side"></i>
             </div>
-            <div class="bg-blue-700 rounded-2xl p-4 text-white">
-                <h2 class="text-xs font-bold mb-2">Lihat Daftar Jok Kosong Yang Tersedia</h2>
-                <button id="btn-temukan" class="bg-white text-blue-700 font-bold px-3 py-2 rounded-lg text-xs w-full"><i class="fa-solid fa-magnifying-glass mr-1"></i> Temukan Jok</button>
+            <div>
+                <span class="bg-blue-500 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-blue-400">Tebengan</span>
+                <h2 class="text-2xl font-black mt-2 tracking-tight">Bagikan Jok</h2>
+                <p class="text-xs text-blue-100 mt-1 max-w-[200px]">Punya kendaraan kosong? Berbagi jok bareng sobat komunitas yuk.</p>
+            </div>
+            <div class="mt-4">
+                <span class="bg-white text-blue-600 font-bold px-4 py-2.5 rounded-xl text-xs shadow-md inline-block">Ketuk untuk Formu →</span>
             </div>
         </div>
 
-        <!-- Tips ditaruh di luar grid, tapi masih di dalam px-4 agar rapi di bawah -->
-        <div class="mt-4 text-[10px] text-gray-500 italic text-center">
-            <i class="fa-solid fa-circle-info mr-1"></i> Tips: Klik 'Peta' untuk koordinat kasar, pastikan chat driver untuk konfirmasi titik jemput yang tepat ya!
+        <!-- ROW KEDUA: GRID INTERAKTIF 2 KOLOM (Cari Jok & Dukungan) -->
+        <div class="grid grid-cols-2 gap-4">
+            <!-- CARD 2: CARI JOK -->
+            <div id="card-cari" class="bg-gradient-to-br from-blue-700 to-blue-800 rounded-3xl p-5 text-white shadow-lg cursor-pointer transform active:scale-95 transition flex flex-col justify-between min-h-[160px] relative overflow-hidden">
+                <div class="absolute right-[-10px] bottom-[-10px] opacity-10 text-7xl pointer-events-none">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <div>
+                    <div class="bg-blue-600 w-9 h-9 rounded-xl flex items-center justify-center mb-3 shadow">
+                        <i class="fa-solid fa-magnifying-glass text-sm"></i>
+                    </div>
+                    <h3 class="font-black text-lg leading-tight tracking-tight">Cari Jok</h3>
+                    <p class="text-[11px] text-blue-100 mt-1">Temukan teman tumpangan aktif</p>
+                </div>
+                <span class="text-xs font-bold underline mt-3 inline-block text-blue-200">Lihat Daftar →</span>
+            </div>
+
+            <!-- CARD 3: DUKUNGAN KOMUNITAS -->
+            <div id="card-dukungan" class="bg-gradient-to-br from-emerald-600 to-emerald-700 rounded-3xl p-5 text-white shadow-lg cursor-pointer transform active:scale-95 transition flex flex-col justify-between min-h-[160px] relative overflow-hidden">
+                <div class="absolute right-[-10px] bottom-[-10px] opacity-10 text-7xl pointer-events-none">
+                    <i class="fa-solid fa-heart"></i>
+                </div>
+                <div>
+                    <div class="bg-emerald-500 w-9 h-9 rounded-xl flex items-center justify-center mb-3 shadow">
+                        <i class="fa-solid fa-hand-holding-heart text-sm"></i>
+                    </div>
+                    <h3 class="font-black text-lg leading-tight tracking-tight">Dukungan</h3>
+                    <p class="text-[11px] text-emerald-100 mt-1">Donasi via QRIS Bisnis DANA</p>
+                </div>
+                <span class="text-xs font-bold underline mt-3 inline-block text-emerald-200">Buka QRIS →</span>
+            </div>
+        </div>
+
+        <!-- Info Tips -->
+        <div class="text-[11px] text-gray-500 italic text-center bg-gray-100 p-3 rounded-2xl border border-gray-200">
+            <i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> Tips: Klik 'Peta' untuk koordinat kasar, pastikan chat driver untuk konfirmasi titik jemput yang tepat ya!
+        </div>
+
+        <!-- 🏢 PAPAN IKLAN UMKM LOKAL (GULIR SAMPING/HORIZONTAL) -->
+        <div class="umkm-board-section !p-0 mt-2">
+            <h3 class="text-base font-black text-gray-800 mb-3 px-1"><i class="fa-solid fa-store text-amber-500 mr-2"></i>Papan Iklan UMKM Lokal Kalcer</h3>
+            <!-- Kontainer diubah menjadi horizontal slide -->
+            <div id="bulletin-container" class="flex overflow-x-auto space-x-4 pb-4 pt-1 px-1 snap-x scrollbar-hide">
+                <p class="text-gray-400 text-sm">Memuat iklan lokal...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- 📥 MODAL FORM BAGIKAN JOK (Native Slide-Up Feel) -->
+    <div id="modal-form-bagikan" class="fixed inset-0 bg-black bg-opacity-60 z-[150] hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-white rounded-t-3xl sm:rounded-3xl w-full max-w-lg max-h-[92vh] overflow-y-auto p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="font-black text-gray-800 text-lg flex items-center gap-2"><i class="fa-solid fa-bullhorn text-blue-600"></i> Bagikan Jok Kosong</h3>
+                <button onclick="tutupFormBagikan()" class="text-gray-400 hover:text-gray-600 text-xl font-bold p-1">✕</button>
+            </div>
+            
+            <form id="nebengForm" class="space-y-4">
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Nama Panggilan</label>
+                    <input type="text" name="Nama" class="w-full mt-1 p-3 border border-gray-200 rounded-xl bg-gray-50 outline-none focus:border-blue-500" placeholder="Contoh: Sobat" required>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Tujuan</label>
+                    <select name="Tujuan" class="w-full mt-1 p-3 border border-gray-200 rounded-xl bg-gray-50 outline-none focus:border-blue-500" required>
+                        <option value="UNKRIT">Universitas Kristen Tentena</option>
+                        <option value="STT">Sekolah Tinggi Teologi Tentena</option>
+                        <option value="SMAN 1">SMAN 1 Pamona Utara</option>
+                        <option value="SMA GKST 1">SMA GKST 1 Tentena</option>
+                        <option value="SMA GKST 2">SMA GKST 2 Tentena</option>
+                        <option value="SMK GKST 1">SMK GKST 1 Tentena</option>
+                        <option value="SMK GKST 2">SMK GKST 2 Tentena</option>
+                        <option value="SMK Eklesia">SMK Teknik Eklesia Tentena</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">TITIK DRIVER (GPS)</label>
+                    <button type="button" id="btn-lokasi" onclick="getLokasiOtomatis()" class="w-full mt-1 bg-gray-50 border border-dashed border-gray-300 py-3 rounded-xl text-blue-600 font-semibold text-sm hover:bg-blue-50 transition">
+                        <span id="icon-lokasi"><i class="fa-solid fa-location-dot mr-2"></i></span> 
+                        <span id="text-lokasi">Dapatkan Lokasi Saya</span>
+                    </button>
+                    <input type="text" name="Titik Jemput" id="geo-link" class="w-full mt-2 p-2 border rounded-lg text-xs bg-gray-100" readonly required>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Tarif (Rp)</label>
+                    <input type="number" name="Tarif" min="2000" max="15000" class="w-full mt-1 p-3 border border-gray-200 rounded-xl bg-gray-50 outline-none focus:border-blue-500" placeholder="Contoh: 5000" required>
+                    <p class="text-[10px] text-blue-600 mt-1 italic">
+                        Kontribusi solidaritas: Rp2.000 - Rp15.000. Berbagi jok, berbagi beban, demi kemudahan kita bersama.
+                    </p>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Jam</label>
+                        <input type="tel" name="Jam Berangkat" id="input-jam" maxlength="5" inputmode="numeric" class="w-full mt-1 p-3 border border-gray-200 rounded-xl bg-gray-50" placeholder="07.00" onkeyup="formatJam(this)" required>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">No. WhatsApp</label>
+                        <input type="text" name="No WA" id="no-wa" placeholder="+62 8xx..." inputmode="numeric" pattern="[0-9\+\s]*" class="w-full mt-1 p-3 border rounded-xl bg-gray-50" oninput="formatWA(this)" maxlength="18" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold shadow-md hover:bg-blue-700 transition active:scale-95 flex items-center justify-center text-base">
+                    <i class="fa-solid fa-rocket mr-2"></i> <span>Mulai Bagikan Jok</span>
+                </button>
+                
+                <div class="text-[10px] text-gray-500 bg-gray-50 p-3 rounded-xl border border-gray-200">
+                    <p><b>Catatan Keselamatan:</b> Pengguna wajib setuju keselamatan adalah tanggung jawab pribadi. Pastikan pengemudi memiliki SIM, menggunakan helm, serta mematuhi aturan lalu lintas.</p>
+                </div>
+            </form>
         </div>
     </div>
 
-    <!-- Main Content -->
-    <main class="px-4 mt-4">
-        <form id="nebengForm" class="bg-white rounded-2xl p-5 shadow-sm space-y-4">
-            <h3 class="font-bold text-gray-800"><i class="fa-solid fa-bullhorn mr-2"></i> Bagikan Jok Kosong</h3>
-            <div>
-                <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Nama Panggilan</label>
-                <input type="text" name="Nama" class="w-full mt-1 p-3 border border-gray-200 rounded-xl" placeholder="Contoh: Sobat" required>
-            </div>
-            <div>
-                <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Tujuan</label>
-                <select name="Tujuan" class="w-full mt-1 p-3 border border-gray-200 rounded-xl bg-white" required>
-                    <option value="UNKRIT">Universitas Kristen Tentena</option>
-                    <option value="STT">Sekolah Tinggi Teologi Tentena</option>
-                    <option value="SMAN 1">SMAN 1 Pamona Utara</option>
-                    <option value="SMA GKST 1">SMA GKST 1 Tentena</option>
-                    <option value="SMA GKST 2">SMA GKST 2 Tentena</option>
-                    <option value="SMK GKST 1">SMK GKST 1 Tentena</option>
-                    <option value="SMK GKST 2">SMK GKST 2 Tentena</option>
-                    <option value="SMK Eklesia">SMK Teknik Eklesia Tentena</option>
-                </select>
-            </div>
-            <div>
-                <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">TITIK DRIVER (GPS)</label>
-                <button type="button" id="btn-lokasi" onclick="getLokasiOtomatis()" class="w-full mt-1 bg-gray-50 border border-dashed border-gray-300 py-3 rounded-xl text-blue-600 font-semibold text-sm">
-                    <span id="icon-lokasi"><i class="fa-solid fa-location-dot mr-2"></i></span> 
-                    <span id="text-lokasi">Dapatkan Lokasi Saya</span>
-                </button>
-                <input type="text" name="Titik Jemput" id="geo-link" class="w-full mt-2 p-2 border rounded-lg text-xs bg-gray-50" readonly required>
-            </div>
-            <div class="mt-4">
-                <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Tarif (Rp)</label>
-                <input type="number" name="Tarif" min="2000" max="15000" class="w-full mt-1 p-3 border border-gray-200 rounded-xl" placeholder="Contoh: 5000" required>
-                <p class="text-[10px] text-blue-600 mt-1 italic">
-                    Kontribusi solidaritas: Rp2.000 - Rp15.000. Berbagi jok, berbagi beban, demi kemudahan kita bersama.
-                </p>
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Jam</label>
-                    <input type="tel" name="Jam Berangkat" id="input-jam" maxlength="5" inputmode="numeric" class="w-full mt-1 p-3 border border-gray-200 rounded-xl" placeholder="07.00" onkeyup="formatJam(this)" required>
-                </div>
-                <div>
-                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">No. WhatsApp</label>
-                    <input type="text" name="No WA" id="no-wa" placeholder="+62 8xx xxx xxx xx" inputmode="numeric" pattern="[0-9\+\s]*" class="w-full mt-1 p-3 border rounded-xl" oninput="formatWA(this)" maxlength="18" required>
-                </div>
-            </div>
-
-            <div class="flex gap-3 w-full mt-4">
-                <button type="submit" class="flex-[7] bg-blue-600 text-white py-4 rounded-xl font-bold shadow-md hover:bg-blue-700 transition active:scale-95 flex items-center justify-center text-sm md:text-base">
-                    <i class="fa-solid fa-rocket mr-2"></i> <span>Bagikan Jok</span>
-                </button>
-                <button type="button" onclick="bukaDonasi()" class="flex-[3] bg-amber-500 text-white py-4 rounded-xl font-bold shadow-md hover:bg-amber-600 transition active:scale-95 flex items-center justify-center text-sm md:text-base">
-                    <i class="fa-solid fa-hand-holding-heart mr-2"></i> <span>Dukungan</span>
-                </button>
-            </div>
-            <div class="mt-4 text-[10px] text-gray-500 bg-gray-50 p-3 rounded-lg border border-gray-200">
-                <p><b>Catatan Keselamatan:</b> Dengan membagikan/menggunakan tumpangan, Anda setuju bahwa keselamatan adalah tanggung jawab pribadi. Pastikan pengemudi memiliki SIM, menggunakan dan menyediakan helm, serta mematuhi aturan lalu lintas. NebengSobat hanyalah platform penghubung.</p>
-            </div>
-            <!-- Wrapper Papan Pengumuman -->
-            <div class="umkm-board-section">
-                <h3 class="board-title">Papan Iklan UMKM Lokal</h3>
-                <!-- Kontainer ini akan diisi otomatis oleh JavaScript -->
-                <div id="bulletin-container" class="bulletin-grid">
-                    <p>Memuat iklan lokal...</p>
-                </div>
-            </div>
-        </form>
-    </main>
-
     <!-- Modal Temukan Jok (Filter Terintegrasi) -->
-    <div id="modal-jok" class="fixed inset-0 bg-blue-900 bg-opacity-90 z-50 hidden flex flex-col">
-        <div class="p-4 flex justify-between items-center text-white border-b border-blue-700">
-            <h2 class="font-bold text-lg">Daftar Jok Tersedia</h2>
-            <button onclick="tutupModal()" class="text-white font-bold px-3 py-1 bg-blue-800 rounded-lg">✕ Tutup</button>
+    <div id="modal-jok" class="fixed inset-0 bg-blue-900 bg-opacity-95 z-50 hidden flex flex-col">
+        <div class="p-5 flex justify-between items-center text-white border-b border-blue-800">
+            <h2 class="font-black text-lg tracking-tight">Daftar Jok Tersedia</h2>
+            <button onclick="tutupModal()" class="text-white font-bold px-4 py-2 bg-blue-800 rounded-xl text-xs active:scale-95 transition">✕ Tutup</button>
         </div>
         <!-- Filter Bar -->
-        <div class="px-4 py-2 bg-blue-900">
-            <input type="text" id="filterTujuan" placeholder="Cari tujuan..." onkeyup="filterData()" class="w-full p-2 rounded-lg text-sm mb-2 outline-none">
-            <select id="filterWaktu" onchange="filterData()" class="w-full p-2 rounded-lg text-sm text-gray-600 outline-none">
+        <div class="px-5 py-3 bg-blue-900 space-y-2">
+            <input type="text" id="filterTujuan" placeholder="Cari tujuan kampus/sekolah..." onkeyup="filterData()" class="w-full p-3 rounded-xl text-sm outline-none text-gray-800">
+            <select id="filterWaktu" onchange="filterData()" class="w-full p-3 rounded-xl text-sm text-gray-600 outline-none">
                 <option value="">Semua Waktu</option>
                 <option value="Pagi">Pagi (05:00 - 11:00)</option>
                 <option value="Siang">Siang (11:00 - 15:00)</option>
                 <option value="Sore">Sore (15:00 - 18:00)</option>
                 <option value="Malam">Malam (18:00 - 05:00)</option>
             </select>
-            <div class="mt-4 p-3 bg-blue-50 border-l-4 border-blue-500 rounded-r-lg">
-                <p class="text-[10px] text-blue-700 font-medium">
-                    <i class="fa-solid fa-clock mr-1"></i> <b>Info Penting:</b> Data jok Anda akan otomatis terhapus dari sistem setelah 1 jam. Silakan bagikan ulang jika belum mendapatkan teman tebengan.
+            <div class="p-3 bg-blue-950 rounded-xl border-l-4 border-blue-500">
+                <p class="text-[10px] text-blue-300 font-medium">
+                    <i class="fa-solid fa-clock mr-1"></i> Data jok otomatis terhapus setelah 1 jam demi privasi dan akurasi.
                 </p>
             </div>
         </div>
-        <div id="modal-data-container" class="p-4 overflow-y-auto flex-1 space-y-3"></div>
+        <div id="modal-data-container" class="p-5 overflow-y-auto flex-1 space-y-4"></div>
     </div>
 
     <!-- Donasi -->
     <div id="modal-donasi" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-white p-6 rounded-2xl w-full max-w-sm text-center">
-            <!-- Judul -->
-            <h3 class="font-bold text-gray-800 text-lg mb-2">Dukung Komunitas</h3>
-            <!-- Penjelasan -->
-            <p class="text-sm text-gray-600 mb-6">
-                Terima kasih telah menjadi bagian dari NebengSobat! Dukunganmu sangat berarti untuk pemeliharaan server dan pengembangan fitur-fitur dalam komunitas.
+        <div class="bg-white p-6 rounded-3xl w-full max-w-sm text-center shadow-2xl">
+            <h3 class="font-black text-gray-900 text-lg mb-2">Dukung Komunitas</h3>
+            <p class="text-xs text-gray-600 mb-6">
+                Dukunganmu sangat berarti untuk pemeliharaan database Supabase server dan operasional komunitas NebengSobat.
             </p>
-            <!-- QRIS Area -->
             <div class="mb-6">
-                <img src="QRIS_bisnis_nebeng.png" alt="QRIS NebengSobat" class="w-48 h-48 mx-auto border-2 border-gray-100 rounded-lg">
-                <p class="text-xs text-gray-500 mt-3 px-2">
-                    Screenshot lalu scan QRIS ini dengan aplikasi DANA, GoPay, OVO, ShopeePay, atau m-Banking apa saja.
+                <img src="QRIS_bisnis_nebeng.png" alt="QRIS NebengSobat" class="w-48 h-48 mx-auto border-2 border-gray-100 rounded-2xl p-1 shadow-sm">
+                <p class="text-[11px] text-gray-500 mt-3 px-2 leading-relaxed">
+                    Screenshot lalu scan QRIS ini dengan aplikasi DANA, GoPay, OVO, ShopeePay, atau m-Banking kamu.
                 </p>
             </div>
-            <!-- Tombol Tutup -->
-            <button onclick="tutupDonasi()" class="w-full bg-gray-100 text-gray-600 py-3 rounded-xl font-bold hover:bg-gray-200 transition">
+            <button onclick="tutupDonasi()" class="w-full bg-gray-100 text-gray-700 py-3 rounded-xl font-bold hover:bg-gray-200 transition active:scale-95">
                 Tutup
             </button>
         </div>
     </div>
 
     <!-- Modal ToS -->
-    <div id="tos-modal" style="display:flex; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center; padding: 10px;">
-        <div style="background:white; padding:25px; border-radius:15px; width:90%; max-width:500px; display: flex; flex-direction: column; max-height: 90vh;">
-            <!-- Area Teks (Bisa di-scroll) -->
-            <div style="overflow-y: auto; margin-bottom: 20px;">
-                <h3 style="text-align:center;">Syarat & Ketentuan NebengSobat</h3>
-                <p style="font-size: 14px; line-height: 1.5; color: #333;">
+    <div id="tos-modal" style="display:flex; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center; padding: 15px;">
+        <div style="background:white; padding:25px; border-radius:24px; width:95%; max-width:480px; display: flex; flex-direction: column; max-height: 85vh; shadow: 24px;">
+            <div style="overflow-y: auto; margin-bottom: 20px;" class="scrollbar-hide">
+                <h3 style="text-align:center; font-weight: 900; font-size: 18px; margin-bottom: 10px;">Syarat & Ketentuan NebengSobat</h3>
+                <p style="font-size: 13px; line-height: 1.6; color: #4a5568;">
                     Dengan menggunakan layanan NebengSobat, pengguna menyatakan setuju pada hal-hal berikut:<br><br>
                     <strong>1. Sifat Layanan:</strong> NebengSobat hanyalah platform perantara untuk menghubungkan sesama mahasiswa. Kami bukan penyedia jasa transportasi komersial.<br><br>
                     <strong>2. Tanggung Jawab:</strong> Segala bentuk interaksi, negosiasi harga, dan risiko selama perjalanan adalah tanggung jawab masing-masing individu (pengemudi dan penumpang).<br><br>
@@ -200,25 +237,24 @@
                     <strong>6. Hak Admin:</strong> Admin berhak menghapus data atau memblokir akses pengguna yang dianggap melanggar etika atau menyalahgunakan platform ini.
                 </p>
             </div>
-            <!-- Tombol (Tetap di bawah dan pasti bisa diklik) -->
-            <button id="btn-setuju" style="padding:15px; background:#28a745; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold; font-size:16px; pointer-events: auto; z-index: 10000; position: relative;">
+            <button id="btn-setuju" style="padding:14px; background:#2563eb; color:white; border:none; border-radius:14px; cursor:pointer; font-weight:bold; font-size:15px; pointer-events: auto; transition: all 0.2s;">
                 Saya Setuju & Mulai
             </button>
         </div>
     </div>
 
-    <footer class="text-center p-4 text-gray-400 text-[10px]">
+    <footer class="text-center p-6 text-gray-400 text-[10px]">
         <p>NebengSobat Tentena © 2026</p>
         <p>All Rights Reserved</p>
     </footer>
 
-    <div id="notif-berhasil" class="fixed inset-0 z-[100] flex items-center justify-center p-4 hidden transition-opacity duration-300 opacity-0">
-        <div class="bg-white rounded-2xl p-6 shadow-2xl text-center transform scale-95 transition-transform duration-300 w-full max-w-sm">
+    <div id="notif-berhasil" class="fixed inset-0 z-[200] flex items-center justify-center p-4 hidden transition-opacity duration-300 opacity-0">
+        <div class="bg-white rounded-3xl p-6 shadow-2xl text-center transform scale-95 transition-transform duration-300 w-full max-w-sm">
             <div class="w-16 h-16 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
                 <i class="fa-solid fa-check text-3xl"></i>
             </div>
             <h3 class="text-lg font-bold text-gray-800">Berhasil!</h3>
-            <p class="text-sm text-gray-600 mt-1 mb-6">Jok kamu sudah dibagikan ke komunitas.</p>
+            <p class="text-xs text-gray-600 mt-1 mb-6">Jok kamu sudah dibagikan ke komunitas.</p>
             <button onclick="tutupNotif()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700">Tutup</button>
         </div>
     </div>
@@ -226,7 +262,7 @@
     <div id="modal-info" class="fixed inset-0 bg-black bg-opacity-50 z-[200] hidden flex items-center justify-center p-4" onclick="tutupModalInfo()">
         <div class="bg-white rounded-2xl p-6 shadow-2xl max-w-sm w-full" onclick="event.stopPropagation()">
             <h3 id="info-title" class="font-bold text-lg text-gray-800 mb-2"></h3>
-            <p id="info-text" class="text-sm text-gray-600 mb-6"></p>
+            <p id="info-text" class="text-sm text-gray-600 mb-6 whitespace-pre-line"></p>
             <button onclick="tutupModalInfo()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold">Mengerti</button>
         </div>
     </div>
@@ -249,7 +285,7 @@
         </a>
     </div>
 
-    <!-- Modal Chat Baru -->
+    <!-- Modal Chat -->
     <div id="chat-modal" class="chat-modal">
         <div class="chat-header">
             <span>Asisten AI NebengSobat</span>
