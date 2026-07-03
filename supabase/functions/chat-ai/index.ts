@@ -31,7 +31,7 @@ serve(async (req) => {
 
     // INISIALISASI MESIN AI GOOGLE
     const genAI = new GoogleGenerativeAI(cleanApiKey)
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" })
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" })
 
     // Eksekusi percakapan
     const result = await model.generateContent(message)
