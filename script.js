@@ -252,16 +252,31 @@ function filterData() {
     tampilkanData(hasil);
 }
 
-// --- 📱 PENGHUBUNG ACTION DASHBOARD KARTU NATIVE ---
-document.getElementById('card-bagikan').onclick = () => bukaFormBagikan();
-document.getElementById('card-cari').onclick = () => { document.getElementById('modal-jok').classList.remove('hidden'); loadDataTebengan(); };
-document.getElementById('card-dukungan').onclick = () => bukaDonasi();
+// --- 📱 FUNGSI PEMICU MODAL DASHBOARD NATIVE (DIJAMIN JALAN) ---
+function bukaFormBagikan() { 
+    document.getElementById('modal-form-bagikan').classList.remove('hidden'); 
+}
 
-function bukaFormBagikan() { document.getElementById('modal-form-bagikan').classList.remove('hidden'); }
-function tutupFormBagikan() { document.getElementById('modal-form-bagikan').classList.add('hidden'); }
-function tutupModal() { document.getElementById('modal-jok').classList.add('hidden'); }
-function bukaDonasi() { document.getElementById('modal-donasi').classList.remove('hidden'); }
-function tutupDonasi() { document.getElementById('modal-donasi').classList.add('hidden'); }
+function tutupFormBagikan() { 
+    document.getElementById('modal-form-bagikan').classList.add('hidden'); 
+}
+
+function bukaModalCariJok() {
+    document.getElementById('modal-jok').classList.remove('hidden');
+    loadDataTebengan(); // Otomatis memuat data terbaru dari Supabase
+}
+
+function tutupModal() { 
+    document.getElementById('modal-jok').classList.add('hidden'); 
+}
+
+function bukaDonasi() { 
+    document.getElementById('modal-donasi').classList.remove('hidden'); 
+}
+
+function tutupDonasi() { 
+    document.getElementById('modal-donasi').classList.add('hidden'); 
+}
 
 function tampilNotif() {
     const notif = document.getElementById('notif-berhasil');
