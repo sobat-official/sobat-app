@@ -6,24 +6,30 @@ const corsHeaders = {
 }
 
 serve(async (req) => {
-  // Menangani masalah CORS
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
 
-  const apiKey = Deno.env.get("GEMINI_API_KEY")
-  
-  // Deteksi apakah API Key ada atau tidak
-  if (!apiKey) {
-    return new Response(JSON.stringify({ error: "GEMINI_API_KEY TIDAK DITEMUKAN DI SUPABASE" }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-      status: 500
+  try {
+    const { message } = await req.json()
+    const apiKey = Deno.env.get("GEMINI_API_KEY")
+
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: message }] }]
+      }),
+    })
+
+    const data = await response.json()
+    const reply = data.candidates[0].content.parts[0].text
+    
+    return new Response(JSON.stringify({ reply }), { 
+      headers: { ...corsHeaders, "Content-Type": "application/json" } 
+    })
+
+  } catch (error) {
+    return new Response(JSON.stringify({ reply: "Maaf, terjadi kesalahan saat memproses chat." }), { 
+      headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 500 
     })
   }
-
-  // Panggil list model
-  const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`)
-  const data = await response.json()
-
-  return new Response(JSON.stringify(data, null, 2), {
-    headers: { ...corsHeaders, "Content-Type": "application/json" }
-  })
 })
