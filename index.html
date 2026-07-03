@@ -52,7 +52,7 @@
     <!-- 📱 NATIVE DASHBOARD MAIN WRAPPER -->
     <main class="px-5 mt-6 space-y-6">
         
-        <!-- CARD 1: BAGIKAN JOK (Ditambahkan onclick="bukaFormBagikan()") -->
+        <!-- CARD 1: BAGIKAN JOK -->
         <div id="card-bagikan" onclick="bukaFormBagikan()" class="bg-blue-600 rounded-3xl p-6 text-white shadow-xl shadow-blue-100 cursor-pointer transform active:scale-95 transition relative overflow-hidden flex flex-col justify-between min-h-[180px]">
             <div class="absolute right-4 bottom-2 opacity-10 text-[130px] pointer-events-none">
                 <i class="fa-solid fa-car-side"></i>
@@ -67,10 +67,11 @@
             </div>
         </div>
 
+        <!-- ⚠️ HANYA BOLEH ADA SATU BLOK GRID INI DI BAWAHNYA, YANG LAIN DIHAPUS ⚠️ -->
         <!-- ROW KEDUA: GRID INTERAKTIF 2 KOLOM (Cari Jok & Dukungan) -->
         <div class="grid grid-cols-2 gap-4">
             <!-- CARD 2: CARI JOK -->
-            <div id="card-cari" class="bg-gradient-to-br from-blue-700 to-blue-800 rounded-3xl p-5 text-white shadow-lg cursor-pointer transform active:scale-95 transition flex flex-col justify-between min-h-[160px] relative overflow-hidden">
+            <div id="card-cari" onclick="bukaModalCariJok()" class="bg-gradient-to-br from-blue-700 to-blue-800 rounded-3xl p-5 text-white shadow-lg cursor-pointer transform active:scale-95 transition flex flex-col justify-between min-h-[160px] relative overflow-hidden">
                 <div class="absolute right-[-10px] bottom-[-10px] opacity-10 text-7xl pointer-events-none">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </div>
@@ -85,7 +86,7 @@
             </div>
 
             <!-- CARD 3: DUKUNGAN KOMUNITAS -->
-            <div id="card-dukungan" class="bg-gradient-to-br from-emerald-600 to-emerald-700 rounded-3xl p-5 text-white shadow-lg cursor-pointer transform active:scale-95 transition flex flex-col justify-between min-h-[160px] relative overflow-hidden">
+            <div id="card-dukungan" onclick="bukaDonasi()" class="bg-gradient-to-br from-emerald-600 to-emerald-700 rounded-3xl p-5 text-white shadow-lg cursor-pointer transform active:scale-95 transition flex flex-col justify-between min-h-[160px] relative overflow-hidden">
                 <div class="absolute right-[-10px] bottom-[-10px] opacity-10 text-7xl pointer-events-none">
                     <i class="fa-solid fa-heart"></i>
                 </div>
@@ -105,16 +106,14 @@
             <i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> Tips: Klik 'Peta' untuk koordinat kasar, pastikan chat driver untuk konfirmasi titik jemput yang tepat ya!
         </div>
 
-        <!-- 🏢 PAPAN IKLAN UMKM LOKAL (GULIR SAMPING/HORIZONTAL) -->
+        <!-- PAPAN IKLAN UMKM LOKAL -->
         <div class="umkm-board-section !p-0 mt-2">
             <h3 class="text-base font-black text-gray-800 mb-3 px-1"><i class="fa-solid fa-store text-amber-500 mr-2"></i>Papan Iklan UMKM Lokal Kalcer</h3>
-            <!-- Kontainer diubah menjadi horizontal slide -->
             <div id="bulletin-container" class="flex overflow-x-auto space-x-4 pb-4 pt-1 px-1 snap-x scrollbar-hide">
                 <p class="text-gray-400 text-sm">Memuat iklan lokal...</p>
             </div>
         </div>
     </main>
-
     <!-- 📥 MODAL FORM BAGIKAN JOK (Native Slide-Up Feel) -->
     <div id="modal-form-bagikan" class="fixed inset-0 bg-black bg-opacity-60 z-[150] hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="bg-white rounded-t-3xl sm:rounded-3xl w-full max-w-lg max-h-[92vh] overflow-y-auto p-6 shadow-2xl space-y-4">
