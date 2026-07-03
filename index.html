@@ -150,6 +150,51 @@
     .bottom-nav a.active-nav {
         color: #2563eb !important; /* Gunakan !important agar menang dari gaya lain */
     }
+    /* Styling tombol di Navigasi */
+.btn-nav-chat {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.btn-nav-chat:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+/* Styling Modal Chatbox (Kekinian) */
+#chat-modal {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 350px;
+  height: 500px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px); /* Efek kaca */
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  display: none; /* Default tersembunyi */
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  z-index: 1000;
+}
+
+/* Header Modal */
+.chat-header {
+  padding: 15px;
+  background: #2563eb;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+}
 </style>
 </head>
 <body class="bg-gray-50 pb-20">
@@ -693,9 +738,10 @@ function tutupModalInfo() {
     <a href="#" id="nav-beranda" class="active-nav" onclick="setAktif('nav-beranda'); window.scrollTo({top: 0, behavior: 'smooth'}); return false;">
         <i class="fa-solid fa-house"></i><small>Beranda</small>
     </a>
-    <a href="#" id="nav-cara" onclick="setAktif('nav-cara'); bukaModalInfo('Cara Pakai', '1. Bagikan Jok jika punya kendaraan.\n2. Klik Temukan Jok untuk mencari tumpangan.\n3. Chat driver untuk konfirmasi.'); return false;">
-        <i class="fa-solid fa-lightbulb"></i><small>Cara Pakai</small>
-    </a>
+   <a href="#" id="nav-chat-trigger" class="nav-link" onclick="toggleChatbot(); return false;">
+    <!-- Saya ganti ikonnya jadi fa-comments agar lebih pas untuk chat -->
+    <i class="fa-solid fa-comments"></i><small>Asisten AI</small>
+</a>
     <a href="#" id="nav-dukung" onclick="setAktif('nav-dukung'); bukaDonasi(); return false;">
         <i class="fa-solid fa-heart"></i><small>Dukungan</small>
     </a>
@@ -756,6 +802,15 @@ function tutupModalInfo() {
         displayArea.innerText = "Error: Gagal terhubung ke server AI.";
         console.error(error);
     });
+}
+    function toggleChatbot() {
+    const chatModal = document.getElementById('chat-modal');
+    // Jika modal tidak terlihat, kita buka. Jika terlihat, kita tutup.
+    if (chatModal.style.display === 'none' || chatModal.style.display === '') {
+        chatModal.style.display = 'flex';
+    } else {
+        chatModal.style.display = 'none';
+    }
 }
 </script>
 </body>
