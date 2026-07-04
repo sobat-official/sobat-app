@@ -45,7 +45,7 @@ async function loadBulletinBoard() {
 
 // Fungsi Pelacakan dan Redirect (Optimistic Tracking)
 async function handleWaClick(id, nomorWa, namaProduk, currentClicks) {
-    const pesan = `Halo, saya tertarik dengan produk ${namaProduk} yang saya lihat di NebengSobat.`;
+    const pesan = `Halo, saya tertarik dengan produk ${namaProduk} yang saya lihat di SOBAT.`;
     const waUrl = `https://wa.me/${nomorWa}?text=${encodeURIComponent(pesan)}`;
     
     window.open(waUrl, '_blank');
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function bukaTentangKami() {
-    const narasi = `NebengSobat Tentena adalah inisiatif berbasis teknologi yang hadir untuk memfasilitasi kebutuhan mobilitas harian civitas akademika dan Pelajar Tentena dengan semangat "Dibuat oleh Sobat untuk Sobat". Kami berfokus pada efisiensi, aksesibilitas, dan penguatan nilai gotong-royong.
+    const narasi = `SOBAT Tentena adalah inisiatif berbasis teknologi yang hadir untuk memfasilitasi kebutuhan mobilitas harian civitas akademika dan Pelajar Tentena dengan semangat "Dibuat oleh Sobat untuk Sobat". Kami berfokus pada efisiensi, aksesibilitas, dan penguatan nilai gotong-royong.
 
 Keamanan Data & Privasi
 Privasi adalah prioritas kami. Seluruh data bersifat sementara dan dibersihkan otomatis setiap satu jam. Kami tidak menyimpan data perjalanan jangka panjang untuk meminimalisir risiko kebocoran informasi pribadi.
@@ -344,7 +344,7 @@ function updateOnlineStatus() {
         document.body.innerHTML = `
             <div style="text-align: center; padding: 50px 20px; font-family: sans-serif;">
                 <h2 style="color: #333;">Koneksi Terputus 📡</h2>
-                <p style="color: #666;">Sepertinya kamu sedang offline. Silakan periksa koneksi internetmu agar bisa mencari atau membagikan jok di NebengSobat.</p>
+                <p style="color: #666;">Sepertinya kamu sedang offline. Silakan periksa koneksi internetmu agar bisa mencari atau membagikan jok di SOBAT.</p>
                 <button onclick="window.location.reload()" style="padding: 10px 20px; background: #4f46e5; color: white; border: none; border-radius: 8px; margin-top: 20px;">Coba Ulang</button>
             </div>
         `;
