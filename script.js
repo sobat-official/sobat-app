@@ -425,7 +425,7 @@ async function daftarEmail() {
     }
 
     try {
-        const { error } = await sb.auth.signUpWithPassword({
+        const { error } = await sb.auth.signUp({
             email: email,
             password: password
         });
