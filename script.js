@@ -20,7 +20,7 @@ sb.auth.onAuthStateChange((event, session) => {
         if (textMenu) textMenu.innerText = `Keluar (${namaUser})`;
         if (iconMenu) iconMenu.className = "fa-solid fa-right-from-bracket text-red-500 w-6";
     } else {
-        if (textMenu) textMenu.innerText = "Login Google";
+        if (textMenu) textMenu.innerText = "Masuk Akun";
         if (iconMenu) iconMenu.className = "fa-solid fa-right-to-bracket text-gray-600 w-6";
     }
 });
@@ -390,17 +390,49 @@ function tutupModalLogin() {
     document.getElementById('modal-login').classList.add('hidden');
 }
 
-async function loginGoogle() {
+async function loginEmail() {
+    const email = document.getElementById('auth-email').value;
+    const password = document.getElementById('auth-password').value;
+
+    if (!email || !password) {
+        alert("Harap isi email dan password Anda!");
+        return;
+    }
+
     try {
-        const { error } = await sb.auth.signInWithOAuth({
-            provider: 'google',
-            options: {
-                redirectTo: window.location.origin + window.location.pathname
-            }
+        const { error } = await sb.auth.signInWithPassword({
+            email: email,
+            password: password
         });
         if (error) throw error;
+        
+        alert("Selamat datang kembali! Login Berhasil.");
+        tutupModalLogin();
+        window.location.reload();
     } catch (err) {
-        alert("Gagal melakukan login Google: " + err.message);
+        alert("Gagal masuk: " + err.message);
+    }
+}
+
+async function daftarEmail() {
+    const email = document.getElementById('auth-email').value;
+    const password = document.getElementById('auth-password').value;
+
+    if (!email || !password) {
+        alert("Harap lengkapi email dan password untuk mendaftar!");
+        return;
+    }
+
+    try {
+        const { error } = await sb.auth.signUpWithPassword({
+            email: email,
+            password: password
+        });
+        if (error) throw error;
+        
+        alert("Pendaftaran berhasil! Jika Anda mengaktifkan 'Confirm Email' di Supabase, silakan cek kotak masuk email Anda untuk verifikasi terlebih dahulu sebelum login.");
+    } catch (err) {
+        alert("Gagal mendaftar: " + err.message);
     }
 }
 
