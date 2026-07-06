@@ -4,10 +4,26 @@ const SUPABASE_KEY = 'sb_publishable_6VCuASp19-VvDklo6zAspg_elcuAWf4';
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// Nama tabel Supabase untuk Papan Iklan UMKM (menggantikan API_ID/TAB_NAME SheetDB)
+// Nama tabel Supabase untuk Papan Iklan UMKM
 const TABLE_UMKM = 'iklan_umkm';
 const TABLE_TEBENGAN = 'tebengan';
 let semuaData = [];
+
+// --- 🔐 LOGIKA EVENT AUTH LISTENER SUPABASE ---
+sb.auth.onAuthStateChange((event, session) => {
+    const textMenu = document.getElementById('text-auth-menu');
+    const iconMenu = document.getElementById('icon-auth-menu');
+    
+    if (session) {
+        // Jika user berhasil login, tampilkan nama panggilan atau email awal mereka
+        const namaUser = session.user.user_metadata.full_name || session.user.email.split('@')[0];
+        if (textMenu) textMenu.innerText = `Keluar (${namaUser})`;
+        if (iconMenu) iconMenu.className = "fa-solid fa-right-from-bracket text-red-500 w-6";
+    } else {
+        if (textMenu) textMenu.innerText = "Login Google";
+        if (iconMenu) iconMenu.className = "fa-solid fa-right-to-bracket text-gray-600 w-6";
+    }
+});
 
 // Fungsi untuk mengambil dan menampilkan data UMKM
 async function loadBulletinBoard() {
@@ -252,8 +268,13 @@ function filterData() {
     tampilkanData(hasil);
 }
 
-// --- 📱 FUNGSI PEMICU MODAL DASHBOARD NATIVE (DIJAMIN JALAN) ---
-function bukaFormBagikan() { 
+// --- 📱 FUNGSI PEMICU MODAL DASHBOARD NATIVE (DILENGKAPI CACHE SESSION & PROTEKSI AUTH) ---
+async function bukaFormBagikan() { 
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) {
+        bukaModalLogin();
+        return;
+    }
     document.getElementById('modal-form-bagikan').classList.remove('hidden'); 
 }
 
@@ -261,9 +282,14 @@ function tutupFormBagikan() {
     document.getElementById('modal-form-bagikan').classList.add('hidden'); 
 }
 
-function bukaModalCariJok() {
+async function bukaModalCariJok() {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) {
+        bukaModalLogin();
+        return;
+    }
     document.getElementById('modal-jok').classList.remove('hidden');
-    loadDataTebengan(); // Otomatis memuat data terbaru dari Supabase
+    loadDataTebengan(); 
 }
 
 function tutupModal() { 
@@ -354,3 +380,40 @@ function updateOnlineStatus() {
 window.addEventListener('online', updateOnlineStatus);
 window.addEventListener('offline', updateOnlineStatus);
 updateOnlineStatus();
+
+// --- ⚙️ FUNGSI TAMBAHAN PEMBANTU SISTEM AUTHENTICATION & REDIRECT ---
+function bukaModalLogin() {
+    document.getElementById('modal-login').classList.remove('hidden');
+}
+
+function tutupModalLogin() {
+    document.getElementById('modal-login').classList.add('hidden');
+}
+
+async function loginGoogle() {
+    try {
+        const { error } = await sb.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                redirectTo: window.location.origin + window.location.pathname
+            }
+        });
+        if (error) throw error;
+    } catch (err) {
+        alert("Gagal melakukan login Google: " + err.message);
+    }
+}
+
+async function handleAuthAction() {
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) {
+        if (confirm("Apakah Anda yakin ingin keluar dari akun SOBAT?")) {
+            await sb.auth.signOut();
+            tutupMenu();
+            window.location.reload();
+        }
+    } else {
+        tutupMenu();
+        bukaModalLogin();
+    }
+}
