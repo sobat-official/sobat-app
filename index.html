@@ -118,7 +118,7 @@
           <!-- 📝 FORM NYARI TEBENGAN BARU (ALA GOJEK) -->
 <form id="nebengForm" class="space-y-4">
     <div>
-        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">📍 Titik Berangkat / Jemput</label>
+        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">📍 Titik Jemput (Lokasi Awal)</label>
         <div class="relative mt-1">
             <input type="text" id="input-jemput" name="Titik Jemput" placeholder="Ketik lokasi jemput atau gunakan lokasi GPS..." class="w-full px-4 py-3 bg-gray-50 text-gray-800 rounded-xl text-sm font-medium border border-gray-200 focus:border-blue-500 focus:bg-white outline-none transition pr-10" required>
             <button type="button" onclick="getLokasiOtomatisGojek()" class="absolute right-2 top-1/2 -translate-y-1/2 text-blue-500 hover:text-blue-700 p-1">
@@ -130,18 +130,6 @@
     <div>
         <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">🏁 Lokasi Tujuan</label>
         <input type="text" id="input-tujuan" name="Tujuan" placeholder="Mau pergi ke mana?" class="w-full mt-1 px-4 py-3 bg-gray-50 text-gray-800 rounded-xl text-sm font-medium border border-gray-200 focus:border-blue-500 focus:bg-white outline-none transition" required>
-    </div>
-
-    <div class="grid grid-cols-2 gap-3">
-        <div>
-            <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">⏰ Jam Berangkat</label>
-            <input type="text" id="input-jam" name="Jam Berangkat" onkeyup="formatJam(this)" placeholder="Contoh: 07.15" class="w-full mt-1 px-4 py-3 bg-gray-50 text-gray-800 rounded-xl text-sm font-medium border border-gray-200 focus:border-blue-500 focus:bg-white outline-none transition" required>
-        </div>
-
-        <div>
-            <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">💰 Tarif Komunitas (Rp)</label>
-            <input type="number" id="input-tarif" name="Tarif" placeholder="Contoh: 5000" class="w-full mt-1 px-4 py-3 bg-gray-50 text-gray-800 rounded-xl text-sm font-medium border border-gray-200 focus:border-blue-500 focus:bg-white outline-none transition" required>
-        </div>
     </div>
 
     <div id="box-estimasi" class="hidden bg-blue-50 border border-blue-100 rounded-2xl p-4 flex justify-between items-center animate-fade-in">
@@ -156,15 +144,14 @@
     </div>
 
     <div>
-        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">💬 Catatan Tambahan</label>
-        <textarea id="input-catatan" name="Catatan" rows="2" placeholder="Contoh: Motor Beat Hitam, sedia helm cadangan..." class="w-full mt-1 px-4 py-2.5 bg-gray-50 text-gray-800 rounded-xl text-sm font-medium border border-gray-200 focus:border-blue-500 focus:bg-white outline-none transition resize-none"></textarea>
+        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">💬 Catatan untuk Driver</label>
+        <textarea id="input-catatan" name="Catatan" rows="2" placeholder="Contoh: Pake baju hitam depan alfa / bawa helm dua ya bang..." class="w-full mt-1 px-4 py-2.5 bg-gray-50 text-gray-800 rounded-xl text-sm font-medium border border-gray-200 focus:border-blue-500 focus:bg-white outline-none transition resize-none"></textarea>
     </div>
 
     <button type="submit" id="btn-submit-order" class="w-full bg-blue-600 text-white py-3.5 rounded-xl font-bold hover:bg-blue-700 transition active:scale-95 text-sm shadow-md shadow-blue-100 flex items-center justify-center gap-2">
-        <i class="fa-solid fa-paper-plane"></i> Mulai Bagikan Jok
+        <i class="fa-solid fa-paper-plane"></i> Cari Driver Sekarang
     </button>
 </form>
-  
         </div>
     </div>
 
