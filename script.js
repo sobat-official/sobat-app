@@ -430,7 +430,7 @@ async function daftarEmail() {
         });
         if (error) throw error;
         
-        alert("Pendaftaran berhasil! Jika Anda mengaktifkan 'Confirm Email' di Supabase, silakan cek kotak masuk email Anda untuk verifikasi terlebih dahulu sebelum login.");
+        alert("Pendaftaran berhasil! Akun Anda telah aktif. Silakan langsung klik tombol 'Masuk'.");
     } catch (err) {
         alert("Gagal mendaftar: " + err.message);
     }
