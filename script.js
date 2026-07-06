@@ -277,7 +277,7 @@ function hitungRuteDanEstimasiBiaya() {
     });
 }
 
-// --- PERBAIKAN FUNGSI GEOLOCATION ---
+// 2. Fungsi Geolocation yang diselaraskan namanya dengan HTML kamu
 async function getLokasiOtomatisGojek() {
     const inputJemput = document.getElementById('input-jemput');
     const options = { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 };
@@ -287,14 +287,14 @@ async function getLokasiOtomatisGojek() {
         navigator.geolocation.getCurrentPosition((pos) => {
             const lat = pos.coords.latitude;
             const lng = pos.coords.longitude;
-            // Menyimpan koordinat murni agar nanti bisa dibaca link Peta di daftar jok
+            // Menyimpan koordinat murni agar driver bisa klik navigasi rute
             inputJemput.value = `https://www.google.com/maps?q=${lat},${lng}`;
         }, (err) => { 
-            alert("Gagal mendapatkan lokasi. Pastikan izin lokasi perangkat aktif."); 
+            alert("Gagal mendapatkan lokasi GPS. Pastikan GPS perangkat aktif."); 
             inputJemput.value = ""; 
         }, options);
     } else {
-        alert("Browser tidak mendukung geolokasi.");
+        alert("Browser tidak mendukung deteksi lokasi.");
     }
 }
 
@@ -377,14 +377,15 @@ function tampilkanData(data) {
 }
 
 // --- PERBAIKAN LOGIKA KIRIM FORM TEBENGAN ---
+// 3. Logika submit form orderan real-time ke Supabase
 document.getElementById('nebengForm').onsubmit = async (e) => {
     e.preventDefault();
     const submitBtn = e.target.querySelector('button[type="submit"]');
     submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Mengirim...';
+    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Mencari Driver...';
     
     try {
-        // 1. Ambil informasi sesi user aktif dari Supabase Auth secara otomatis
+        // Ambil data session user aktif
         const { data: { session } } = await sb.auth.getSession();
         if (!session) {
             alert("Sesi Anda berakhir. Silakan login kembali.");
@@ -396,9 +397,8 @@ document.getElementById('nebengForm').onsubmit = async (e) => {
         const namaUser = metadata.full_name || session.user.email.split('@')[0];
         const waUser = metadata.phone_wa || '';
 
-        // Proteksi jika user belum melengkapi nomor WhatsApp di profil mereka
         if (!waUser) {
-            alert("Harap lengkapi Nomor WhatsApp Anda di menu 'Profil' terlebih dahulu sebelum membagikan jok!");
+            alert("Harap lengkapi Nomor WhatsApp Anda di menu 'Profil' terlebih dahulu sebelum membuat pesanan!");
             tutupFormBagikan();
             bukaProfil();
             return;
@@ -406,30 +406,37 @@ document.getElementById('nebengForm').onsubmit = async (e) => {
         
         const formData = new FormData(e.target);
         
-        // 2. Susun payload data yang disinkronkan dengan input HTML dan Metadata Auth
+        // Payload rapi siap kirim ke database Supabase
         const payload = {
             nama: namaUser,
+            titik_jemput: formData.get('Titik Jemput'),
             tujuan: formData.get('Tujuan'),
-            titik_jemput: formData.get('Titik Jemput'), // Diambil dari input name="Titik Jemput"
-            tarif: Number(formData.get('Tarif')),
-            jam_berangkat: formData.get('Jam Berangkat'),
-            no_wa: waUser
+            catatan: formData.get('Catatan'),
+            jarak: estimasiJarakMurni, // Diambil otomatis dari hasil hitung peta
+            tarif: estimasiTarifMurni, // Diambil otomatis dari hasil hitung peta
+            no_wa: waUser,
+            status: 'Mencari Driver'   // Status awal orderan real-time
         };
         
-        // 3. Masukkan data ke tabel Supabase
+        // Eksekusi insert ke tabel database
         const { error } = await sb.from(TABLE_TEBENGAN).insert([payload]);
         if (error) throw error;
         
         tutupFormBagikan();
-        tampilNotif(); 
+        tampilNotif(); // Trigger animasi/modal sukses bawaan kamu
         e.target.reset();
+        document.getElementById('box-estimasi').classList.add('hidden');
+        
+        // Reset variabel penampung
+        estimasiJarakMurni = 0;
+        estimasiTarifMurni = 0;
     } catch (error) { 
-        console.error('Gagal mengirim data:', error);
-        alert('Gagal mengirim data tebengan ke database.'); 
+        console.error('Gagal memproses orderan:', error);
+        alert('Gagal membuat orderan. Silakan coba beberapa saat lagi.'); 
     } 
     finally { 
         submitBtn.disabled = false; 
-        submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Mulai Bagikan Jok'; 
+        submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Cari Driver Sekarang'; 
     }
 };
 /**
