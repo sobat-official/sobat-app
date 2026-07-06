@@ -115,59 +115,49 @@
                 <h3 class="font-black text-gray-800 text-lg flex items-center gap-2"><i class="fa-solid fa-bullhorn text-blue-600"></i> Bagikan Jok Kosong</h3>
                 <button onclick="tutupFormBagikan()" class="text-gray-400 hover:text-gray-600 text-xl font-bold p-1">✕</button>
             </div>
-            
-            <form id="nebengForm" class="space-y-4">
-                <div>
-                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Nama Panggilan</label>
-                    <input type="text" name="Nama" class="w-full mt-1 p-3 border border-gray-200 rounded-xl bg-gray-50 outline-none focus:border-blue-500" placeholder="Contoh: Sobat" required>
-                </div>
-                <div>
-                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Tujuan</label>
-                    <select name="Tujuan" class="w-full mt-1 p-3 border border-gray-200 rounded-xl bg-gray-50 outline-none focus:border-blue-500" required>
-                        <option value="UNKRIT">Universitas Kristen Tentena</option>
-                        <option value="STT">Sekolah Tinggi Teologi Tentena</option>
-                        <option value="SMAN 1">SMAN 1 Pamona Utara</option>
-                        <option value="SMA GKST 1">SMA GKST 1 Tentena</option>
-                        <option value="SMA GKST 2">SMA GKST 2 Tentena</option>
-                        <option value="SMK GKST 1">SMK GKST 1 Tentena</option>
-                        <option value="SMK GKST 2">SMK GKST 2 Tentena</option>
-                        <option value="SMK Eklesia">SMK Teknik Eklesia Tentena</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">TITIK DRIVER (GPS)</label>
-                    <button type="button" id="btn-lokasi" onclick="getLokasiOtomatis()" class="w-full mt-1 bg-gray-50 border border-dashed border-gray-300 py-3 rounded-xl text-blue-600 font-semibold text-sm hover:bg-blue-50 transition">
-                        <span id="icon-lokasi"><i class="fa-solid fa-location-dot mr-2"></i></span> 
-                        <span id="text-lokasi">Dapatkan Lokasi Saya</span>
-                    </button>
-                    <input type="text" name="Titik Jemput" id="geo-link" class="w-full mt-2 p-2 border rounded-lg text-xs bg-gray-100" readonly required>
-                </div>
-                <div>
-                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Tarif (Rp)</label>
-                    <input type="number" name="Tarif" min="2000" max="15000" class="w-full mt-1 p-3 border border-gray-200 rounded-xl bg-gray-50 outline-none focus:border-blue-500" placeholder="Contoh: 5000" required>
-                    <p class="text-[10px] text-blue-600 mt-1 italic">
-                        Kontribusi solidaritas: Rp2.000 - Rp15.000. Berbagi jok, berbagi beban, demi kemudahan kita bersama.
-                    </p>
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">Jam</label>
-                        <input type="tel" name="Jam Berangkat" id="input-jam" maxlength="5" inputmode="numeric" class="w-full mt-1 p-3 border border-gray-200 rounded-xl bg-gray-50" placeholder="07.00" onkeyup="formatJam(this)" required>
-                    </div>
-                    <div>
-                        <label class="text-xs font-bold text-gray-500 uppercase tracking-wider">No. WhatsApp</label>
-                        <input type="text" name="No WA" id="no-wa" placeholder="+62 8xx..." inputmode="numeric" pattern="[0-9\+\s]*" class="w-full mt-1 p-3 border rounded-xl bg-gray-50" oninput="formatWA(this)" maxlength="18" required>
-                    </div>
-                </div>
+          <!-- 📝 FORM NYARI TEBENGAN BARU (ALA GOJEK) -->
+<form id="nebengForm" class="space-y-4">
+    <!-- Kolom Titik Jemput -->
+    <div>
+        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">📍 Titik Jemput (Lokasi Awal)</label>
+        <div class="relative mt-1">
+            <input type="text" id="input-jemput" placeholder="Ketik lokasi jemput atau gunakan lokasi GPS..." class="w-full px-4 py-3 bg-gray-50 text-gray-800 rounded-xl text-sm font-medium border border-gray-200 focus:border-blue-500 focus:bg-white outline-none transition pr-10" required>
+            <button type="button" onclick="getLokasiOtomatisGojek()" class="absolute right-2 top-1/2 -translate-y-1/2 text-blue-500 hover:text-blue-700 p-1">
+                <i class="fa-solid fa-location-crosshairs text-lg"></i>
+            </button>
+        </div>
+    </div>
 
-                <button type="submit" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold shadow-md hover:bg-blue-700 transition active:scale-95 flex items-center justify-center text-base">
-                    <i class="fa-solid fa-rocket mr-2"></i> <span>Mulai Bagikan Jok</span>
-                </button>
-                
-                <div class="text-[10px] text-gray-500 bg-gray-50 p-3 rounded-xl border border-gray-200">
-                    <p><b>Catatan Keselamatan:</b> Pengguna wajib setuju keselamatan adalah tanggung jawab pribadi. Pastikan pengemudi memiliki SIM, menggunakan helm, serta mematuhi aturan lalu lintas.</p>
-                </div>
-            </form>
+    <!-- Kolom Lokasi Tujuan -->
+    <div>
+        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">🏁 Lokasi Tujuan</label>
+        <input type="text" id="input-tujuan" placeholder="Mau pergi ke mana?" class="w-full mt-1 px-4 py-3 bg-gray-50 text-gray-800 rounded-xl text-sm font-medium border border-gray-200 focus:border-blue-500 focus:bg-white outline-none transition" required>
+    </div>
+
+    <!-- Kotak Tampilan Estimasi Rute & Biaya (Muncul Otomatis) -->
+    <div id="box-estimasi" class="hidden bg-blue-50 border border-blue-100 rounded-2xl p-4 flex justify-between items-center animate-fade-in">
+        <div>
+            <span class="text-[10px] font-bold text-blue-400 uppercase tracking-wider">Estimasi Perjalanan</span>
+            <p id="txt-jarak" class="text-sm font-black text-gray-800">0.0 Km</p>
+        </div>
+        <div class="text-right">
+            <span class="text-[10px] font-bold text-blue-400 uppercase tracking-wider">Tarif Komunitas</span>
+            <p id="txt-biaya" class="text-lg font-black text-blue-600">Rp 0</p>
+        </div>
+    </div>
+
+    <!-- Kolom Catatan / Pesan Pengemudi -->
+    <div>
+        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">💬 Catatan untuk Driver</label>
+        <textarea id="input-catatan" rows="2" placeholder="Contoh: Jemput jam 3 sore ya bang / Pake baju hitam depan alfa..." class="w-full mt-1 px-4 py-2.5 bg-gray-50 text-gray-800 rounded-xl text-sm font-medium border border-gray-200 focus:border-blue-500 focus:bg-white outline-none transition resize-none"></textarea>
+    </div>
+
+    <!-- Tombol Submit Kirim Orderan -->
+    <button type="submit" id="btn-submit-order" class="w-full bg-blue-600 text-white py-3.5 rounded-xl font-bold hover:bg-blue-700 transition active:scale-95 text-sm shadow-md shadow-blue-100 flex items-center justify-center gap-2">
+        <i class="fa-solid fa-paper-plane"></i> Cari Driver Sekarang
+    </button>
+</form>  
+  
         </div>
     </div>
 
@@ -374,5 +364,6 @@
             </div>
         </div>
     </div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=API_KEY_GOOGLE_MAMU&libraries=places"></script>
 </body>
 </html>
