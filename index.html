@@ -324,5 +324,55 @@
     </div>
 
     <script src="script.js"></script>
+    <!-- 👤 Modal Edit Profil User (Native App Style) -->
+    <div id="modal-profil" class="fixed inset-0 bg-black bg-opacity-60 z-[250] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 shadow-2xl text-center max-w-sm w-full max-h-[90vh] overflow-y-auto">
+            <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-2 border-4 border-blue-50">
+                <i class="fa-solid fa-user-gear text-2xl"></i>
+            </div>
+            <h3 class="text-lg font-black text-gray-800">Profil Pengguna</h3>
+            <p class="text-xs text-gray-500">Lengkapi data diri Anda untuk keamanan komunitas</p>
+            
+            <!-- 📝 Form Pengisian Data Profil -->
+            <div class="mt-4 text-left space-y-3">
+                <!-- Input Email (Read-Only / Terkunci) -->
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Alamat Email</label>
+                    <input type="text" id="profil-email" class="w-full mt-1 px-4 py-2.5 bg-gray-100 text-gray-500 rounded-xl text-sm font-semibold border border-gray-200 outline-none cursor-not-allowed" readonly>
+                </div>
+                
+                <!-- Input Nama Lengkap / Username -->
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Nama Lengkap / Username</label>
+                    <input type="text" id="profil-nama" placeholder="Contoh: Ruben Sandante" class="w-full mt-1 px-4 py-2.5 bg-gray-50 text-gray-800 rounded-xl text-sm font-medium border border-gray-200 focus:border-blue-500 focus:bg-white outline-none transition">
+                </div>
+
+                <!-- Input Nomor HP / WhatsApp -->
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Nomor WhatsApp</label>
+                    <input type="tel" id="profil-hp" placeholder="Contoh: 0822xxxxxxxx" class="w-full mt-1 px-4 py-2.5 bg-gray-50 text-gray-800 rounded-xl text-sm font-medium border border-gray-200 focus:border-blue-500 focus:bg-white outline-none transition">
+                </div>
+
+                <!-- Input Status / Instansi (Sangat berguna untuk menyaring civitas/umum) -->
+                <div>
+                    <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Status / Instansi</label>
+                    <input type="text" id="profil-status" placeholder="Contoh: Mahasiswa FKIP / Umum" class="w-full mt-1 px-4 py-2.5 bg-gray-50 text-gray-800 rounded-xl text-sm font-medium border border-gray-200 focus:border-blue-500 focus:bg-white outline-none transition">
+                </div>
+            </div>
+
+            <!-- 🔘 Tombol Aksi -->
+            <div class="mt-6 space-y-2">
+                <button onclick="simpanPerubahanProfil()" id="btn-simpan-profil" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition active:scale-95 text-sm shadow-md shadow-blue-100 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-floppy-disk"></i> Simpan Perubahan
+                </button>
+                
+                <button onclick="tutupProfil(); handleAuthAction();" class="w-full bg-red-50 text-red-600 py-2.5 rounded-xl font-bold hover:bg-red-100 transition active:scale-95 text-xs flex items-center justify-center gap-2 border border-red-100">
+                    <i class="fa-solid fa-right-from-bracket"></i> Keluar Akun (Logout)
+                </button>
+                
+                <button onclick="tutupProfil()" class="w-full bg-gray-100 text-gray-500 py-2 rounded-xl text-xs font-semibold hover:bg-gray-200 transition">Batal</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
