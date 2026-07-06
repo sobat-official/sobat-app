@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin SOBAT - Top Up Saldo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+
+    <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-xl border border-gray-100 space-y-6">
+        <!-- Header Panel -->
+        <div class="text-center border-b pb-4">
+            <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-inner">
+                <i class="fa-solid fa-vault text-2xl"></i>
+            </div>
+            <h1 class="font-black text-xl text-gray-800 tracking-tight">SOBAT Admin Panel</h1>
+            <p class="text-xs text-gray-500 font-medium mt-0.5">Sistem Pengisian Saldo Driver Komunitas</p>
+        </div>
+
+        <!-- Form Pencarian & Top Up -->
+        <form id="adminTopUpForm" class="space-y-4">
+            <!-- Input Email Driver -->
+            <div>
+                <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">📧 Email Driver</label>
+                <input type="email" id="driver-email" placeholder="contoh: driver@gmail.com" class="w-full mt-1 px-4 py-3 bg-gray-50 text-gray-800 rounded-xl text-sm font-medium border border-gray-200 focus:border-blue-500 focus:bg-white outline-none transition" required>
+            </div>
+
+            <!-- Input Nominal Top Up -->
+            <div>
+                <label class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">💰 Nominal Top-Up (Rp)</label>
+                <div class="relative mt-1">
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-bold">Rp</span>
+                    <input type="number" id="nominal-topup" placeholder="Contoh: 20000" class="w-full pl-10 pr-4 py-3 bg-gray-50 text-gray-800 rounded-xl text-sm font-medium border border-gray-200 focus:border-blue-500 focus:bg-white outline-none transition" required>
+                </div>
+                <div class="flex gap-2 mt-2">
+                    <!-- Tombol Cepat (Shortcut) -->
+                    <button type="button" onclick="setNominal(10000)" class="bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs font-semibold px-3 py-1.5 rounded-lg transition">10k</button>
+                    <button type="button" onclick="setNominal(20000)" class="bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs font-semibold px-3 py-1.5 rounded-lg transition">20k</button>
+                    <button type="button" onclick="setNominal(50000)" class="bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs font-semibold px-3 py-1.5 rounded-lg transition">50k</button>
+                </div>
+            </div>
+
+            <!-- Tombol Aksi -->
+            <button type="submit" id="btn-proses" class="w-full bg-blue-600 text-white py-3.5 rounded-xl font-bold hover:bg-blue-700 transition active:scale-95 text-sm shadow-md shadow-blue-100 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-square-plus"></i> Proses Pengisian Saldo
+            </button>
+        </form>
+
+        <div class="text-[10px] text-gray-400 text-center italic">
+            <i class="fa-solid fa-shield-halved mr-1"></i> Pastikan uang fisik/transfer sudah diterima sebelum memproses saldo.
+        </div>
+    </div>
+
+    <script>
+        // Konfigurasi Supabase (Gunakan kredensial yang sama dengan aplikasi utama)
+        const SB_URL = "https://URL_SUPABASE_MU.supabase.co";
+        const SB_KEY = "API_KEY_SUPABASE_MU";
+        const sb = supabase.createClient(SB_URL, SB_KEY);
+
+        // Fungsi Shortcut Nominal
+        function setNominal(jumlah) {
+            document.getElementById('nominal-topup').value = jumlah;
+        }
+
+        // Logika Eksekusi Top Up
+        document.getElementById('adminTopUpForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const btnProses = document.getElementById('btn-proses');
+            const emailDriver = document.getElementById('driver-email').value.trim();
+            const nominal = parseInt(document.getElementById('nominal-topup').value);
+
+            btnProses.disabled = true;
+            btnProses.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Memproses...';
+
+            try {
+                // 1. Cari profil driver berdasarkan email di tabel profiles
+                const { data: driver, error: errCari } = await sb
+                    .from('profiles')
+                    .select('id, saldo, nama')
+                    .eq('email', emailDriver) // Pastikan di tabel profiles kamu ada kolom email
+                    .maybeSingle();
+
+                if (errCari) throw errCari;
+                if (!driver) {
+                    alert("Akun driver dengan email tersebut tidak ditemukan! Periksa kembali penulisan email.");
+                    return;
+                }
+
+                // 2. Kalkulasi saldo baru (Saldo sekarang + Nominal top up)
+                const saldoLama = driver.saldo || 0;
+                const saldoBaru = saldoLama + nominal;
+
+                // 3. Update data saldo terbaru ke Supabase
+                const { error: errUpdate } = await sb
+                    .from('profiles')
+                    .update({ saldo: saldoBaru })
+                    .eq('id', driver.id);
+
+                if (errUpdate) throw errUpdate;
+
+                // 4. Sukses
+                alert(`Top-Up Berhasil!\nDriver: ${driver.nama}\nSaldo Awal: Rp ${saldoLama.toLocaleString()}\nTambahan: Rp ${nominal.toLocaleString()}\nSaldo Sekarang: Rp ${saldoBaru.toLocaleString()}`);
+                e.target.reset();
+
+            } catch (error) {
+                console.error("Error Admin Top-Up:", error);
+                alert("Terjadi kesalahan sistem saat mengisi saldo.");
+            } finally {
+                btnProses.disabled = false;
+                btnProses.innerHTML = '<i class="fa-solid fa-square-plus"></i> Proses Pengisian Saldo';
+            }
+        };
+    </script>
+</body>
+</html>
