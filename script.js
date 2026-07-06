@@ -277,44 +277,26 @@ function hitungRuteDanEstimasiBiaya() {
     });
 }
 
-/**
- * Mengunci GPS smartphone pengguna, lalu mengubah angka koordinat menjadi nama jalan tertulis.
- */
-function getLokasiOtomatisGojek() {
+// --- PERBAIKAN FUNGSI GEOLOCATION ---
+async function getLokasiOtomatisGojek() {
     const inputJemput = document.getElementById('input-jemput');
-    if (!navigator.geolocation) {
-        alert("Ponsel tidak mendukung pelacakan GPS.");
-        return;
+    const options = { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 };
+    
+    if (navigator.geolocation) {
+        inputJemput.value = "Mendeteksi lokasi GPS Anda...";
+        navigator.geolocation.getCurrentPosition((pos) => {
+            const lat = pos.coords.latitude;
+            const lng = pos.coords.longitude;
+            // Menyimpan koordinat murni agar nanti bisa dibaca link Peta di daftar jok
+            inputJemput.value = `https://www.google.com/maps?q=${lat},${lng}`;
+        }, (err) => { 
+            alert("Gagal mendapatkan lokasi. Pastikan izin lokasi perangkat aktif."); 
+            inputJemput.value = ""; 
+        }, options);
+    } else {
+        alert("Browser tidak mendukung geolokasi.");
     }
-
-    inputJemput.value = "Mengunci koordinat GPS Anda...";
-
-    navigator.geolocation.getCurrentPosition((pos) => {
-        const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
-
-        dataKoordinat.latJemput = lat;
-        dataKoordinat.lngJemput = lng;
-
-        const geocoder = new google.maps.Geocoder();
-        const latlng = { lat: parseFloat(lat), lng: parseFloat(lng) };
-
-        geocoder.geocode({ location: latlng }, (results, status) => {
-            if (status === "OK" && results[0]) {
-                inputJemput.value = results[0].formatted_address;
-                dataKoordinat.alamatJemput = results[0].formatted_address;
-                hitungRuteDanEstimasiBiaya();
-            } else {
-                inputJemput.value = `${lat}, ${lng}`;
-                dataKoordinat.alamatJemput = `Titik Koordinat: ${lat}, ${lng}`;
-            }
-        });
-    }, () => {
-        alert("Gagal membaca GPS. Aktifkan Izin Lokasi HP.");
-        inputJemput.value = "";
-    }, { enableHighAccuracy: true });
 }
-
 
 // =========================================================================
 // 🚗 PAPAN DASHBOARD ORDERAN: LOAD DATA PERMINTAAN JEMPUTAN PENUMPANG
@@ -394,71 +376,62 @@ function tampilkanData(data) {
     }).join('') : '<p class="text-white text-center p-4">Belum ada penumpang yang mencari tumpangan saat ini.</p>';
 }
 
-/**
- * SUBMIT FORM: Penumpang memesan jemputan, otomatis membaca data Profil dari Supabase Auth.
- */
+// --- PERBAIKAN LOGIKA KIRIM FORM TEBENGAN ---
 document.getElementById('nebengForm').onsubmit = async (e) => {
     e.preventDefault();
-    const submitBtn = document.getElementById('btn-submit-order');
-
-    const { data: { session } } = await sb.auth.getSession();
-    if (!session) {
-        alert("Sesi habis. Silakan login kembali.");
-        bukaModalLogin();
-        return;
-    }
-
-    const metadata = session.user.user_metadata || {};
-    const namaUser = metadata.full_name;
-    const waUser = metadata.phone_wa;
-
-    if (!namaUser || !waUser) {
-        alert("Anda belum mengisi data Nama Lengkap atau Nomor WhatsApp di menu Profil! Silakan lengkapi profil Anda terlebih dahulu demi keselamatan perjalanan.");
-        tutupFormBagikan();
-        bukaProfil();
-        return;
-    }
-
-    if (!dataKoordinat.latJemput || !dataKoordinat.latTujuan) {
-        alert("Mohon pilih lokasi jemput dan tujuan yang valid dari pilihan peta Google!");
-        return;
-    }
-
+    const submitBtn = e.target.querySelector('button[type="submit"]');
     submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Mencari Driver...';
-
-    const payload = {
-        nama: namaUser,
-        no_wa: waUser,
-        alamat_jemput: dataKoordinat.alamatJemput,
-        lat_jemput: dataKoordinat.latJemput,
-        lng_jemput: dataKoordinat.lngJemput,
-        alamat_tujuan: dataKoordinat.alamatTujuan,
-        lat_tujuan: dataKoordinat.latTujuan,
-        lng_tujuan: dataKoordinat.lngTujuan,
-        catatan: document.getElementById('input-catatan').value.trim(),
-        estimasi_jarak: dataKoordinat.jarakText,
-        estimasi_biaya: dataKoordinat.biayaTotal
-    };
-
+    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Mengirim...';
+    
     try {
+        // 1. Ambil informasi sesi user aktif dari Supabase Auth secara otomatis
+        const { data: { session } } = await sb.auth.getSession();
+        if (!session) {
+            alert("Sesi Anda berakhir. Silakan login kembali.");
+            bukaModalLogin();
+            return;
+        }
+
+        const metadata = session.user.user_metadata || {};
+        const namaUser = metadata.full_name || session.user.email.split('@')[0];
+        const waUser = metadata.phone_wa || '';
+
+        // Proteksi jika user belum melengkapi nomor WhatsApp di profil mereka
+        if (!waUser) {
+            alert("Harap lengkapi Nomor WhatsApp Anda di menu 'Profil' terlebih dahulu sebelum membagikan jok!");
+            tutupFormBagikan();
+            bukaProfil();
+            return;
+        }
+        
+        const formData = new FormData(e.target);
+        
+        // 2. Susun payload data yang disinkronkan dengan input HTML dan Metadata Auth
+        const payload = {
+            nama: namaUser,
+            tujuan: formData.get('Tujuan'),
+            titik_jemput: formData.get('Titik Jemput'), // Diambil dari input name="Titik Jemput"
+            tarif: Number(formData.get('Tarif')),
+            jam_berangkat: formData.get('Jam Berangkat'),
+            no_wa: waUser
+        };
+        
+        // 3. Masukkan data ke tabel Supabase
         const { error } = await sb.from(TABLE_TEBENGAN).insert([payload]);
         if (error) throw error;
         
         tutupFormBagikan();
         tampilNotif(); 
-        e.target.reset(); 
-        
-        dataKoordinat = { latJemput: null, lngJemput: null, alamatJemput: '', latTujuan: null, lngTujuan: null, alamatTujuan: '', jarakText: '', biayaTotal: 0 };
-        document.getElementById('box-estimasi').classList.add('hidden');
-    } catch (error) {
-        alert('Gagal memproses pesanan: ' + error.message);
-    } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Cari Driver Sekarang';
+        e.target.reset();
+    } catch (error) { 
+        console.error('Gagal mengirim data:', error);
+        alert('Gagal mengirim data tebengan ke database.'); 
+    } 
+    finally { 
+        submitBtn.disabled = false; 
+        submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Mulai Bagikan Jok'; 
     }
 };
-
 /**
  * Menyaring daftar pencarian orderan berdasarkan ketikan teks alamat tujuan secara offline.
  */
