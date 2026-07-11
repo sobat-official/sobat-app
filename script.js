@@ -8,7 +8,7 @@ const SUPABASE_URL = 'https://jdmvepfxiuvjsebvypfa.supabase.co';
 // Kunci Publik (Anon Key) untuk autentikasi dan hak akses client-side
 const SUPABASE_KEY = 'sb_publishable_6VCuASp19-VvDklo6zAspg_elcuAWf4';
 
-// Mengambil fungsi bawan createClient dari library global Supabase
+// Mengambil fungsi bawaan createClient dari library global Supabase
 const { createClient } = supabase;
 
 // Menginisialisasi koneksi client database dengan variabel sb
@@ -17,16 +17,26 @@ const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 // Nama-nama tabel yang digunakan di database Supabase
 const TABLE_UMKM = 'iklan_umkm';
 const TABLE_TEBENGAN = 'tebengan';
+const TABLE_PROFILES = 'profiles';
 
 // State global untuk menampung seluruh data tebengan yang aktif dari server
 let semuaData = [];
 
-// Variabel cache penampung koordinat lokasi real-time dari Google Maps API
+// Variabel cache penampung koordinat lokasi real-time GPS Perangkat
 let dataKoordinat = {
     latJemput: null, lngJemput: null, alamatJemput: '',
     latTujuan: null, lngTujuan: null, alamatTujuan: '',
-    jarakText: '', biayaTotal: 0
+    jarakText: '0 Km', biayaTotal: 0
 };
+
+// State Global Sistem Argo Digital Terintegrasi GPS HP Driver
+let argoWatchId = null;
+let argoWakeLock = null;
+let argoTotalJarak = 0;
+let argoKoordinatTerakhir = null;
+
+const TARIF_PER_KM = 2000;      // Rp 2.000 / Km untuk Driver
+const BIAYA_APLIKASI = 1000;    // Rp 1.000 Platform Fee (Keuntungan Kopi/Kopma)
 
 
 // =========================================================================
@@ -190,113 +200,160 @@ function formatWA(input) {
 
 
 // =========================================================================
-// 🚖 MODUL GOJEK-STYLE: AUTOCOMPLETE & OTOMATISASI HITUNG TARIF RUTE
+// 🚖 MODUL ARGO MURNI: GEOLOCATION & TRACKING GPS PETA MANDIRI (TANPA GOOGLE KEY)
 // =========================================================================
 
-document.addEventListener('DOMContentLoaded', initGoogleMapsAutocomplete);
-
 /**
- * Mengaktifkan sistem pencarian alamat pintar Google Places Autocomplete pada formulir.
+ * Mendapatkan lokasi koordinat presisi Penumpang langsung dari internal GPS Browser HP
  */
-function initGoogleMapsAutocomplete() {
-    if (typeof google === 'undefined') return;
-
-    const inputJemput = document.getElementById('input-jemput');
-    const inputTujuan = document.getElementById('input-tujuan');
-
-    if (!inputJemput || !inputTujuan) return;
-
-    const autocompleteJemput = new google.maps.places.Autocomplete(inputJemput, {
-        componentRestrictions: { country: 'id' }
-    });
-
-    const autocompleteTujuan = new google.maps.places.Autocomplete(inputTujuan, {
-        componentRestrictions: { country: 'id' }
-    });
-
-    autocompleteJemput.addListener('place_changed', () => {
-        const place = autocompleteJemput.getPlace();
-        if (!place.geometry) return;
-        dataKoordinat.latJemput = place.geometry.location.lat();
-        dataKoordinat.lngJemput = place.geometry.location.lng();
-        dataKoordinat.alamatJemput = place.formatted_address;
-        hitungRuteDanEstimasiBiaya();
-    });
-
-    autocompleteTujuan.addListener('place_changed', () => {
-        const place = autocompleteTujuan.getPlace();
-        if (!place.geometry) return;
-        dataKoordinat.latTujuan = place.geometry.location.lat();
-        dataKoordinat.lngTujuan = place.geometry.location.lng();
-        dataKoordinat.alamatTujuan = place.formatted_address;
-        hitungRuteDanEstimasiBiaya();
-    });
-}
-
-/**
- * Menggunakan Google Distance Matrix Service untuk menghitung rute riil jalan & tarif otomatis.
- */
-function hitungRuteDanEstimasiBiaya() {
-    if (!dataKoordinat.latJemput || !dataKoordinat.latTujuan) return;
-
-    const origin = new google.maps.LatLng(dataKoordinat.latJemput, dataKoordinat.lngJemput);
-    const destination = new google.maps.LatLng(dataKoordinat.latTujuan, dataKoordinat.lngTujuan);
-
-    const service = new google.maps.DistanceMatrixService();
-    service.getDistanceMatrix({
-        origins: [origin],
-        destinations: [destination],
-        travelMode: google.maps.TravelMode.DRIVING
-    }, (response, status) => {
-        if (status === google.maps.DistanceMatrixStatus.OK) {
-            const results = response.rows[0].elements[0];
-            if (results.status === "ZERO_RESULTS") {
-                alert("Rute jalan tidak ditemukan.");
-                return;
-            }
-
-            const jarakText = results.distance.text;
-            const jarakMeter = results.distance.value;
-            const jarakKm = jarakMeter / 1000;
-
-            // Aturan hitung biaya: Rp 3.000 / km, minimal bayar Rp 5.000
-            const TARIF_PER_KM = 3000;
-            const TARIF_MINIMAL = 5000;
-            
-            let kalkulasiBiaya = Math.round(jarakKm * TARIF_PER_KM);
-            if (kalkulasiBiaya < TARIF_MINIMAL) kalkulasiBiaya = TARIF_MINIMAL;
-
-            dataKoordinat.jarakText = jarakText;
-            dataKoordinat.biayaTotal = kalkulasiBiaya;
-
-            // Suntik ke UI Box Estimasi halaman HTML
-            document.getElementById('txt-jarak').innerText = jarakText;
-            document.getElementById('txt-biaya').innerText = `Rp ${kalkulasiBiaya.toLocaleString('id-ID')}`;
-            document.getElementById('box-estimasi').classList.remove('hidden');
-        }
-    });
-}
-
-// 2. Fungsi Geolocation yang diselaraskan namanya dengan HTML kamu
 async function getLokasiOtomatisGojek() {
     const inputJemput = document.getElementById('input-jemput');
     const options = { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 };
     
     if (navigator.geolocation) {
-        inputJemput.value = "Mendeteksi lokasi GPS Anda...";
+        inputJemput.value = "Menghubungkan ke satelit GPS...";
         navigator.geolocation.getCurrentPosition((pos) => {
             const lat = pos.coords.latitude;
             const lng = pos.coords.longitude;
-            // Menyimpan koordinat murni agar driver bisa klik navigasi rute
-            inputJemput.value = `https://www.google.com/maps?q=${lat},${lng}`;
+            
+            // Simpan ke state cache koordinat murni agar rute deep link driver bekerja akurat
+            dataKoordinat.latJemput = lat;
+            dataKoordinat.lngJemput = lng;
+            dataKoordinat.alamatJemput = `Lokasi Saya (${lat.toFixed(5)}, ${lng.toFixed(5)})`;
+            
+            inputJemput.value = dataKoordinat.alamatJemput;
+            
+            // Tampilkan info box estimasi argo murni ke penumpang
+            document.getElementById('txt-jarak').innerText = "Argo Berjalan";
+            document.getElementById('txt-biaya').innerText = "Rp 2.000 / Km (+1k Aplikasi)";
+            document.getElementById('box-estimasi').classList.remove('hidden');
         }, (err) => { 
-            alert("Gagal mendapatkan lokasi GPS. Pastikan GPS perangkat aktif."); 
+            alert("Gagal mengunci posisi GPS. Pastikan setelan lokasi HP Anda aktif."); 
             inputJemput.value = ""; 
         }, options);
     } else {
-        alert("Browser tidak mendukung deteksi lokasi.");
+        alert("Perangkat Anda tidak mendukung pemetaan lokasi.");
     }
 }
+
+/**
+ * Rumus Haversine: Perhitungan matematis jarak melengkung permukaan bumi murni tanpa hit API
+ */
+function hitungJarakHaversine(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Jari-jari bumi dalam satuan Kilometer
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c; 
+}
+
+/**
+ * ENGINE ARGO START: Dipicu oleh Driver saat penumpang naik motor
+ */
+async function mulaiArgoPerjalanan(orderId) {
+    if (!("geolocation" in navigator)) {
+        alert("HP Driver tidak memiliki sensor tracking GPS.");
+        return;
+    }
+
+    try {
+        // A. WAKE LOCK: Cegah layar HP meredup/mati otomatis agar proses background GPS tidak dibekukan sistem Android
+        if ('wakeLock' in navigator) {
+            argoWakeLock = await navigator.wakeLock.request('screen');
+            console.log("🔒 Screen Wake Lock aktif. Layar HP Driver terkunci menyala.");
+        }
+    } catch (err) {
+        console.error("Gagal mengaktifkan pencegah layar mati:", err);
+    }
+
+    // Reset total jarak awal
+    argoTotalJarak = 0;
+    argoKoordinatTerakhir = null;
+
+    // B. PUSH DATABASE: Update status pesanan di server Supabase menjadi 'Berjalan'
+    await sb.from(TABLE_TEBENGAN).update({ status: 'Berjalan' }).eq('id', orderId);
+    alert("Argo Digital Aktif! Silakan mulai meluncur mengantar penumpang.");
+
+    // C. WATCH POSITION: Melacak pergerakan koordinat roda motor secara real-time
+    argoWatchId = navigator.geolocation.watchPosition((position) => {
+        const latSekarang = position.coords.latitude;
+        const lngSekarang = position.coords.longitude;
+
+        if (argoKoordinatTerakhir !== null) {
+            const pergeseranKm = hitungJarakHaversine(
+                argoKoordinatTerakhir.lat, argoKoordinatTerakhir.lng,
+                latSekarang, lngSekarang
+            );
+            
+            // Akumulasikan perpindahan meter ke total jarak tempuh argo
+            argoTotalJarak += pergeseranKm;
+            
+            // Render perubahan real-time langsung ke layar interface driver
+            const elementIndikator = document.getElementById('txt-argo-berjalan');
+            if (elementIndikator) {
+                elementIndikator.innerText = `${argoTotalJarak.toFixed(2)} Km`;
+            }
+        }
+        argoKoordinatTerakhir = { lat: latSekarang, lng: lngSekarang };
+    }, (error) => {
+        console.error("Kendala pelacakan GPS Driver:", error);
+    }, { enableHighAccuracy: true, maximumAge: 0 });
+}
+
+/**
+ * ENGINE ARGO STOP: Dipicu oleh Driver saat sampai di lokasi tujuan penumpang
+ */
+async function hentikanArgoDanPotongSaldo(orderId, driverUid) {
+    if (argoWatchId !== null) {
+        navigator.geolocation.clearWatch(argoWatchId);
+        argoWatchId = null;
+    }
+    
+    if (argoWakeLock !== null) {
+        await argoWakeLock.release();
+        argoWakeLock = null;
+        console.log("🔓 Layar HP dikembalikan ke setelan normal.");
+    }
+
+    // Kalkulasi hitungan keuangan akhir argo digital
+    const tarifDriverMurni = Math.round(argoTotalJarak * TARIF_PER_KM);
+    const totalBayarTunai = tarifDriverMurni + BIAYA_APLIKASI;
+    const jarakFixText = `${argoTotalJarak.toFixed(2)} Km`;
+
+    try {
+        // 1. UPDATE DATA PERJALANAN DI SUPABASE
+        await sb.from(TABLE_TEBENGAN).update({
+            jarak: jarakFixText,
+            tarif: totalBayarTunai,
+            status: 'Selesai'
+        }).eq('id', orderId);
+
+        // 2. AMBIL DATA PROFIL DRIVER TERBARU UNTUK PROSES DEBIT SALDO
+        const { data: profil, error: fetchErr } = await sb
+            .from(TABLE_PROFILES)
+            .select('saldo')
+            .eq('id', driverUid)
+            .single();
+
+        if (fetchErr) throw fetchErr;
+
+        // 3. POTONG SALDO APLIKASI DRIVER SEBESAR RP 1.000 SECARA OTOMATIS
+        const saldoLama = profil.saldo || 0;
+        const saldoBaru = saldoLama - BIAYA_APLIKASI;
+
+        await sb.from(TABLE_PROFILES).update({ saldo: saldoBaru }).eq('id', driverUid);
+
+        alert(`🏁 PERJALANAN SELESAI!\n\nJarak: ${jarakFixText}\nTagih Tunai ke Penumpang: Rp ${totalBayarTunai.toLocaleString('id-ID')}\n(Saldo aplikasi Anda terpotong Rp 1.000)`);
+        window.location.reload();
+    } catch (err) {
+        console.error("Gagal memproses finalisasi argo:", err);
+        alert("Transaksi lokal aman, namun gagal sinkronisasi ke server database.");
+    }
+}
+
 
 // =========================================================================
 // 🚗 PAPAN DASHBOARD ORDERAN: LOAD DATA PERMINTAAN JEMPUTAN PENUMPANG
@@ -328,26 +385,52 @@ async function loadDataTebengan() {
 /**
  * MENAMPILKAN DATA ORDER PENUMPANG (Sisi Driver memantau Rute Peta, Catatan & Harga)
  */
-function tampilkanData(data) {
+async function tampilkanData(data) {
     const container = document.getElementById('modal-data-container');
+    const { data: { session } } = await sb.auth.getSession();
+    const currentUid = session ? session.user.id : null;
     
     container.innerHTML = data.length > 0 ? data.map(item => {
-        // Mengamankan data alamat/tujuan jika menggunakan kolom versi lama agar tidak crash
         const jemputFix = item.alamat_jemput || item.titik_jemput || 'Lokasi tidak terdeteksi';
         const tujuanFix = item.alamat_tujuan || item.tujuan || 'Tujuan tidak ditentukan';
-        const biayaFix = item.estimasi_biaya || item.tarif || 0;
-        const jarakFix = item.estimasi_jarak || '0 Km';
+        const statusOrder = item.status || 'Mencari Driver';
+
+        // Logika tampilan tombol aksi dinamis mengikuti pergerakan status argo
+        let tombolAksi = '';
+        if (statusOrder === 'Mencari Driver') {
+            tombolAksi = `
+                <a href="https://wa.me/${item.no_wa.replace(/\D/g, '')}?text=Halo%20${item.nama.split(' ')[0]},%20saya%20Driver%20SOBAT.%20Saya%20jemput%20sekarang%20ya!" target="_blank" 
+                   onclick="sb.from('${TABLE_TEBENGAN}').update({status: 'Driver Menuju Lokasi'}).eq('id', '${item.id}')"
+                   class="flex-[2] text-center bg-green-500 hover:bg-green-600 py-2.5 rounded-xl text-white text-xs font-bold shadow-md transition flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-comment-sms"></i> Ambil / Chat WA
+                </a>`;
+        } else if (statusOrder === 'Driver Menuju Lokasi') {
+            tombolAksi = `
+                <button onclick="mulaiArgoPerjalanan('${item.id}')" 
+                        class="flex-[2] text-center bg-blue-600 hover:bg-blue-700 py-2.5 rounded-xl text-white text-xs font-bold shadow-md transition">
+                    <i class="fa-solid fa-play"></i> Mulai Naik Motor (Argo Start)
+                </button>`;
+        } else if (statusOrder === 'Berjalan') {
+            tombolAksi = `
+                <button onclick="hentikanArgoDanPotongSaldo('${item.id}', '${currentUid}')" 
+                        class="flex-[2] text-center bg-red-600 hover:bg-red-700 py-2.5 rounded-xl text-white text-xs font-bold shadow-md transition animate-pulse">
+                    <i class="fa-solid fa-flag-checkered"></i> Sampai Tujuan (Argo Stop)
+                </button>`;
+        } else {
+            tombolAksi = `<span class="flex-1 text-center py-2.5 text-xs text-gray-400 font-bold bg-gray-100 rounded-xl">Perjalanan Selesai</span>`;
+        }
 
         return `
         <div class="bg-white p-4 rounded-2xl shadow-lg border border-gray-100 flex flex-col gap-2">
             <div class="flex justify-between items-center">
                 <h4 class="font-bold text-gray-800 text-sm"><i class="fa-solid fa-user text-blue-500 mr-1"></i> ${item.nama}</h4>
-                <span class="text-[11px] font-black text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">${jarakFix}</span>
+                <span class="text-[11px] font-black text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md" id="txt-argo-berjalan">${item.jarak || 'Argo Murni'}</span>
             </div>
             
             <div class="text-xs text-gray-600 space-y-1.5 bg-gray-50 p-2.5 rounded-xl border border-gray-100 mt-1">
                 <div><span class="font-bold text-green-600">📍 Jemput:</span> ${jemputFix}</div>
                 <div><span class="font-bold text-red-500">🏁 Tujuan:</span> ${tujuanFix}</div>
+                <div class="text-[10px] text-gray-400">Status: <span class="font-bold text-blue-500">${statusOrder}</span></div>
             </div>
 
             ${item.catatan ? `
@@ -355,29 +438,17 @@ function tampilkanData(data) {
                 <span class="font-bold text-amber-700 not-italic">💬 Pesan:</span> "${item.catatan}"
             </div>` : ''}
 
-            <div class="text-xs font-black text-emerald-600 bg-emerald-50 px-2.5 py-1.5 rounded-lg self-start mt-1">
-                Estimasi Tarif: Rp ${biayaFix.toLocaleString('id-ID')}
-            </div>
-
             <div class="mt-2 flex gap-2">
-                <a href="https://www.google.com/maps/dir/?api=1&origin=${item.lat_jemput || ''},${item.lng_jemput || ''}&destination=${item.lat_tujuan || ''},${item.lng_tujuan || ''}" target="_blank" class="flex-1 text-center bg-gray-100 hover:bg-gray-200 py-2.5 rounded-xl text-xs font-bold text-gray-700 transition flex items-center justify-center gap-1">
-                    <i class="fa-solid fa-map-location-dot"></i> Rute Peta
+                <a href="https://www.google.com/maps/dir/?api=1&origin=${item.lat_jemput || ''},${item.lng_jemput || ''}&destination=${encodeURIComponent(tujuanFix)}" target="_blank" class="flex-1 text-center bg-gray-100 hover:bg-gray-200 py-2.5 rounded-xl text-xs font-bold text-gray-700 transition flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-map-location-dot"></i> Maps HP
                 </a>
-                <a href="https://wa.me/${item.no_wa.replace(/\D/g, '')}?text=Halo%20${item.nama.split(' ')[0]},%20saya%20Driver%20SOBAT.%20Saya%20lihat%20pesanan%20jemputanmu%20ke%20${encodeURIComponent(tujuanFix)}%20searah.%20Saya%20jemput%20sekarang%20ya!" target="_blank" class="flex-[2] text-center bg-green-500 hover:bg-green-600 py-2.5 rounded-xl text-white text-xs font-bold shadow-md shadow-green-100 transition flex items-center justify-center gap-1">
-                    <i class="fa-solid fa-comment-sms"></i> Ambil / Chat WA
-                </a>
-            </div>
-            <div class="text-center mt-1">
-                <a href="https://wa.me/6282292067618?text=Halo%20Admin,%20saya%20ingin%20melaporkan%20orderan%20palsu%20atas%20nama%20${item.nama}" target="_blank" class="text-[9px] text-red-400 underline font-medium">
-                    <i class="fa-solid fa-flag"></i> Laporkan orderan palsu
-                </a>
+                ${tombolAksi}
             </div>
         </div>`;
     }).join('') : '<p class="text-white text-center p-4">Belum ada penumpang yang mencari tumpangan saat ini.</p>';
 }
 
-// --- PERBAIKAN LOGIKA KIRIM FORM TEBENGAN ---
-// 3. Logika submit form orderan real-time ke Supabase
+// --- LOGIKA KIRIM FORM TEBENGAN DENGAN PAYLOAD ARGO MURNI ---
 document.getElementById('nebengForm').onsubmit = async (e) => {
     e.preventDefault();
     const submitBtn = e.target.querySelector('button[type="submit"]');
@@ -385,7 +456,6 @@ document.getElementById('nebengForm').onsubmit = async (e) => {
     submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Mencari Driver...';
     
     try {
-        // Ambil data session user aktif
         const { data: { session } } = await sb.auth.getSession();
         if (!session) {
             alert("Sesi Anda berakhir. Silakan login kembali.");
@@ -406,42 +476,39 @@ document.getElementById('nebengForm').onsubmit = async (e) => {
         
         const formData = new FormData(e.target);
         
-        // Payload rapi siap kirim ke database Supabase
+        // Payload diselaraskan untuk mengamankan data koordinat awal GPS asli HP penumpang
         const payload = {
             nama: namaUser,
             titik_jemput: formData.get('Titik Jemput'),
             tujuan: formData.get('Tujuan'),
             catatan: formData.get('Catatan'),
-            jarak: estimasiJarakMurni, // Diambil otomatis dari hasil hitung peta
-            tarif: estimasiTarifMurni, // Diambil otomatis dari hasil hitung peta
+            jarak: '0.00 Km',
+            tarif: 0, 
             no_wa: waUser,
-            status: 'Mencari Driver'   // Status awal orderan real-time
+            status: 'Mencari Driver',
+            lat_jemput: dataKoordinat.latJemput,
+            lng_jemput: dataKoordinat.lngJemput
         };
         
-        // Eksekusi insert ke tabel database
         const { error } = await sb.from(TABLE_TEBENGAN).insert([payload]);
         if (error) throw error;
         
         tutupFormBagikan();
-        tampilNotif(); // Trigger animasi/modal sukses bawaan kamu
+        tampilNotif(); 
         e.target.reset();
         document.getElementById('box-estimasi').classList.add('hidden');
         
-        // Reset variabel penampung
-        estimasiJarakMurni = 0;
-        estimasiTarifMurni = 0;
+        dataKoordinat.latJemput = null;
+        dataKoordinat.lngJemput = null;
     } catch (error) { 
         console.error('Gagal memproses orderan:', error);
         alert('Gagal membuat orderan. Silakan coba beberapa saat lagi.'); 
-    } 
-    finally { 
+    } finally { 
         submitBtn.disabled = false; 
         submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Cari Driver Sekarang'; 
     }
 };
-/**
- * Menyaring daftar pencarian orderan berdasarkan ketikan teks alamat tujuan secara offline.
- */
+
 function filterData() {
     const teks = document.getElementById('filterTujuan').value.toLowerCase();
     const hasil = semuaData.filter(item => {
